@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QGLWidget{QGLFormat(), parent}, alpha{25}, beta{-25}, distance{5} {}
 
 QSize MainWindow::sizeHint() const {
-    return QSize(1280, 640);
+    return QSize(640, 480);
 }
 
 //TO DO: rewrite this function
