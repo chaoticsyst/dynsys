@@ -169,10 +169,3 @@ void MainWindow::wheelEvent(QWheelEvent *event) {
 
     event->accept();
 }
-
-
-
-
-
-
-
