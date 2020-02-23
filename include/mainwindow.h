@@ -6,12 +6,14 @@
 #include <QGLShaderProgram>
 #include <QMouseEvent>
 #include <QWheelEvent>
+#include <QTime>
+#include <QTimer>
 #include "Model.h"
 
 class MainWindow : public QGLWidget {
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow() = default;
+    ~MainWindow();
     QSize sizeHint() const override;
 
     std::vector<Point> currentPoints;
@@ -25,6 +27,9 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
 
+private slots:
+    void updateTime();
+
 private:
     Q_OBJECT
 
@@ -36,6 +41,10 @@ private:
     double beta;
     double distance;
     QPoint lastMousePosition;
+
+    QTimer *timer;
+
+    size_t last;
 };
 
 #endif // MAINWINDOW_H

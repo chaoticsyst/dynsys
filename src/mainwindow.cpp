@@ -4,7 +4,17 @@
 #include "Model.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QGLWidget{QGLFormat(), parent}, alpha{25}, beta{-25}, distance{5} {}
+    QGLWidget{QGLFormat(), parent}, alpha{25}, beta{-25}, distance{5}, last{0} {
+
+    timer = new QTimer(this);
+    timer->setInterval(5);
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateTime()));
+    timer->start();
+}
+
+MainWindow::~MainWindow() {
+    delete timer;
+}
 
 QSize MainWindow::sizeHint() const {
     return QSize(640, 480);
@@ -52,12 +62,25 @@ void addCube(QVector<QVector3D> &vertices, const QVector3D &center) {
              << QVector3D(center.x() - R, center.y() - R, center.z() - R);
 }
 
+QVector3D pointFromStruct(const Point &point) {
+    return QVector3D(point.x, point.y, point.z);
+}
+
 QVector<QVector3D> fromVector(const std::vector<Point> &points) {
     QVector<QVector3D> result;
     for (auto &point : points) {
-        result.push_back(QVector3D(point.x, point.y, point.z));
+        result.push_back(pointFromStruct(point));
     }
     return result;
+}
+
+void MainWindow::updateTime() {
+    if (last == currentPoints.size()) {
+        return;
+    }
+    addCube(vertices, pointFromStruct(currentPoints[last++]));
+
+    repaint();
 }
 
 void MainWindow::initializeGL() {
@@ -106,10 +129,10 @@ void MainWindow::paintGL() {
     vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
 
     // TODO HERE
-    for (auto &point : fromVector(currentPoints)) {
-        addCube(vertices, point);
-    }
-    currentPoints.clear();
+//    for (auto &point : fromVector(currentPoints)) {
+//        addCube(vertices, point);
+//    }
+//    currentPoints.clear();
     //
 
     shaderProgram.setUniformValue("matrix", pMatrix * vMatrix * mMatrix);
