@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QGLWidget{QGLFormat(), parent}, alpha{25}, beta{-25}, distance{5}, last{0} {
 
     timer = new QTimer(this);
-    timer->setInterval(5);
+    timer->setInterval(1);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateTime()));
     timer->start();
 }
@@ -20,10 +20,11 @@ QSize MainWindow::sizeHint() const {
     return QSize(640, 480);
 }
 
-//TO DO: rewrite this function
+//TODO: rewrite this function
 void addCube(QVector<QVector3D> &vertices, const QVector3D &center) {
     const double R = 0.005;
 
+    //cubes
     vertices << QVector3D(center.x() - R, center.y() - R, center.z() + R)
              << QVector3D(center.x() + R, center.y() - R, center.z() + R)
              << QVector3D(center.x() + R, center.y() + R, center.z() + R) // Front
@@ -60,10 +61,24 @@ void addCube(QVector<QVector3D> &vertices, const QVector3D &center) {
              << QVector3D(center.x() + R, center.y() - R, center.z() + R)
              << QVector3D(center.x() - R, center.y() - R, center.z() + R)
              << QVector3D(center.x() - R, center.y() - R, center.z() - R);
+
+    //tetrahedrons
+    /*vertices << QVector3D(center.x() + R, center.y() + R, center.z() + R) <<
+                QVector3D(center.x() - R, center.y() - R, center.z() + R) <<
+                QVector3D(center.x() + R, center.y() - R, center.z() - R) << //front
+                QVector3D(center.x() + R, center.y() + R, center.z() + R) <<
+                QVector3D(center.x() - R, center.y() + R, center.z() - R) <<
+                QVector3D(center.x() - R, center.y() - R, center.z() + R) << //right
+                QVector3D(center.x() + R, center.y() + R, center.z() + R) <<
+                QVector3D(center.x() + R, center.y() - R, center.z() - R) <<
+                QVector3D(center.x() - R, center.y() + R, center.z() - R) << //left
+                QVector3D(center.x() - R, center.y() + R, center.z() - R) <<
+                QVector3D(center.x() - R, center.y() - R, center.z() + R) <<
+                QVector3D(center.x() + R, center.y() - R, center.z() - R);*/ //bottom
 }
 
 QVector3D pointFromStruct(const Point &point) {
-    return QVector3D(point.x, point.y, point.z);
+    return QVector3D(point.x / 8, point.y / 8, point.z / 8); //TODO: implement normalization
 }
 
 QVector<QVector3D> fromVector(const std::vector<Point> &points) {
@@ -78,8 +93,9 @@ void MainWindow::updateTime() {
     if (last == currentPoints.size()) {
         return;
     }
-    addCube(vertices, pointFromStruct(currentPoints[last++]));
-
+    for (size_t i = 0; i < 10; i++) {
+        addCube(vertices, pointFromStruct(currentPoints[last++]));
+    }
     repaint();
 }
 
@@ -110,7 +126,7 @@ void MainWindow::resizeGL(int width, int height) {
         height = 1;
     }
     pMatrix.setToIdentity();
-    pMatrix.perspective(60.0, (float) width / (float) height, 0.001, 1000);
+    pMatrix.perspective(60.0, (float) width / (float) height, 0.01, 1000);
     glViewport(0, 0, width, height);
 }
 
@@ -127,13 +143,6 @@ void MainWindow::paintGL() {
     QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, distance);
     QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
     vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
-
-    // TODO HERE
-//    for (auto &point : fromVector(currentPoints)) {
-//        addCube(vertices, point);
-//    }
-//    currentPoints.clear();
-    //
 
     shaderProgram.setUniformValue("matrix", pMatrix * vMatrix * mMatrix);
     shaderProgram.setUniformValue("color", QColor(Qt::white));
