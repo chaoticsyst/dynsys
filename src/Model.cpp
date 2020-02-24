@@ -9,6 +9,18 @@ void set_constants(long double a_, long double b_, long double c_) {
     c = c_;
 }
 
+void set_constant_a(long double a_) {
+    a = a_;
+}
+
+void set_constant_b(long double b_) {
+    b = b_;
+}
+
+void set_constant_c(long double c_) {
+    c = c_;
+}
+
 //Формулы по уравнениям для аттрактора Рёсслера
 static Point count_derivatives(const Point &values) {
     return Point{

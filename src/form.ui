@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Window</class>
+ <widget class="QWidget" name="Window">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>512</width>
+    <height>512</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Аттрактор Рёсслера</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="VisualOpenGLWidget" name="visualOpenGLWidget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>450</width>
+       <height>370</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Первый параметр</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Второй параметр</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Третий параметр</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VisualOpenGLWidget</class>
+   <extends>QWidget</extends>
+   <header>visual_opengl_widget.h</header>
+   <container>1</container>
+   <slots>
+    <slot>slot_set_constant_a(double)</slot>
+    <slot>slot_set_constant_b(double)</slot>
+    <slot>slot_set_constant_c(double)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>doubleSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>Window</receiver>
+   <slot>slot_set_constant_a(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>420</x>
+     <y>408</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>393</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>doubleSpinBox_2</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>Window</receiver>
+   <slot>slot_set_constant_b(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>410</x>
+     <y>443</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>507</x>
+     <y>445</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>doubleSpinBox_3</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>Window</receiver>
+   <slot>slot_set_constant_c(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>382</x>
+     <y>477</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>478</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>slot_set_constant_a(double)</slot>
+  <slot>slot_set_constant_b(double)</slot>
+  <slot>slot_set_constant_c(double)</slot>
+ </slots>
+</ui>

@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef VISUAL_OPENGL_WIDGET_H
+#define VISUAL_OPENGL_WIDGET_H
 
 #include <vector>
 #include <QGLWidget>
@@ -10,11 +10,10 @@
 #include <QTimer>
 #include "Model.h"
 
-class MainWindow : public QGLWidget {
+class VisualOpenGLWidget : public QGLWidget {
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
-    QSize sizeHint() const override;
+    explicit VisualOpenGLWidget(QWidget *parent = nullptr);
+    ~VisualOpenGLWidget();
 
     std::vector<Point> currentPoints;
 
@@ -26,6 +25,9 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
+
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
 private slots:
     void updateTime();
@@ -47,4 +49,6 @@ private:
     size_t last;
 };
 
-#endif // MAINWINDOW_H
+
+#endif //VISUAL_OPENGL_WIDGET_H
+

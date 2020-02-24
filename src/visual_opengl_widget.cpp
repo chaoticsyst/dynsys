@@ -1,10 +1,12 @@
 #include <vector>
 #include <iostream>
-#include "mainwindow.h"
+#include "visual_opengl_widget.h"
 #include "Model.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
     QGLWidget{QGLFormat(), parent}, alpha{25}, beta{-25}, distance{5}, last{0} {
+
+    currentPoints = generate_points({1, 1, 1}, 200000, 10, 0.010);
 
     timer = new QTimer(this);
     timer->setInterval(1);
@@ -12,11 +14,15 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->start();
 }
 
-MainWindow::~MainWindow() {
+VisualOpenGLWidget::~VisualOpenGLWidget() {
     delete timer;
 }
 
-QSize MainWindow::sizeHint() const {
+QSize VisualOpenGLWidget::minimumSizeHint() const {
+    return QSize(640, 480);
+}
+
+QSize VisualOpenGLWidget::sizeHint() const {
     return QSize(640, 480);
 }
 
@@ -89,7 +95,7 @@ QVector<QVector3D> fromVector(const std::vector<Point> &points) {
     return result;
 }
 
-void MainWindow::updateTime() {
+void VisualOpenGLWidget::updateTime() {
     if (last == currentPoints.size()) {
         return;
     }
@@ -99,7 +105,7 @@ void MainWindow::updateTime() {
     repaint();
 }
 
-void MainWindow::initializeGL() {
+void VisualOpenGLWidget::initializeGL() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
@@ -121,7 +127,7 @@ void MainWindow::initializeGL() {
     shaderProgram.link();
 }
 
-void MainWindow::resizeGL(int width, int height) {
+void VisualOpenGLWidget::resizeGL(int width, int height) {
     if (height == 0) {
         height = 1;
     }
@@ -130,7 +136,7 @@ void MainWindow::resizeGL(int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void MainWindow::paintGL() {
+void VisualOpenGLWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     QMatrix4x4 mMatrix;
     QMatrix4x4 vMatrix;
@@ -153,12 +159,12 @@ void MainWindow::paintGL() {
     shaderProgram.release();
 }
 
-void MainWindow::mousePressEvent(QMouseEvent *event) {
+void VisualOpenGLWidget::mousePressEvent(QMouseEvent *event) {
     lastMousePosition = event->pos();
     event->accept();
 }
 
-void MainWindow::mouseMoveEvent(QMouseEvent *event) {
+void VisualOpenGLWidget::mouseMoveEvent(QMouseEvent *event) {
     int deltaX = event->x() - lastMousePosition.x();
     int deltaY = event->y() - lastMousePosition.y();
 
@@ -186,7 +192,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event) {
     event->accept();
 }
 
-void MainWindow::wheelEvent(QWheelEvent *event) {
+void VisualOpenGLWidget::wheelEvent(QWheelEvent *event) {
     int delta = event->delta();
 
     if (event->orientation() == Qt::Vertical) {
