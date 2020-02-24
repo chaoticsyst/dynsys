@@ -44,12 +44,12 @@ static Point next_point(const Point &point) {
 
 std::vector<Point> generate_points(Point point, int points_count, int steps_per_point, long double tau_) {
     tau = tau_;
-    std::vector<Point> time_line;
+    std::vector<Point> time_line(points_count);
     for (int i = 0; i < points_count; ++i) {
         for (int j = 0; j < steps_per_point; ++j) {
             point = next_point(point);
         }
-        time_line.push_back(point);
+        time_line[i] = point;
     }
     return std::move(time_line);
 }
