@@ -6,6 +6,12 @@
 
 #include "visual_opengl_widget.h"
 
+// Model constants
+const Point START_POINT = {1, 1, 1};
+const int COUNT_POINTS = 200'000;
+const int STEPS_PER_COUNT = 10;
+const double TAU = 0.001;
+
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     ui->setupUi(this);
 }
@@ -23,7 +29,8 @@ void Window::slot_set_constant_c(double c) {
 }
 
 void Window::slot_restart_button() {
-    //TODO
+    ui->visualOpenGLWidget->clearPoints();
+    ui->visualOpenGLWidget->setPoints(generate_points(START_POINT, COUNT_POINTS, STEPS_PER_COUNT, TAU));
 }
 
 Window::~Window() {
