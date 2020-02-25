@@ -15,7 +15,9 @@ public:
     explicit VisualOpenGLWidget(QWidget *parent = nullptr);
     ~VisualOpenGLWidget();
 
-    std::vector<Point> currentPoints;
+    void setPoints(const std::vector<Point> &points);
+    void appendPoints(const std::vector<Point> &points);
+    void clearPoints();
 
 protected:
     void initializeGL() override;
@@ -46,7 +48,8 @@ private:
 
     QTimer *timer;
 
-    size_t last;
+    size_t lastPoint;
+    QVector<QVector3D> pointsToPaint;
 };
 
 

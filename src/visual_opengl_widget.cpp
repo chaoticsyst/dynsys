@@ -3,18 +3,14 @@
 #include "visual_opengl_widget.h"
 #include "Model.h"
 
-// Model constants
-const Point START_POINT = {1, 1, 1};
-const int COUNT_POINTS = 200'000;
-const int STEPS_PER_COUNT = 10;
-const double TAU = 0.001;
-
 // Timer constants
 const int TIMER_INTERVAL = 1;
 
 // Window size constants
-const int WINDOW_SIZE_H = 640;
-const int WINDOW_SIZE_W = 480;
+const int WINDOW_SIZE_W = 1080;
+const int WINDOW_SIZE_H = 720;
+const int MIN_WINDOW_SIZE_W = 640;
+const int MIN_WINDOW_SIZE_H = 480;
 
 // Size of cubes (points)
 const double R = 0.005;
@@ -22,10 +18,11 @@ const double R = 0.005;
 // Normalize constans (TODO: adaptive normalize)
 const int DIV_NORMALIZE = 8;
 
-VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
-    QGLWidget{QGLFormat(), parent}, alpha{25}, beta{-25}, distance{5}, last{0} {
+// Painting
+const size_t POINTS_PER_ITERATION = 10;
 
-    currentPoints = generate_points(START_POINT, COUNT_POINTS, STEPS_PER_COUNT, TAU);
+VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
+    QGLWidget{QGLFormat(), parent}, alpha{25}, beta{-25}, distance{5}, lastPoint{0} {
 
     timer = new QTimer(this);
     timer->setInterval(TIMER_INTERVAL);
@@ -38,11 +35,11 @@ VisualOpenGLWidget::~VisualOpenGLWidget() {
 }
 
 QSize VisualOpenGLWidget::minimumSizeHint() const {
-    return QSize(WINDOW_SIZE_H, WINDOW_SIZE_W);
+    return QSize(MIN_WINDOW_SIZE_W, MIN_WINDOW_SIZE_H);
 }
 
 QSize VisualOpenGLWidget::sizeHint() const {
-    return QSize(WINDOW_SIZE_H, WINDOW_SIZE_W);
+    return QSize(WINDOW_SIZE_W, WINDOW_SIZE_H);
 }
 
 //TODO: rewrite this function
@@ -101,24 +98,41 @@ void addCube(QVector<QVector3D> &vertices, const QVector3D &center) {
                 QVector3D(center.x() + R, center.y() - R, center.z() - R);*/ //bottom
 }
 
-QVector3D pointFromStruct(const Point &point) {
+QVector3D getQPoint(const Point &point) {
     return QVector3D(point.x / DIV_NORMALIZE, point.y / DIV_NORMALIZE, point.z / DIV_NORMALIZE); //TODO: implement normalization
 }
 
-QVector<QVector3D> fromVector(const std::vector<Point> &points) {
+QVector<QVector3D> getQPointsFromVector(const std::vector<Point> &points) {
     QVector<QVector3D> result;
     for (auto &point : points) {
-        result.push_back(pointFromStruct(point));
+        result.push_back(getQPoint(point));
     }
     return result;
 }
 
+void VisualOpenGLWidget::setPoints(const std::vector<Point> &points) {
+    clearPoints();
+    pointsToPaint = getQPointsFromVector(points);
+}
+
+void VisualOpenGLWidget::appendPoints(const std::vector<Point> &points) {
+    for (auto &point : points) {
+        pointsToPaint.push_back(getQPoint(point));
+    }
+}
+
+void VisualOpenGLWidget::clearPoints() {
+    vertices.clear();
+    pointsToPaint.clear();
+    lastPoint = 0;
+}
+
 void VisualOpenGLWidget::updateTime() {
-    if (last == currentPoints.size()) {
+    if (lastPoint == static_cast<size_t>(pointsToPaint.size())) {
         return;
     }
-    for (size_t i = 0; i < STEPS_PER_COUNT; i++) {
-        addCube(vertices, pointFromStruct(currentPoints[last++]));
+    for (size_t i = 0; i < POINTS_PER_ITERATION; i++) {
+        addCube(vertices, pointsToPaint[lastPoint++]);
     }
     repaint();
 }
