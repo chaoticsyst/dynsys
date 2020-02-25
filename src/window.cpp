@@ -22,6 +22,10 @@ void Window::slot_set_constant_c(double c) {
     set_constant_c(c);
 }
 
+void Window::slot_restart_button() {
+    //TODO
+}
+
 Window::~Window() {
     delete ui;
 }
