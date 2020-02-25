@@ -6,7 +6,7 @@
 VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
     QGLWidget{QGLFormat(), parent}, alpha{25}, beta{-25}, distance{5}, last{0} {
 
-    currentPoints = generate_points({1, 1, 1}, 200000, 10, 0.010);
+    currentPoints = generate_points({1, 1, 1}, 200000, 10, 0.001);
 
     timer = new QTimer(this);
     timer->setInterval(1);
