@@ -12,7 +12,7 @@
 class VisualOpenGLWidget : public QGLWidget {
 public:
     explicit VisualOpenGLWidget(QWidget *parent = nullptr);
-    ~VisualOpenGLWidget();
+    ~VisualOpenGLWidget() = default;
 
     void setPoints(const std::vector<Point> &points);
     void appendPoints(const std::vector<Point> &points);

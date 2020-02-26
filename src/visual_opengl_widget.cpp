@@ -13,10 +13,10 @@ const int MIN_WINDOW_SIZE_W = 640;
 const int MIN_WINDOW_SIZE_H = 480;
 
 // Size of cubes (points)
-const double R = 0.005;
+const double R = 0.015;
 
 // Normalize constans (TODO: adaptive normalize)
-const int DIV_NORMALIZE = 8;
+const int DIV_NORMALIZE = 1;
 
 // Painting
 const size_t POINTS_PER_ITERATION = 10;
@@ -28,10 +28,6 @@ VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
     timer->setInterval(TIMER_INTERVAL);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateTime()));
     timer->start();
-}
-
-VisualOpenGLWidget::~VisualOpenGLWidget() {
-    delete timer;
 }
 
 QSize VisualOpenGLWidget::minimumSizeHint() const {
@@ -46,7 +42,7 @@ QSize VisualOpenGLWidget::sizeHint() const {
 void addCube(QVector<QVector3D> &vertices, const QVector3D &center) {
 
     //cubes
-    vertices << QVector3D(center.x() - R, center.y() - R, center.z() + R)
+    /*vertices << QVector3D(center.x() - R, center.y() - R, center.z() + R)
              << QVector3D(center.x() + R, center.y() - R, center.z() + R)
              << QVector3D(center.x() + R, center.y() + R, center.z() + R) // Front
              << QVector3D(center.x() + R, center.y() + R, center.z() + R)
@@ -82,9 +78,9 @@ void addCube(QVector<QVector3D> &vertices, const QVector3D &center) {
              << QVector3D(center.x() + R, center.y() - R, center.z() + R)
              << QVector3D(center.x() - R, center.y() - R, center.z() + R)
              << QVector3D(center.x() - R, center.y() - R, center.z() - R);
-
+    */
     //tetrahedrons
-    /*vertices << QVector3D(center.x() + R, center.y() + R, center.z() + R) <<
+    vertices << QVector3D(center.x() + R, center.y() + R, center.z() + R) <<
                 QVector3D(center.x() - R, center.y() - R, center.z() + R) <<
                 QVector3D(center.x() + R, center.y() - R, center.z() - R) << //front
                 QVector3D(center.x() + R, center.y() + R, center.z() + R) <<
@@ -94,8 +90,8 @@ void addCube(QVector<QVector3D> &vertices, const QVector3D &center) {
                 QVector3D(center.x() + R, center.y() - R, center.z() - R) <<
                 QVector3D(center.x() - R, center.y() + R, center.z() - R) << //left
                 QVector3D(center.x() - R, center.y() + R, center.z() - R) <<
-                QVector3D(center.x() - R, center.y() - R, center.z() + R) <<
-                QVector3D(center.x() + R, center.y() - R, center.z() - R);*/ //bottom
+                QVector3D(center.x() + R, center.y() - R, center.z() - R) <<
+                QVector3D(center.x() - R, center.y() - R, center.z() + R); //bottom
 }
 
 QVector3D getQPoint(const Point &point) {
@@ -110,8 +106,10 @@ QVector<QVector3D> getQPointsFromVector(const std::vector<Point> &points) {
     return result;
 }
 
-void VisualOpenGLWidget::setPoints(const std::vector<Point> &points) {
+void VisualOpenGLWidget::setPoints(const std::vector<Point> &points_) {
     clearPoints();
+    std::vector<Point> points = points_;
+    normalize_points(points);
     pointsToPaint = getQPointsFromVector(points);
 }
 
