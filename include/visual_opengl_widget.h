@@ -1,5 +1,4 @@
-#ifndef VISUAL_OPENGL_WIDGET_H
-#define VISUAL_OPENGL_WIDGET_H
+#pragma once
 
 #include <vector>
 #include <QGLWidget>
@@ -51,7 +50,3 @@ private:
     size_t lastPoint;
     QVector<QVector3D> pointsToPaint;
 };
-
-
-#endif //VISUAL_OPENGL_WIDGET_H
-

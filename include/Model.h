@@ -1,6 +1,6 @@
-#ifndef DYNSYS_MODEL_H
-#define DYNSYS_MODEL_H
+#pragma once
 
+#include <vector>
 
 struct Point {
     long double x, y, z;
@@ -14,4 +14,4 @@ void set_constant_c(long double c);
 
 std::vector<Point> generate_points(Point start_point, int points_count, int steps_per_point, long double tau);
 
-#endif //DYNSYS_MODEL_H
+void normalize_points(std::vector<Point>& points);

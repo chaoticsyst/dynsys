@@ -1,5 +1,4 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#pragma once
 
 #include <QWidget>
 #include <QSlider>
@@ -29,5 +28,3 @@ private:
 
     Ui::Window *ui;
 };
-
-#endif // WINDOW_H
