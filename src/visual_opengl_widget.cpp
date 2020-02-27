@@ -4,22 +4,27 @@
 #include "Model.h"
 
 // Timer constants
-const int TIMER_INTERVAL = 1;
+constexpr int TIMER_INTERVAL = 1;
 
 // Window size constants
-const int WINDOW_SIZE_W = 1080;
-const int WINDOW_SIZE_H = 720;
-const int MIN_WINDOW_SIZE_W = 640;
-const int MIN_WINDOW_SIZE_H = 480;
+constexpr QSize MIN_WINDOW_SIZE = QSize(640, 480);
+constexpr QSize INIT_WINDOW_SIZE = QSize(1080, 720);
 
 // Size of cubes (points)
-const double R = 0.005;
+constexpr double R = 0.005;
 
 // Normalize constans (TODO: adaptive normalize)
-const int DIV_NORMALIZE = 8;
+constexpr int DIV_NORMALIZE = 8;
 
 // Painting
-const size_t POINTS_PER_ITERATION = 10;
+constexpr size_t POINTS_PER_ITERATION = 10;
+
+// Resizing window
+constexpr qreal PERSPECTIVE_NEAR_PLANE = 0.001;
+constexpr qreal PERSPECTIVE_FAR_PLANE = 1000;
+
+// Zooming camera
+constexpr float ZOOM_DELTA = 0.05;
 
 VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
     QGLWidget{QGLFormat(), parent}, alpha{25}, beta{-25}, distance{5}, lastPoint{0} {
@@ -30,16 +35,12 @@ VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
     timer->start();
 }
 
-VisualOpenGLWidget::~VisualOpenGLWidget() {
-    delete timer;
-}
-
 QSize VisualOpenGLWidget::minimumSizeHint() const {
-    return QSize(MIN_WINDOW_SIZE_W, MIN_WINDOW_SIZE_H);
+    return MIN_WINDOW_SIZE;
 }
 
 QSize VisualOpenGLWidget::sizeHint() const {
-    return QSize(WINDOW_SIZE_W, WINDOW_SIZE_H);
+    return INIT_WINDOW_SIZE;
 }
 
 //TODO: rewrite this function
@@ -164,7 +165,7 @@ void VisualOpenGLWidget::resizeGL(int width, int height) {
         height = 1;
     }
     pMatrix.setToIdentity();
-    pMatrix.perspective(60.0, (float) width / (float) height, 0.01, 1000); //Кирилл, разберись с константами, вообще непонятно
+    pMatrix.perspective(60.0, (float) width / (float) height, PERSPECTIVE_NEAR_PLANE, PERSPECTIVE_FAR_PLANE);
     glViewport(0, 0, width, height);
 }
 
@@ -229,9 +230,9 @@ void VisualOpenGLWidget::wheelEvent(QWheelEvent *event) {
 
     if (event->orientation() == Qt::Vertical) {
         if (delta < 0) {
-            distance *= 1.1; // Эти константы тоже вынести
+            distance *= (1 + ZOOM_DELTA); // Эти константы тоже вынести
         } else if (delta > 0) {
-            distance *= 0.9;
+            distance *= (1 - ZOOM_DELTA);
         }
 
         updateGL();
