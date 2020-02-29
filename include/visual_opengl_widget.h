@@ -1,5 +1,4 @@
-#ifndef VISUAL_OPENGL_WIDGET_H
-#define VISUAL_OPENGL_WIDGET_H
+#pragma once
 
 #include <vector>
 #include <QGLWidget>
@@ -13,7 +12,7 @@
 class VisualOpenGLWidget : public QGLWidget {
 public:
     explicit VisualOpenGLWidget(QWidget *parent = nullptr);
-    ~VisualOpenGLWidget();
+    ~VisualOpenGLWidget() = default;
 
     void setPoints(const std::vector<Point> &points);
     void appendPoints(const std::vector<Point> &points);
@@ -51,7 +50,3 @@ private:
     size_t lastPoint;
     QVector<QVector3D> pointsToPaint;
 };
-
-
-#endif //VISUAL_OPENGL_WIDGET_H
-
