@@ -1,20 +1,46 @@
 #include <vector>
 #include "Model.h"
 
+constexpr long double COORDINATE_VALUE_LIMIT = 1000; //generation stops if the coordinate value becomes greater
+
 namespace Model {
 
-inline auto generate_next_point_function(long double tau, const std::vector<long double> &constants) {
-    long double a = constants[0];
-    long double b = constants[1];
-    long double c = constants[2];
-    //Уравнения для аттрактора Рёсслера
-    auto count_derivatives = [a, b, c](const Point &values) {
-        return Point{
-                -values.y - values.z,
-                values.x + a * values.y,
-                b + values.z * (values.x - c)
-        };
-    };
+inline std::function<Point(Point)> generate_count_derivatives_function(const std::vector<long double> &constants,
+                                                                       ModelName modelName) {
+    switch (modelName) {
+        case ModelName::Rossler : {
+            long double a = constants[0];
+            long double b = constants[1];
+            long double c = constants[2];
+            return [a, b, c](const Point &values) {
+                return Point{
+                        -values.y - values.z,
+                        values.x + a * values.y,
+                        b + values.z * (values.x - c)
+                };
+            };
+        }
+        case ModelName::Lorenz : {
+            long double sigma = constants[0];
+            long double r = constants[1];
+            long double b = constants[2];
+            return [sigma, r, b](const Point &values) {
+                return Point{
+                        sigma * (values.y - values.x),
+                        values.x * (r - values.z) - values.y,
+                        values.x * values.y - b * values.z
+                };
+            };
+        }
+        default:
+            std::abort();
+    }
+}
+
+inline auto generate_next_point_function(long double tau,
+                                         const std::vector<long double> &constants,
+                                         ModelName modelName) {
+    auto count_derivatives = generate_count_derivatives_function(constants, modelName);
     auto next_point = [tau, count_derivatives](const Point &point) {
         Point k1 = count_derivatives(point);
         Point send = {
@@ -47,12 +73,17 @@ void generate_points(const std::function<void(const Point &)> &new_point_action,
                      long double tau,
                      ModelName modelName,
                      const std::vector<long double> &constants) {
-    (void) modelName;
-    auto next_point = generate_next_point_function(tau, constants);
+    Point previous_point = point;
+    auto next_point = generate_next_point_function(tau, constants, modelName);
     for (int i = 0; i < points_count; ++i) {
         for (int j = 0; j < steps_per_point; ++j) {
             point = next_point(point);
         }
+        if ((point.x == previous_point.x && point.y == previous_point.y && point.z == previous_point.z) ||
+            point.x > COORDINATE_VALUE_LIMIT || point.y > COORDINATE_VALUE_LIMIT || point.z > COORDINATE_VALUE_LIMIT) {
+            break;
+        }
+        previous_point = point;
         new_point_action(point);
     }
 }

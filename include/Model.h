@@ -4,7 +4,9 @@
 
 namespace Model {
 
-enum class ModelName{Rossler, Lorenz};
+enum class ModelName {
+    Rossler, Lorenz
+};
 
 struct Point {
     long double x, y, z;
