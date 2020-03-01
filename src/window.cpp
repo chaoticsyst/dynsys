@@ -21,12 +21,17 @@ void Window::slot_restart_button() {
     constants.push_back(ui->doubleSpinBox->value());
     constants.push_back(ui->doubleSpinBox_2->value());
     constants.push_back(ui->doubleSpinBox_3->value());
+    std::vector<Model::Point> points;
+    points.reserve(COUNT_POINTS);
+    auto pushBackVector = [&points](const Model::Point &point) { points.push_back(point); };
+    Model::generate_points(pushBackVector,
+                           START_POINT,
+                           COUNT_POINTS,
+                           STEPS_PER_COUNT,
+                           TAU,
+                           constants);
     ui->visualOpenGLWidget->clearPoints();
-    ui->visualOpenGLWidget->setPoints(Model::generate_points(START_POINT,
-                                                             COUNT_POINTS,
-                                                             STEPS_PER_COUNT,
-                                                             TAU,
-                                                             constants));
+    ui->visualOpenGLWidget->setPoints(points);
 }
 
 Window::~Window() {

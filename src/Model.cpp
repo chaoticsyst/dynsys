@@ -40,20 +40,19 @@ auto generate_next_point_function(long double tau, const std::vector<long double
     return next_point;
 }
 
-std::vector<Point> generate_points(Point point,
-                                   int points_count,
-                                   int steps_per_point,
-                                   long double tau,
-                                   const std::vector<long double> &constants) {
+void generate_points(const std::function<void(const Point &)> &new_point_action,
+                     Point point,
+                     int points_count,
+                     int steps_per_point,
+                     long double tau,
+                     const std::vector<long double> &constants) {
     auto next_point = generate_next_point_function(tau, constants);
-    std::vector<Point> time_line(points_count);
     for (int i = 0; i < points_count; ++i) {
         for (int j = 0; j < steps_per_point; ++j) {
             point = next_point(point);
         }
-        time_line[i] = point;
+        new_point_action(point);
     }
-    return time_line;
 }
 
 }//namespace Model
