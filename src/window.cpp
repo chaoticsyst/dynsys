@@ -16,21 +16,13 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     ui->setupUi(this);
 }
 
-void Window::slot_set_constant_a(double a) {
-    set_constant_a(a);
-}
-
-void Window::slot_set_constant_b(double b) {
-    set_constant_b(b);
-}
-
-void Window::slot_set_constant_c(double c) {
-    set_constant_c(c);
-}
-
 void Window::slot_restart_button() {
+    std::vector<long double> constants;
+    constants.push_back(ui->doubleSpinBox->value());
+    constants.push_back(ui->doubleSpinBox_2->value());
+    constants.push_back(ui->doubleSpinBox_3->value());
     ui->visualOpenGLWidget->clearPoints();
-    ui->visualOpenGLWidget->setPoints(generate_points(START_POINT, COUNT_POINTS, STEPS_PER_COUNT, TAU));
+    ui->visualOpenGLWidget->setPoints(generate_points(START_POINT, COUNT_POINTS, STEPS_PER_COUNT, TAU, constants));
 }
 
 Window::~Window() {
