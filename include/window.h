@@ -1,5 +1,4 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#pragma once
 
 #include <QWidget>
 #include <QSlider>
@@ -16,10 +15,6 @@ public:
     ~Window();
 
 public slots:
-    void slot_set_constant_a(double a);
-    void slot_set_constant_b(double b);
-    void slot_set_constant_c(double c);
-
     void slot_restart_button();
 
 protected:
@@ -30,5 +25,3 @@ private:
 
     Ui::Window *ui;
 };
-
-#endif // WINDOW_H

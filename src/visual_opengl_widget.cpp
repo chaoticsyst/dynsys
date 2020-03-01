@@ -99,11 +99,11 @@ void addCube(QVector<QVector3D> &vertices, const QVector3D &center) {
                 QVector3D(center.x() + R, center.y() - R, center.z() - R);*/ //bottom
 }
 
-QVector3D getQPoint(const Point &point) {
+QVector3D getQPoint(const Model::Point &point) {
     return QVector3D(point.x / DIV_NORMALIZE, point.y / DIV_NORMALIZE, point.z / DIV_NORMALIZE); //TODO: implement normalization
 }
 
-QVector<QVector3D> getQPointsFromVector(const std::vector<Point> &points) {
+QVector<QVector3D> getQPointsFromVector(const std::vector<Model::Point> &points) {
     QVector<QVector3D> result;
     for (auto &point : points) {
         result.push_back(getQPoint(point));
@@ -111,12 +111,12 @@ QVector<QVector3D> getQPointsFromVector(const std::vector<Point> &points) {
     return result;
 }
 
-void VisualOpenGLWidget::setPoints(const std::vector<Point> &points) {
+void VisualOpenGLWidget::setPoints(const std::vector<Model::Point> &points) {
     clearPoints();
     pointsToPaint = getQPointsFromVector(points);
 }
 
-void VisualOpenGLWidget::appendPoints(const std::vector<Point> &points) {
+void VisualOpenGLWidget::appendPoints(const std::vector<Model::Point> &points) {
     for (auto &point : points) {
         pointsToPaint.push_back(getQPoint(point));
     }

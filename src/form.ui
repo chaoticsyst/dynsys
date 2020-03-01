@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>512</width>
-    <height>512</height>
+    <height>517</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -120,54 +120,6 @@
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>doubleSpinBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>Window</receiver>
-   <slot>slot_set_constant_a(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>501</x>
-     <y>405</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>509</x>
-     <y>393</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>doubleSpinBox_2</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>Window</receiver>
-   <slot>slot_set_constant_b(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>501</x>
-     <y>438</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>507</x>
-     <y>445</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>doubleSpinBox_3</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>Window</receiver>
-   <slot>slot_set_constant_c(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>501</x>
-     <y>471</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>506</x>
-     <y>478</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
