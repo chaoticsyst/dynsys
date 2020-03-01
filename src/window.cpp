@@ -40,7 +40,7 @@ Window::~Window() {
     delete ui;
 }
 
-void Window::ketPressEvent(QKeyEvent *event) {
+void Window::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape)
         close();
     else

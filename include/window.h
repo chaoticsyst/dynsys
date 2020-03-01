@@ -23,7 +23,7 @@ public slots:
     void slot_restart_button();
 
 protected:
-    void ketPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
 
