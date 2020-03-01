@@ -3,7 +3,7 @@
 
 namespace Model {
 
-auto generate_next_point_function(long double tau, const std::vector<long double> &constants) {
+inline auto generate_next_point_function(long double tau, const std::vector<long double> &constants) {
     long double a = constants[0];
     long double b = constants[1];
     long double c = constants[2];
