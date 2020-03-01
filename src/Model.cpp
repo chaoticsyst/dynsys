@@ -73,11 +73,17 @@ void generate_points(const std::function<void(const Point &)> &new_point_action,
                      long double tau,
                      ModelName modelName,
                      const std::vector<long double> &constants) {
+    Point previous_point = point;
     auto next_point = generate_next_point_function(tau, constants, modelName);
     for (int i = 0; i < points_count; ++i) {
         for (int j = 0; j < steps_per_point; ++j) {
             point = next_point(point);
         }
+        if ((point.x == previous_point.x && point.y == previous_point.y && point.z == previous_point.z) ||
+            point.x > COORDINATE_VALUE_LIMIT || point.y > COORDINATE_VALUE_LIMIT || point.z > COORDINATE_VALUE_LIMIT) {
+            break;
+        }
+        previous_point = point;
         new_point_action(point);
     }
 }
