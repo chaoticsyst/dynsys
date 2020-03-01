@@ -14,6 +14,7 @@ const double TAU = 0.001;
 
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     ui->setupUi(this);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 void Window::slot_set_constant_a(double a) {
@@ -37,10 +38,15 @@ Window::~Window() {
     delete ui;
 }
 
-void Window::ketPressEvent(QKeyEvent *event) {
+void Window::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape)
         close();
-    else
-        QWidget::keyPressEvent(event);
+    else {
+        ui->visualOpenGLWidget->keyPressEvent(event);
+    }
+}
+
+void Window::keyReleaseEvent(QKeyEvent *event) {
+    ui->visualOpenGLWidget->keyReleaseEvent(event);
 }
 

@@ -5,9 +5,11 @@
 #include <QGLShaderProgram>
 #include <QMouseEvent>
 #include <QWheelEvent>
+#include <QKeyEvent>
 #include <QTime>
 #include <QTimer>
 #include "Model.h"
+#include "Camera.h"
 
 class VisualOpenGLWidget : public QGLWidget {
 public:
@@ -18,35 +20,37 @@ public:
     void appendPoints(const std::vector<Point> &points);
     void clearPoints();
 
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+
 protected:
     void initializeGL() override;
     void resizeGL(int width, int height) override;
     void paintGL() override;
 
-    void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
-    void wheelEvent(QWheelEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
 private slots:
-    void updateTime();
+    void updatePoints();
+    void updateKeys();
 
 private:
     Q_OBJECT
 
-    QMatrix4x4 pMatrix;
     QGLShaderProgram shaderProgram;
     QVector<QVector3D> vertices;
 
-    double alpha;
-    double beta;
-    double distance;
-    QPoint lastMousePosition;
+    Camera camera;
 
-    QTimer *timer;
+    QTimer *pointsTimer;
+    QTimer *keysTimer;
 
     size_t lastPoint;
     QVector<QVector3D> pointsToPaint;
+
+    QSet<qint32> keys;
 };
