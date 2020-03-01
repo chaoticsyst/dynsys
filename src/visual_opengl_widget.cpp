@@ -1,5 +1,4 @@
 #include <vector>
-#include <iostream>
 #include <cmath>
 #include "visual_opengl_widget.h"
 #include "Model.h"
