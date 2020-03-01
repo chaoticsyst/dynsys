@@ -7,7 +7,7 @@
 #include "visual_opengl_widget.h"
 
 // Model constants
-const Point START_POINT = {1, 1, 1};
+const Model::Point START_POINT = {1, 1, 1};
 const int COUNT_POINTS = 200'000;
 const int STEPS_PER_COUNT = 10;
 const double TAU = 0.001;
@@ -22,7 +22,11 @@ void Window::slot_restart_button() {
     constants.push_back(ui->doubleSpinBox_2->value());
     constants.push_back(ui->doubleSpinBox_3->value());
     ui->visualOpenGLWidget->clearPoints();
-    ui->visualOpenGLWidget->setPoints(generate_points(START_POINT, COUNT_POINTS, STEPS_PER_COUNT, TAU, constants));
+    ui->visualOpenGLWidget->setPoints(Model::generate_points(START_POINT,
+                                                             COUNT_POINTS,
+                                                             STEPS_PER_COUNT,
+                                                             TAU,
+                                                             constants));
 }
 
 Window::~Window() {
