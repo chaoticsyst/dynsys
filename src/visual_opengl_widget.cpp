@@ -1,5 +1,6 @@
 #include <vector>
 #include <iostream>
+#include <cmath>
 #include "visual_opengl_widget.h"
 #include "Model.h"
 
@@ -19,20 +20,19 @@ constexpr int DIV_NORMALIZE = 8;
 // Painting
 constexpr size_t POINTS_PER_ITERATION = 10;
 
-// Resizing window
-constexpr qreal PERSPECTIVE_NEAR_PLANE = 0.001;
-constexpr qreal PERSPECTIVE_FAR_PLANE = 1000;
-
-// Zooming camera
-constexpr float ZOOM_DELTA = 0.05;
 
 VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
-    QGLWidget{QGLFormat(), parent}, alpha{25}, beta{-25}, distance{5}, lastPoint{0} {
+    QGLWidget{QGLFormat(), parent}, lastPoint{0} {
 
-    timer = new QTimer(this);
-    timer->setInterval(TIMER_INTERVAL);
-    connect(timer, SIGNAL(timeout()), this, SLOT(updateTime()));
-    timer->start();
+    pointsTimer = new QTimer(this);
+    pointsTimer->setInterval(TIMER_INTERVAL);
+    connect(pointsTimer, SIGNAL(timeout()), this, SLOT(updatePoints()));
+    pointsTimer->start();
+
+    keysTimer = new QTimer(this);
+    keysTimer->setInterval(TIMER_INTERVAL);
+    connect(keysTimer, SIGNAL(timeout()), this, SLOT(updateKeys()));
+    keysTimer->start();
 }
 
 QSize VisualOpenGLWidget::minimumSizeHint() const {
@@ -128,7 +128,7 @@ void VisualOpenGLWidget::clearPoints() {
     lastPoint = 0;
 }
 
-void VisualOpenGLWidget::updateTime() {
+void VisualOpenGLWidget::updatePoints() {
     if (lastPoint == static_cast<size_t>(pointsToPaint.size())) {
         return;
     }
@@ -161,29 +161,14 @@ void VisualOpenGLWidget::initializeGL() {
 }
 
 void VisualOpenGLWidget::resizeGL(int width, int height) {
-    if (height == 0) {
-        height = 1;
-    }
-    pMatrix.setToIdentity();
-    pMatrix.perspective(60.0, (float) width / (float) height, PERSPECTIVE_NEAR_PLANE, PERSPECTIVE_FAR_PLANE);
-    glViewport(0, 0, width, height);
+    camera.recalculatePerspective(width, height);
 }
 
 void VisualOpenGLWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    QMatrix4x4 mMatrix;
-    QMatrix4x4 vMatrix;
     shaderProgram.bind();
 
-    QMatrix4x4 cameraTransformation;
-    cameraTransformation.rotate(alpha, 0, 1, 0); //Тут желательно тоже разобраться с константами
-    cameraTransformation.rotate(beta, 1, 0, 0);
-
-    QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, distance);
-    QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0); // И тут везде тоже
-    vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
-
-    shaderProgram.setUniformValue("matrix", pMatrix * vMatrix * mMatrix);
+    shaderProgram.setUniformValue("matrix", camera.getMatrix());
     shaderProgram.setUniformValue("color", QColor(Qt::white));
     shaderProgram.setAttributeArray("vertex", vertices.constData());
     shaderProgram.enableAttributeArray("vertex");
@@ -192,51 +177,41 @@ void VisualOpenGLWidget::paintGL() {
     shaderProgram.release();
 }
 
-void VisualOpenGLWidget::mousePressEvent(QMouseEvent *event) {
-    lastMousePosition = event->pos();
-    event->accept();
-}
-
 void VisualOpenGLWidget::mouseMoveEvent(QMouseEvent *event) {
-    int deltaX = event->x() - lastMousePosition.x();
-    int deltaY = event->y() - lastMousePosition.y();
-
-    if (event->buttons() & Qt::LeftButton) {
-        alpha -= deltaX;
-        while (alpha < 0) {
-            alpha += 360; // Это тоже вынести в константы
-        }
-        while (alpha >= 360) {
-            alpha -= 360;
-        }
-
-        beta -= deltaY;
-        if (beta < -90) {
-            beta = -90;
-        }
-        if (beta > 90) {
-            beta = 90;
-        }
-
-        updateGL();
-    }
-    lastMousePosition = event->pos();
-
+    camera.recalculateTarget(event->pos());
     event->accept();
 }
 
-void VisualOpenGLWidget::wheelEvent(QWheelEvent *event) {
-    int delta = event->delta();
-
-    if (event->orientation() == Qt::Vertical) {
-        if (delta < 0) {
-            distance *= (1 + ZOOM_DELTA); // Эти константы тоже вынести
-        } else if (delta > 0) {
-            distance *= (1 - ZOOM_DELTA);
-        }
-
-        updateGL();
-    }
-
+void VisualOpenGLWidget::mousePressEvent(QMouseEvent *event) {
+    camera.resetMousePosition(event->pos());
     event->accept();
+}
+
+void VisualOpenGLWidget::keyPressEvent(QKeyEvent *event) {
+    keys.insert(event->key());
+}
+
+void VisualOpenGLWidget::keyReleaseEvent(QKeyEvent *event) {
+    keys.remove(event->key());
+}
+
+void VisualOpenGLWidget::updateKeys() {
+    if (keys.contains(Qt::Key_W)) {
+        camera.moveForward(1);
+    }
+    if (keys.contains(Qt::Key_S)) {
+        camera.moveForward(-1);
+    }
+    if (keys.contains(Qt::Key_D)) {
+        camera.moveRight(1);
+    }
+    if (keys.contains(Qt::Key_A)) {
+        camera.moveRight(-1);
+    }
+    if (keys.contains(Qt::Key_Q)) {
+        camera.moveUp(1);
+    }
+    if (keys.contains(Qt::Key_E)) {
+        camera.moveUp(-1);
+    }
 }
