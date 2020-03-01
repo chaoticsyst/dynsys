@@ -17,6 +17,7 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
 }
 
 void Window::slot_restart_button() {
+    Model::ModelName modelName = Model::ModelName::Rossler;
     std::vector<long double> constants;
     constants.push_back(ui->doubleSpinBox->value());
     constants.push_back(ui->doubleSpinBox_2->value());
@@ -29,6 +30,7 @@ void Window::slot_restart_button() {
                            COUNT_POINTS,
                            STEPS_PER_COUNT,
                            TAU,
+                           modelName,
                            constants);
     ui->visualOpenGLWidget->clearPoints();
     ui->visualOpenGLWidget->setPoints(points);

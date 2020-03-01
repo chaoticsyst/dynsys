@@ -45,7 +45,9 @@ void generate_points(const std::function<void(const Point &)> &new_point_action,
                      int points_count,
                      int steps_per_point,
                      long double tau,
+                     ModelName modelName,
                      const std::vector<long double> &constants) {
+    (void) modelName;
     auto next_point = generate_next_point_function(tau, constants);
     for (int i = 0; i < points_count; ++i) {
         for (int j = 0; j < steps_per_point; ++j) {
