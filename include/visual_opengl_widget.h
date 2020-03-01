@@ -14,8 +14,8 @@ public:
     explicit VisualOpenGLWidget(QWidget *parent = nullptr);
     ~VisualOpenGLWidget() = default;
 
-    void setPoints(const std::vector<Point> &points);
-    void appendPoints(const std::vector<Point> &points);
+    void setPoints(const std::vector<Model::Point> &points);
+    void appendPoints(const std::vector<Model::Point> &points);
     void clearPoints();
 
 protected:

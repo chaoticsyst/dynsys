@@ -16,9 +16,9 @@ public:
     ~Window();
 
 public slots:
-    void slot_set_constant_a(double a);
-    void slot_set_constant_b(double b);
-    void slot_set_constant_c(double c);
+    void slot_set_constant_a(double){};//TODO: safe delete
+    void slot_set_constant_b(double){};//TODO: safe delete
+    void slot_set_constant_c(double){};//TODO: safe delete
 
     void slot_restart_button();
 
