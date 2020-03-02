@@ -181,11 +181,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>horizontalSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Window</receiver>
+   <slot>slot_time_slider(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>27</x>
+     <y>347</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>7</x>
+     <y>348</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>slot_set_constant_a(double)</slot>
-  <slot>slot_set_constant_b(double)</slot>
-  <slot>slot_set_constant_c(double)</slot>
   <slot>slot_restart_button()</slot>
+  <slot>slot_time_slider(int)</slot>
  </slots>
 </ui>
