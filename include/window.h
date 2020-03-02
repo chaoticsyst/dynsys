@@ -26,7 +26,7 @@ protected:
 private:
     int timeValue = 0;
 
-    QTimer *pointsTimer, *sliderTimer;
+    QTimer *sliderTimer;
 
     Ui::Window *ui;
 };
