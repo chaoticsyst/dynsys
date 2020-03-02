@@ -121,7 +121,8 @@ void VisualOpenGLWidget::updatePoints() {
     if (lastPoint == static_cast<size_t>(pointsToPaint.size())) {
         return;
     }
-    for (size_t i = 0; i < POINTS_PER_ITERATION; i++) {
+    for (size_t i = 0; i         < POINTS_PER_ITERATION &&
+                       lastPoint < static_cast<size_t>(pointsToPaint.size()); i++) {
         addCube(vertices, pointsToPaint[lastPoint++]);
     }
     repaint();
