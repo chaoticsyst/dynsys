@@ -42,7 +42,7 @@ QSize VisualOpenGLWidget::sizeHint() const {
 }
 
 //TODO: rewrite this function
-void addCube(QVector<QVector3D> &vertices, const QVector3D &center) {
+void drawPoint(QVector<QVector3D> &vertices, const QVector3D &center) {
 
     //cubes
     vertices << QVector3D(center.x() - R, center.y() - R, center.z() + R)
@@ -123,7 +123,7 @@ void VisualOpenGLWidget::updatePoints() {
     }
     for (size_t i = 0; i         < POINTS_PER_ITERATION &&
                        lastPoint < static_cast<size_t>(pointsToPaint.size()); i++) {
-        addCube(vertices, pointsToPaint[lastPoint++]);
+        drawPoint(vertices, pointsToPaint[lastPoint++]);
     }
     repaint();
 }
