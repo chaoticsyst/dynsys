@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <QGLWidget>
 #include <QGLShaderProgram>
 #include <QMouseEvent>
@@ -37,7 +36,6 @@ protected:
 
 private slots:
     void updatePoints();
-    void updateKeys();
 
 private:
     Q_OBJECT
@@ -45,14 +43,11 @@ private:
     QGLShaderProgram shaderProgram;
     QVector<QVector3D> vertices;
 
-    Camera camera;
+    Camera::KeyboardAndMouseController cameraController;
 
     QTimer *pointsTimer;
-    QTimer *keysTimer;
 
     size_t lastPoint;
     int currentTime;
     QVector<QVector3D> pointsToPaint;
-
-    QSet<qint32> keys;
 };
