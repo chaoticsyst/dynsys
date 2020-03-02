@@ -13,9 +13,6 @@ constexpr QSize INIT_WINDOW_SIZE = QSize(1080, 720);
 // Size of cubes (points)
 constexpr double R = 0.005;
 
-// Normalize constans (TODO: adaptive normalize)
-constexpr int DIV_NORMALIZE = 8;
-
 // Painting
 constexpr size_t POINTS_PER_ITERATION = 10;
 
@@ -98,27 +95,14 @@ void addCube(QVector<QVector3D> &vertices, const QVector3D &center) {
                 QVector3D(center.x() + R, center.y() - R, center.z() - R);*/ //bottom
 }
 
-QVector3D getQPoint(const Model::Point &point) {
-    return QVector3D(point.x / DIV_NORMALIZE, point.y / DIV_NORMALIZE, point.z / DIV_NORMALIZE); //TODO: implement normalization
-}
-
-QVector<QVector3D> getQPointsFromVector(const std::vector<Model::Point> &points) {
-    QVector<QVector3D> result;
-    for (auto &point : points) {
-        result.push_back(getQPoint(point));
-    }
-    return result;
-}
-
-void VisualOpenGLWidget::setPoints(const std::vector<Model::Point> &points) {
-    clearPoints();
-    pointsToPaint = getQPointsFromVector(points);
-}
-
-void VisualOpenGLWidget::appendPoints(const std::vector<Model::Point> &points) {
-    for (auto &point : points) {
-        pointsToPaint.push_back(getQPoint(point));
-    }
+void VisualOpenGLWidget::pushBackToPaint(const QVector<QVector3D>& v) {
+    std::for_each(
+        v.begin(),
+        v.end(),
+        [this](const QVector3D& vec) {
+            this->pointsToPaint.push_back(vec);
+        }
+    );
 }
 
 void VisualOpenGLWidget::clearPoints() {

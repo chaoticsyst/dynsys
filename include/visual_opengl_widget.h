@@ -16,12 +16,12 @@ public:
     explicit VisualOpenGLWidget(QWidget *parent = nullptr);
     ~VisualOpenGLWidget() = default;
 
-    void setPoints(const std::vector<Model::Point> &points);
-    void appendPoints(const std::vector<Model::Point> &points);
     void clearPoints();
 
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
+
+    void pushBackToPaint(const QVector<QVector3D>& v);
 
 protected:
     void initializeGL() override;

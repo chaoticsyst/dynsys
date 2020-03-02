@@ -3,6 +3,8 @@
 #include <QWidget>
 #include <QSlider>
 
+#include "Model.h"
+
 namespace Ui {
 class Window;
 }
