@@ -3,11 +3,15 @@
 #include <QGLWidget>
 #include <QVector3D>
 #include <QMatrix4x4>
+#include <QSet>
+
+namespace Camera {
 
 class Camera final {
 public:
     Camera();
-    ~Camera()                         = default;
+    ~Camera() = default;
+
     Camera(const Camera &)            = delete;
     Camera(Camera &&)                 = delete;
     Camera &operator=(const Camera &) = delete;
@@ -30,7 +34,7 @@ private:
     constexpr static QVector3D worldUp = QVector3D(0, 1, 0);
 
     QVector3D cameraPosition;
-    QVector3D cameraTarget = QVector3D(0, 0, 0);
+    QVector3D cameraTarget;
 
     QVector3D cameraForward;
     QVector3D cameraUp;
@@ -45,3 +49,35 @@ private:
     void recalculateVectors();
     void normalizeAngles();
 };
+
+class KeyboardAndMouseController final : public QObject {
+public:
+    KeyboardAndMouseController();
+    ~KeyboardAndMouseController() = default;
+
+    KeyboardAndMouseController(const KeyboardAndMouseController &)            = delete;
+    KeyboardAndMouseController(KeyboardAndMouseController &&)                 = delete;
+    KeyboardAndMouseController &operator=(const KeyboardAndMouseController &) = delete;
+    KeyboardAndMouseController &operator=(KeyboardAndMouseController &&)      = delete;
+
+
+    void applyKeyPressEvent(QKeyEvent *event);
+    void applyKeyReleaseEvent(QKeyEvent *event);
+    void applyMousePressEvent(QMouseEvent *event);
+    void applyMouseMoveEvent(QMouseEvent *event);
+
+    QMatrix4x4 getMatrix() const;
+    void recalculatePerspective(int width, int height);
+
+private slots:
+    void updateKeys();
+
+private:
+    Q_OBJECT
+
+    Camera camera;
+    QSet<qint32> keys;
+    QTimer *timer;
+};
+
+} //namespace Camera

@@ -26,11 +26,6 @@ VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
     pointsTimer->setInterval(TIMER_INTERVAL);
     connect(pointsTimer, SIGNAL(timeout()), this, SLOT(updatePoints()));
     pointsTimer->start();
-
-    keysTimer = new QTimer(this);
-    keysTimer->setInterval(TIMER_INTERVAL);
-    connect(keysTimer, SIGNAL(timeout()), this, SLOT(updateKeys()));
-    keysTimer->start();
 }
 
 QSize VisualOpenGLWidget::minimumSizeHint() const {
@@ -154,14 +149,14 @@ void VisualOpenGLWidget::initializeGL() {
 }
 
 void VisualOpenGLWidget::resizeGL(int width, int height) {
-    camera.recalculatePerspective(width, height);
+    cameraController.recalculatePerspective(width, height);
 }
 
 void VisualOpenGLWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shaderProgram.bind();
 
-    shaderProgram.setUniformValue("matrix", camera.getMatrix());
+    shaderProgram.setUniformValue("matrix", cameraController.getMatrix());
     shaderProgram.setUniformValue("color", QColor(Qt::white));
     shaderProgram.setAttributeArray("vertex", vertices.constData());
     shaderProgram.enableAttributeArray("vertex");
@@ -171,40 +166,17 @@ void VisualOpenGLWidget::paintGL() {
 }
 
 void VisualOpenGLWidget::mouseMoveEvent(QMouseEvent *event) {
-    camera.recalculateTarget(event->pos());
-    event->accept();
+    cameraController.applyMouseMoveEvent(event);
 }
 
 void VisualOpenGLWidget::mousePressEvent(QMouseEvent *event) {
-    camera.resetMousePosition(event->pos());
-    event->accept();
+    cameraController.applyMousePressEvent(event);
 }
 
 void VisualOpenGLWidget::keyPressEvent(QKeyEvent *event) {
-    keys.insert(event->key());
+    cameraController.applyKeyPressEvent(event);
 }
 
 void VisualOpenGLWidget::keyReleaseEvent(QKeyEvent *event) {
-    keys.remove(event->key());
-}
-
-void VisualOpenGLWidget::updateKeys() {
-    if (keys.contains(Qt::Key_W)) {
-        camera.moveForward(1);
-    }
-    if (keys.contains(Qt::Key_S)) {
-        camera.moveForward(-1);
-    }
-    if (keys.contains(Qt::Key_D)) {
-        camera.moveRight(1);
-    }
-    if (keys.contains(Qt::Key_A)) {
-        camera.moveRight(-1);
-    }
-    if (keys.contains(Qt::Key_Q)) {
-        camera.moveUp(1);
-    }
-    if (keys.contains(Qt::Key_E)) {
-        camera.moveUp(-1);
-    }
+    cameraController.applyKeyReleaseEvent(event);
 }
