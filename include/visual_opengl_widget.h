@@ -21,7 +21,7 @@ public:
 
     void setCurrentTime(const int currentTime_);
 
-    void pushBackToPaint(const QVector<QVector3D>& v);
+    void pushBackToPaint(const QVector<QVector3D> &points);
 
 protected:
     void initializeGL() override;
@@ -34,8 +34,6 @@ protected:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
-public slots:
-    void updatePoints();
 
 private:
     Q_OBJECT
@@ -45,7 +43,5 @@ private:
 
     Camera::KeyboardAndMouseController cameraController;
 
-    size_t lastPoint;
     int currentTime;
-    QVector<QVector3D> pointsToPaint;
 };

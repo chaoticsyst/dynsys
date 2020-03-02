@@ -3,6 +3,9 @@
 #include <algorithm>
 #include "visual_opengl_widget.h"
 
+
+#include <iostream>
+
 // Window size constants
 constexpr QSize MIN_WINDOW_SIZE = QSize(640, 480);
 constexpr QSize INIT_WINDOW_SIZE = QSize(1080, 720);
@@ -11,11 +14,10 @@ constexpr QSize INIT_WINDOW_SIZE = QSize(1080, 720);
 constexpr double R = 0.005;
 
 // Painting
-constexpr size_t POINTS_PER_ITERATION = 10;
 constexpr int VECTORS_PER_POINT = 36;
 
 VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
-    QGLWidget{QGLFormat(), parent}, lastPoint{0} {}
+    QGLWidget{QGLFormat(), parent} {}
 
 QSize VisualOpenGLWidget::minimumSizeHint() const {
     return MIN_WINDOW_SIZE;
@@ -81,14 +83,10 @@ void drawPoint(QVector<QVector3D> &vertices, const QVector3D &center) {
                 QVector3D(center.x() + R, center.y() - R, center.z() - R);*/ //bottom
 }
 
-void VisualOpenGLWidget::pushBackToPaint(const QVector<QVector3D>& v) {
-    std::for_each(
-        v.begin(),
-        v.end(),
-        [this](const QVector3D& vec) {
-            this->pointsToPaint.push_back(vec);
-        }
-    );
+void VisualOpenGLWidget::pushBackToPaint(const QVector<QVector3D> &points) {
+    for (auto &point : points) {
+        drawPoint(vertices, point);
+    }
 }
 
 void VisualOpenGLWidget::setCurrentTime(const int currentTime_) {
@@ -97,19 +95,6 @@ void VisualOpenGLWidget::setCurrentTime(const int currentTime_) {
 
 void VisualOpenGLWidget::clearPoints() {
     vertices.clear();
-    pointsToPaint.clear();
-    lastPoint = 0;
-}
-
-void VisualOpenGLWidget::updatePoints() {
-    if (lastPoint == static_cast<size_t>(pointsToPaint.size())) {
-        return;
-    }
-    for (size_t i = 0; i         < POINTS_PER_ITERATION &&
-                       lastPoint < static_cast<size_t>(pointsToPaint.size()); i++) {
-        drawPoint(vertices, pointsToPaint[lastPoint++]);
-    }
-    repaint();
 }
 
 

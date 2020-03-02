@@ -7,7 +7,6 @@
 #include "visual_opengl_widget.h"
 
 // Timer constants
-constexpr int POINTS_TIMER_INTERVAL = 1;
 constexpr int SLIDER_TIMER_INTERVAL = 10;
 
 // Model constants
@@ -21,15 +20,10 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     ui->setupUi(this);
     setFocusPolicy(Qt::StrongFocus);
 
-    pointsTimer = new QTimer(this);
-    pointsTimer->setInterval(POINTS_TIMER_INTERVAL);
-
     sliderTimer = new QTimer(this);
     sliderTimer->setInterval(SLIDER_TIMER_INTERVAL);
 
-    connect(pointsTimer, SIGNAL(timeout()), ui->visualOpenGLWidget, SLOT(updatePoints()));
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
-    pointsTimer->start();
 
 }
 
@@ -82,6 +76,7 @@ void Window::slot_time_slider(int timeValue_) {
 void Window::updateSlider() {
     ui->horizontalSlider->setValue(++timeValue);
     ui->visualOpenGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
+    ui->visualOpenGLWidget->repaint();
 }
 
 Window::~Window() {
