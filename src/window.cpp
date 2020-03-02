@@ -4,9 +4,11 @@
 #include "window.h"
 #include "ui_form.h"
 
-#include <iostream> //FOR DEBUG
-
 #include "visual_opengl_widget.h"
+
+// Timer constants
+constexpr int POINTS_TIMER_INTERVAL = 1;
+constexpr int SLIDER_TIMER_INTERVAL = 1000;
 
 // Model constants
 constexpr Model::Point START_POINT = {1, 1, 1};
@@ -18,6 +20,17 @@ constexpr int DIV_NORMALIZE = 8;
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     ui->setupUi(this);
     setFocusPolicy(Qt::StrongFocus);
+
+    pointsTimer = new QTimer(this);
+    pointsTimer->setInterval(POINTS_TIMER_INTERVAL);
+
+    sliderTimer = new QTimer(this);
+    sliderTimer->setInterval(SLIDER_TIMER_INTERVAL);
+
+    connect(pointsTimer, SIGNAL(timeout()), ui->visualOpenGLWidget, SLOT(updatePoints()));
+    connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
+    pointsTimer->start();
+
 }
 
 QVector3D getQPoint(const Model::Point &point) {
@@ -55,9 +68,19 @@ void Window::slot_restart_button() {
                            modelName,
                            constants);
     ui->visualOpenGLWidget->pushBackToPaint(buffer);
+
+    timeValue = 0;
+    ui->horizontalSlider->setValue(timeValue);
+    sliderTimer->start();
 }
 
-void Window::slot_time_slider(int timeValue) {
+void Window::slot_time_slider(int timeValue_) {
+    timeValue = timeValue_;
+    ui->visualOpenGLWidget->setCurrentTime((COUNT_POINTS / 100) * timeValue);
+}
+
+void Window::updateSlider() {
+    ui->horizontalSlider->setValue(++timeValue);
     ui->visualOpenGLWidget->setCurrentTime((COUNT_POINTS / 100) * timeValue);
 }
 

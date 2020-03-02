@@ -34,7 +34,7 @@ protected:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
-private slots:
+public slots:
     void updatePoints();
 
 private:
@@ -44,8 +44,6 @@ private:
     QVector<QVector3D> vertices;
 
     Camera::KeyboardAndMouseController cameraController;
-
-    QTimer *pointsTimer;
 
     size_t lastPoint;
     int currentTime;

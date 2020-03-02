@@ -2,10 +2,6 @@
 #include <cmath>
 #include <algorithm>
 #include "visual_opengl_widget.h"
-#include "Model.h"
-
-// Timer constants
-constexpr int TIMER_INTERVAL = 1;
 
 // Window size constants
 constexpr QSize MIN_WINDOW_SIZE = QSize(640, 480);
@@ -20,13 +16,7 @@ constexpr int VECTORS_PER_POINT = 36;
 
 
 VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
-    QGLWidget{QGLFormat(), parent}, lastPoint{0} {
-
-    pointsTimer = new QTimer(this);
-    pointsTimer->setInterval(TIMER_INTERVAL);
-    connect(pointsTimer, SIGNAL(timeout()), this, SLOT(updatePoints()));
-    pointsTimer->start();
-}
+    QGLWidget{QGLFormat(), parent}, lastPoint{0} {}
 
 QSize VisualOpenGLWidget::minimumSizeHint() const {
     return MIN_WINDOW_SIZE;

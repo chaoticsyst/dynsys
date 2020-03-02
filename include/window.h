@@ -17,12 +17,16 @@ public:
 public slots:
     void slot_restart_button();
     void slot_time_slider(int);
+    void updateSlider();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
+    int timeValue = 0;
+
+    QTimer *pointsTimer, *sliderTimer;
 
     Ui::Window *ui;
 };
