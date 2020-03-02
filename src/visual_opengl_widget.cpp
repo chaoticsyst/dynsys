@@ -42,7 +42,7 @@ QSize VisualOpenGLWidget::sizeHint() const {
 }
 
 //TODO: rewrite this function
-void addCube(QVector<QVector3D> &vertices, const QVector3D &center) {
+void drawPoint(QVector<QVector3D> &vertices, const QVector3D &center) {
 
     //cubes
     vertices << QVector3D(center.x() - R, center.y() - R, center.z() + R)
@@ -121,11 +121,26 @@ void VisualOpenGLWidget::updatePoints() {
     if (lastPoint == static_cast<size_t>(pointsToPaint.size())) {
         return;
     }
-    for (size_t i = 0; i < POINTS_PER_ITERATION; i++) {
-        addCube(vertices, pointsToPaint[lastPoint++]);
+    for (size_t i = 0; i         < POINTS_PER_ITERATION &&
+                       lastPoint < static_cast<size_t>(pointsToPaint.size()); i++) {
+        drawPoint(vertices, pointsToPaint[lastPoint++]);
     }
     repaint();
 }
+
+
+const char *vertexShader =  "attribute highp vec4 vertex;\n"
+                            "uniform highp mat4 matrix;\n"
+                            "void main(void)\n"
+                            "{\n"
+                            "   gl_Position = matrix * vertex;\n"
+                            "}";
+
+const char *fragmentShader = "uniform mediump vec4 color;\n"
+                             "void main(void)\n"
+                             "{\n"
+                             "   gl_FragColor = color;\n"
+                             "}";
 
 void VisualOpenGLWidget::initializeGL() {
     glEnable(GL_DEPTH_TEST);
@@ -133,19 +148,8 @@ void VisualOpenGLWidget::initializeGL() {
 
     qglClearColor(QColor(Qt::black));
 
-    shaderProgram.addShaderFromSourceCode(QGLShader::Vertex,
-                                          "attribute highp vec4 vertex;\n"
-                                          "uniform highp mat4 matrix;\n"
-                                          "void main(void)\n"
-                                          "{\n"
-                                          "   gl_Position = matrix * vertex;\n"
-                                          "}");
-    shaderProgram.addShaderFromSourceCode(QGLShader::Fragment,
-                                          "uniform mediump vec4 color;\n"
-                                          "void main(void)\n"
-                                          "{\n"
-                                          "   gl_FragColor = color;\n"
-                                          "}");
+    shaderProgram.addShaderFromSourceCode(QGLShader::Vertex, vertexShader);
+    shaderProgram.addShaderFromSourceCode(QGLShader::Fragment, fragmentShader);
     shaderProgram.link();
 }
 

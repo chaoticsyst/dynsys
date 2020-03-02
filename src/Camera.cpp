@@ -14,7 +14,7 @@ constexpr float MAX_PITCH = M_PI / 2 - eps;
 constexpr float MAX_YAW = 2 * M_PI;
 
 Camera::Camera() :
-    cameraPosition{0, 0, 3}, cameraTarget{1, 1, 1},  pitch{0}, yaw{0}, lastMousePosition{0, 0} {
+    cameraPosition{0, 0, 6}, cameraTarget{-cameraPosition},  pitch{0}, yaw{0}, lastMousePosition{0, 0} {
 
     recalculateVectors();
 }
