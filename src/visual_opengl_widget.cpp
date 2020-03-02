@@ -127,25 +127,28 @@ void VisualOpenGLWidget::updatePoints() {
     repaint();
 }
 
+
+const char *vertexShader =  "attribute highp vec4 vertex;\n"
+                            "uniform highp mat4 matrix;\n"
+                            "void main(void)\n"
+                            "{\n"
+                            "   gl_Position = matrix * vertex;\n"
+                            "}";
+
+const char *fragmentShader = "uniform mediump vec4 color;\n"
+                             "void main(void)\n"
+                             "{\n"
+                             "   gl_FragColor = color;\n"
+                             "}";
+
 void VisualOpenGLWidget::initializeGL() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
     qglClearColor(QColor(Qt::black));
 
-    shaderProgram.addShaderFromSourceCode(QGLShader::Vertex,
-                                          "attribute highp vec4 vertex;\n"
-                                          "uniform highp mat4 matrix;\n"
-                                          "void main(void)\n"
-                                          "{\n"
-                                          "   gl_Position = matrix * vertex;\n"
-                                          "}");
-    shaderProgram.addShaderFromSourceCode(QGLShader::Fragment,
-                                          "uniform mediump vec4 color;\n"
-                                          "void main(void)\n"
-                                          "{\n"
-                                          "   gl_FragColor = color;\n"
-                                          "}");
+    shaderProgram.addShaderFromSourceCode(QGLShader::Vertex, vertexShader);
+    shaderProgram.addShaderFromSourceCode(QGLShader::Fragment, fragmentShader);
     shaderProgram.link();
 }
 
