@@ -4,6 +4,8 @@
 #include "window.h"
 #include "ui_form.h"
 
+#include <iostream> //FOR DEBUG
+
 #include "visual_opengl_widget.h"
 
 // Model constants
@@ -53,6 +55,10 @@ void Window::slot_restart_button() {
                            modelName,
                            constants);
     ui->visualOpenGLWidget->pushBackToPaint(buffer);
+}
+
+void Window::slot_time_slider(int timeValue) {
+    ui->visualOpenGLWidget->setCurrentTime((COUNT_POINTS / 100) * timeValue);
 }
 
 Window::~Window() {

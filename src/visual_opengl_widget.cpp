@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 #include "visual_opengl_widget.h"
 #include "Model.h"
 
@@ -16,6 +17,7 @@ constexpr double R = 0.005;
 
 // Painting
 constexpr size_t POINTS_PER_ITERATION = 10;
+constexpr int VECTORS_PER_POINT = 36;
 
 
 VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
@@ -106,6 +108,10 @@ void VisualOpenGLWidget::pushBackToPaint(const QVector<QVector3D>& v) {
     );
 }
 
+void VisualOpenGLWidget::setCurrentTime(const int currentTime_) {
+    currentTime = currentTime_;
+}
+
 void VisualOpenGLWidget::clearPoints() {
     vertices.clear();
     pointsToPaint.clear();
@@ -156,7 +162,7 @@ void VisualOpenGLWidget::paintGL() {
     shaderProgram.setUniformValue("color", QColor(Qt::white));
     shaderProgram.setAttributeArray("vertex", vertices.constData());
     shaderProgram.enableAttributeArray("vertex");
-    glDrawArrays(GL_TRIANGLES, 0, vertices.size()); // У меня тут постоянно вылетает warning про устаршевий метод TODO: Заменить на более новый
+    glDrawArrays(GL_TRIANGLES, 0, std::min(vertices.size(), currentTime * VECTORS_PER_POINT)); // У меня тут постоянно вылетает warning про устаршевий метод TODO: Заменить на более новый
     shaderProgram.disableAttributeArray("vertex");
     shaderProgram.release();
 }

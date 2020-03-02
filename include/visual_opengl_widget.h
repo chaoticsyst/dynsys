@@ -21,6 +21,8 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
+    void setCurrentTime(const int currentTime_);
+
     void pushBackToPaint(const QVector<QVector3D>& v);
 
 protected:
@@ -50,6 +52,7 @@ private:
     QTimer *keysTimer;
 
     size_t lastPoint;
+    int currentTime;
     QVector<QVector3D> pointsToPaint;
 
     QSet<qint32> keys;
