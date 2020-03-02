@@ -8,7 +8,6 @@
 #include <QKeyEvent>
 #include <QTime>
 #include <QTimer>
-#include "Model.h"
 #include "Camera.h"
 
 class VisualOpenGLWidget : public QGLWidget {
