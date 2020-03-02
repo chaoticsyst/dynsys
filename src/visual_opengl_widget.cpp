@@ -14,7 +14,6 @@ constexpr double R = 0.005;
 constexpr size_t POINTS_PER_ITERATION = 10;
 constexpr int VECTORS_PER_POINT = 36;
 
-
 VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
     QGLWidget{QGLFormat(), parent}, lastPoint{0} {}
 
