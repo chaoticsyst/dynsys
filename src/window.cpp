@@ -8,7 +8,7 @@
 
 // Timer constants
 constexpr int POINTS_TIMER_INTERVAL = 1;
-constexpr int SLIDER_TIMER_INTERVAL = 1000;
+constexpr int SLIDER_TIMER_INTERVAL = 10;
 
 // Model constants
 constexpr Model::Point START_POINT = {1, 1, 1};
@@ -76,12 +76,12 @@ void Window::slot_restart_button() {
 
 void Window::slot_time_slider(int timeValue_) {
     timeValue = timeValue_;
-    ui->visualOpenGLWidget->setCurrentTime((COUNT_POINTS / 100) * timeValue);
+    ui->visualOpenGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
 }
 
 void Window::updateSlider() {
     ui->horizontalSlider->setValue(++timeValue);
-    ui->visualOpenGLWidget->setCurrentTime((COUNT_POINTS / 100) * timeValue);
+    ui->visualOpenGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
 }
 
 Window::~Window() {
