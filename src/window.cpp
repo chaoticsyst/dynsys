@@ -45,7 +45,7 @@ void Window::slot_restart_button() {
         ui->doubleSpinBox_3->value()
     };
 
-    ui->visualOpenGLWidget->clearPoints();
+    ui->visualOpenGLWidget->clearAll();
     QVector<QVector3D> buffer;
     auto pushBackVector = [&buffer](const Model::Point &point) {
         buffer.push_back(
@@ -61,7 +61,7 @@ void Window::slot_restart_button() {
                            TAU,
                            modelName,
                            constants);
-    ui->visualOpenGLWidget->pushBackToPaint(buffer);
+    ui->visualOpenGLWidget->addNewLocus(buffer);
 
     timeValue = 0;
     ui->horizontalSlider->setValue(timeValue);

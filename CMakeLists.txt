@@ -25,10 +25,12 @@ add_executable(DynamicSystems
     src/Camera.cpp
     src/visual_opengl_widget.cpp
     src/window.cpp
+    src/Locus.cpp
     include/Camera.h
     include/Model.h
     include/window.h
     include/visual_opengl_widget.h
+    include/Locus.h
     src/form.ui
 )
 
