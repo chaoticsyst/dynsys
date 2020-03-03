@@ -1,5 +1,11 @@
 #include <cmath>
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QTime>
+#include <QTimer>
 #include "Camera.h"
+
+namespace Camera {
 
 constexpr float eps = 0.001;
 
@@ -11,10 +17,11 @@ constexpr float speedMove = 0.08;
 constexpr float speedRotation = 0.01;
 
 constexpr float MAX_PITCH = M_PI / 2 - eps;
-constexpr float MAX_YAW = 2 * M_PI;
+
+constexpr int DELTA_TIME = 1;
 
 Camera::Camera() :
-    cameraPosition{0, 0, 3}, cameraTarget{1, 1, 1},  pitch{0}, yaw{0}, lastMousePosition{0, 0} {
+    cameraPosition{0, 0, 5}, cameraTarget{-cameraPosition},  pitch{0}, yaw{-M_PI / 2} {
 
     recalculateVectors();
 }
@@ -55,12 +62,6 @@ void Camera::normalizeAngles() {
     if (pitch < -MAX_PITCH) {
         pitch = -MAX_PITCH;
     }
-    while (yaw >= MAX_YAW) {
-        yaw -= MAX_YAW;
-    }
-    while (yaw < 0) {
-        yaw += MAX_YAW;
-    }
 }
 
 QMatrix4x4 Camera::getMatrix() const {
@@ -97,3 +98,62 @@ void Camera::moveUp(float force) {
 void Camera::resetMousePosition(const QPoint &newMousePosition) {
     lastMousePosition = newMousePosition;
 }
+
+
+KeyboardAndMouseController::KeyboardAndMouseController() {
+    timer = new QTimer(this);
+    timer->setInterval(DELTA_TIME);
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateKeys()));
+    timer->start();
+}
+
+QMatrix4x4 KeyboardAndMouseController::getMatrix() const {
+    return camera.getMatrix();
+}
+
+void KeyboardAndMouseController::recalculatePerspective(int width, int height) {
+    camera.recalculatePerspective(width, height);
+}
+
+void KeyboardAndMouseController::applyKeyPressEvent(QKeyEvent *event) {
+    keys.insert(event->key());
+    event->accept();
+}
+
+void KeyboardAndMouseController::applyKeyReleaseEvent(QKeyEvent *event) {
+    keys.remove(event->key());
+    event->accept();
+}
+
+void KeyboardAndMouseController::applyMousePressEvent(QMouseEvent *event) {
+    camera.resetMousePosition(event->pos());
+    event->accept();
+}
+
+void KeyboardAndMouseController::applyMouseMoveEvent(QMouseEvent *event) {
+    camera.recalculateTarget(event->pos());
+    event->accept();
+}
+
+void KeyboardAndMouseController::updateKeys() {
+    if (keys.contains(Qt::Key_W)) {
+        camera.moveForward(1);
+    }
+    if (keys.contains(Qt::Key_S)) {
+        camera.moveForward(-1);
+    }
+    if (keys.contains(Qt::Key_D)) {
+        camera.moveRight(1);
+    }
+    if (keys.contains(Qt::Key_A)) {
+        camera.moveRight(-1);
+    }
+    if (keys.contains(Qt::Key_Q)) {
+        camera.moveUp(1);
+    }
+    if (keys.contains(Qt::Key_E)) {
+        camera.moveUp(-1);
+    }
+}
+
+} //namespace Camera

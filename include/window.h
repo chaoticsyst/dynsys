@@ -3,8 +3,6 @@
 #include <QWidget>
 #include <QSlider>
 
-#include "Model.h"
-
 namespace Ui {
 class Window;
 }
@@ -18,12 +16,17 @@ public:
 
 public slots:
     void slot_restart_button();
+    void slot_time_slider(int);
+    void updateSlider();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
+    int timeValue = 0;
+
+    QTimer *sliderTimer;
 
     Ui::Window *ui;
 };

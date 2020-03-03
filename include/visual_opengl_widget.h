@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <QGLWidget>
 #include <QGLShaderProgram>
 #include <QMouseEvent>
@@ -8,7 +7,6 @@
 #include <QKeyEvent>
 #include <QTime>
 #include <QTimer>
-#include "Model.h"
 #include "Camera.h"
 
 class VisualOpenGLWidget : public QGLWidget {
@@ -21,7 +19,9 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
-    void pushBackToPaint(const QVector<QVector3D>& v);
+    void setCurrentTime(const int currentTime_);
+
+    void pushBackToPaint(const QVector<QVector3D> &points);
 
 protected:
     void initializeGL() override;
@@ -34,9 +34,6 @@ protected:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
-private slots:
-    void updatePoints();
-    void updateKeys();
 
 private:
     Q_OBJECT
@@ -44,13 +41,7 @@ private:
     QGLShaderProgram shaderProgram;
     QVector<QVector3D> vertices;
 
-    Camera camera;
+    Camera::KeyboardAndMouseController cameraController;
 
-    QTimer *pointsTimer;
-    QTimer *keysTimer;
-
-    size_t lastPoint;
-    QVector<QVector3D> pointsToPaint;
-
-    QSet<qint32> keys;
+    int currentTime;
 };
