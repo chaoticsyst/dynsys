@@ -13,9 +13,6 @@ constexpr QSize INIT_WINDOW_SIZE = QSize(1080, 720);
 // Size of cubes (points)
 constexpr double R = 0.005;
 
-// Painting
-constexpr int VECTORS_PER_POINT = 36;
-
 VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
     QGLWidget{QGLFormat(), parent} {}
 
@@ -27,66 +24,8 @@ QSize VisualOpenGLWidget::sizeHint() const {
     return INIT_WINDOW_SIZE;
 }
 
-//TODO: rewrite this function
-void drawPoint(QVector<QVector3D> &vertices, const QVector3D &center) {
-
-    //cubes
-    vertices << QVector3D(center.x() - R, center.y() - R, center.z() + R)
-             << QVector3D(center.x() + R, center.y() - R, center.z() + R)
-             << QVector3D(center.x() + R, center.y() + R, center.z() + R) // Front
-             << QVector3D(center.x() + R, center.y() + R, center.z() + R)
-             << QVector3D(center.x() - R, center.y() + R, center.z() + R)
-             << QVector3D(center.x() - R, center.y() - R, center.z() + R)
-             << QVector3D(center.x() + R, center.y() - R, center.z() - R)
-             << QVector3D(center.x() - R, center.y() - R, center.z() - R)
-             << QVector3D(center.x() - R, center.y() + R, center.z() - R) // Back
-             << QVector3D(center.x() - R, center.y() + R, center.z() - R)
-             << QVector3D(center.x() + R, center.y() + R, center.z() - R)
-             << QVector3D(center.x() + R, center.y() - R, center.z() - R)
-             << QVector3D(center.x() - R, center.y() - R, center.z() - R)
-             << QVector3D(center.x() - R, center.y() - R, center.z() + R)
-             << QVector3D(center.x() - R, center.y() + R, center.z() + R) // Left
-             << QVector3D(center.x() - R, center.y() + R, center.z() + R)
-             << QVector3D(center.x() - R, center.y() + R, center.z() - R)
-             << QVector3D(center.x() - R, center.y() - R, center.z() - R)
-             << QVector3D(center.x() + R, center.y() - R, center.z() + R)
-             << QVector3D(center.x() + R, center.y() - R, center.z() - R)
-             << QVector3D(center.x() + R, center.y() + R, center.z() - R) // Right
-             << QVector3D(center.x() + R, center.y() + R, center.z() - R)
-             << QVector3D(center.x() + R, center.y() + R, center.z() + R)
-             << QVector3D(center.x() + R, center.y() - R, center.z() + R)
-             << QVector3D(center.x() - R, center.y() + R, center.z() + R)
-             << QVector3D(center.x() + R, center.y() + R, center.z() + R)
-             << QVector3D(center.x() + R, center.y() + R, center.z() - R) // Top
-             << QVector3D(center.x() + R, center.y() + R, center.z() - R)
-             << QVector3D(center.x() - R, center.y() + R, center.z() - R)
-             << QVector3D(center.x() - R, center.y() + R, center.z() + R)
-             << QVector3D(center.x() - R, center.y() - R, center.z() - R)
-             << QVector3D(center.x() + R, center.y() - R, center.z() - R)
-             << QVector3D(center.x() + R, center.y() - R, center.z() + R) // Bottom
-             << QVector3D(center.x() + R, center.y() - R, center.z() + R)
-             << QVector3D(center.x() - R, center.y() - R, center.z() + R)
-             << QVector3D(center.x() - R, center.y() - R, center.z() - R);
-
-    //tetrahedrons
-    /*vertices << QVector3D(center.x() + R, center.y() + R, center.z() + R) <<
-                QVector3D(center.x() - R, center.y() - R, center.z() + R) <<
-                QVector3D(center.x() + R, center.y() - R, center.z() - R) << //front
-                QVector3D(center.x() + R, center.y() + R, center.z() + R) <<
-                QVector3D(center.x() - R, center.y() + R, center.z() - R) <<
-                QVector3D(center.x() - R, center.y() - R, center.z() + R) << //right
-                QVector3D(center.x() + R, center.y() + R, center.z() + R) <<
-                QVector3D(center.x() + R, center.y() - R, center.z() - R) <<
-                QVector3D(center.x() - R, center.y() + R, center.z() - R) << //left
-                QVector3D(center.x() - R, center.y() + R, center.z() - R) <<
-                QVector3D(center.x() - R, center.y() - R, center.z() + R) <<
-                QVector3D(center.x() + R, center.y() - R, center.z() - R);*/ //bottom
-}
-
 void VisualOpenGLWidget::pushBackToPaint(const QVector<QVector3D> &points) {
-    for (auto &point : points) {
-        drawPoint(vertices, point);
-    }
+    vertices << points;
 }
 
 void VisualOpenGLWidget::setCurrentTime(const int currentTime_) {
@@ -134,7 +73,8 @@ void VisualOpenGLWidget::paintGL() {
     shaderProgram.setUniformValue("color", QColor(Qt::white));
     shaderProgram.setAttributeArray("vertex", vertices.constData());
     shaderProgram.enableAttributeArray("vertex");
-    glDrawArrays(GL_TRIANGLES, 0, std::min(vertices.size(), currentTime * VECTORS_PER_POINT)); // У меня тут постоянно вылетает warning про устаршевий метод TODO: Заменить на более новый
+    glPointSize(2);
+    glDrawArrays(GL_POINTS, 0, std::min(vertices.size(), currentTime)); // У меня тут постоянно вылетает warning про устаршевий метод TODO: Заменить на более новый
     shaderProgram.disableAttributeArray("vertex");
     shaderProgram.release();
 }
