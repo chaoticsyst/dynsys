@@ -8,20 +8,21 @@
 #include <QTime>
 #include <QTimer>
 #include "Camera.h"
+#include "Locus.h"
 
 class VisualOpenGLWidget : public QGLWidget {
 public:
     explicit VisualOpenGLWidget(QWidget *parent = nullptr);
     ~VisualOpenGLWidget() = default;
 
-    void clearPoints();
+    void clearAll();
 
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
     void setCurrentTime(const int currentTime_);
 
-    void pushBackToPaint(const QVector<QVector3D> &points);
+    void addNewLocus(const QVector<QVector3D> &points);
 
 protected:
     void initializeGL() override;
@@ -39,7 +40,7 @@ private:
     Q_OBJECT
 
     QGLShaderProgram shaderProgram;
-    QVector<QVector3D> vertices;
+    Locus::LocusController locusController;
 
     Camera::KeyboardAndMouseController cameraController;
 
