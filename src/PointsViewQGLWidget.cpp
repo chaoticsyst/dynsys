@@ -1,35 +1,32 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
-#include "visual_opengl_widget.h"
-
-
-#include <iostream>
+#include "PointsViewQGLWidget.h"
 
 // Window size constants
 constexpr QSize MIN_WINDOW_SIZE = QSize(640, 480);
 constexpr QSize INIT_WINDOW_SIZE = QSize(1080, 720);
 
-VisualOpenGLWidget::VisualOpenGLWidget(QWidget *parent) :
+PointsViewQGLWidget::PointsViewQGLWidget(QWidget *parent) :
     QGLWidget{QGLFormat(), parent} {}
 
-QSize VisualOpenGLWidget::minimumSizeHint() const {
+QSize PointsViewQGLWidget::minimumSizeHint() const {
     return MIN_WINDOW_SIZE;
 }
 
-QSize VisualOpenGLWidget::sizeHint() const {
+QSize PointsViewQGLWidget::sizeHint() const {
     return INIT_WINDOW_SIZE;
 }
 
-void VisualOpenGLWidget::addNewLocus(const QVector<QVector3D> &points) {
+void PointsViewQGLWidget::addNewLocus(const QVector<QVector3D> &points) {
     locusController.addLocus(Locus::Locus(points, QVector<QVector3D>(points.size(), QVector3D(1, 1, 1))));
 }
 
-void VisualOpenGLWidget::setCurrentTime(const int currentTime_) {
+void PointsViewQGLWidget::setCurrentTime(const int currentTime_) {
     currentTime = currentTime_;
 }
 
-void VisualOpenGLWidget::clearAll() {
+void PointsViewQGLWidget::clearAll() {
     locusController.clear();
 }
 
@@ -50,7 +47,7 @@ const char *fragmentShader = "varying highp vec4 varyingColor;\n"
                              "   gl_FragColor = varyingColor;\n"
                              "}";
 
-void VisualOpenGLWidget::initializeGL() {
+void PointsViewQGLWidget::initializeGL() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
@@ -61,11 +58,11 @@ void VisualOpenGLWidget::initializeGL() {
     shaderProgram.link();
 }
 
-void VisualOpenGLWidget::resizeGL(int width, int height) {
+void PointsViewQGLWidget::resizeGL(int width, int height) {
     cameraController.recalculatePerspective(width, height);
 }
 
-void VisualOpenGLWidget::paintGL() {
+void PointsViewQGLWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shaderProgram.bind();
     shaderProgram.setUniformValue("matrix", cameraController.getMatrix());
@@ -73,18 +70,18 @@ void VisualOpenGLWidget::paintGL() {
     shaderProgram.release();
 }
 
-void VisualOpenGLWidget::mouseMoveEvent(QMouseEvent *event) {
+void PointsViewQGLWidget::mouseMoveEvent(QMouseEvent *event) {
     cameraController.applyMouseMoveEvent(event);
 }
 
-void VisualOpenGLWidget::mousePressEvent(QMouseEvent *event) {
+void PointsViewQGLWidget::mousePressEvent(QMouseEvent *event) {
     cameraController.applyMousePressEvent(event);
 }
 
-void VisualOpenGLWidget::keyPressEvent(QKeyEvent *event) {
+void PointsViewQGLWidget::keyPressEvent(QKeyEvent *event) {
     cameraController.applyKeyPressEvent(event);
 }
 
-void VisualOpenGLWidget::keyReleaseEvent(QKeyEvent *event) {
+void PointsViewQGLWidget::keyReleaseEvent(QKeyEvent *event) {
     cameraController.applyKeyReleaseEvent(event);
 }
