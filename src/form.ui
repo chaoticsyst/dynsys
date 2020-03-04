@@ -14,62 +14,6 @@
    <string>Аттрактор Рёсслера</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="VisualOpenGLWidget" name="visualOpenGLWidget" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>450</width>
-       <height>370</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Третий параметр</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
-       <property name="decimals">
-        <number>5</number>
-       </property>
-       <property name="minimum">
-        <double>-1000.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1000.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="value">
-        <double>14.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0">
-    <widget class="QSlider" name="horizontalSlider">
-     <property name="maximum">
-      <number>10000</number>
-     </property>
-     <property name="singleStep">
-      <number>10</number>
-     </property>
-     <property name="sliderPosition">
-      <number>0</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
    <item row="6" column="0">
     <widget class="QPushButton" name="pushButton">
      <property name="text">
@@ -151,19 +95,63 @@
      </item>
     </widget>
    </item>
+   <item row="0" column="0">
+    <widget class="QSlider" name="horizontalSlider">
+     <property name="maximum">
+      <number>10000</number>
+     </property>
+     <property name="singleStep">
+      <number>10</number>
+     </property>
+     <property name="sliderPosition">
+      <number>0</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Третий параметр</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+       <property name="decimals">
+        <number>5</number>
+       </property>
+       <property name="minimum">
+        <double>-1000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>1000.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
+       <property name="value">
+        <double>14.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="PointsViewQGLWidget" name="pointsViewQGLWidget" native="true"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>VisualOpenGLWidget</class>
+   <class>PointsViewQGLWidget</class>
    <extends>QWidget</extends>
-   <header>visual_opengl_widget.h</header>
+   <header>PointsViewQGLWidget.h</header>
    <container>1</container>
-   <slots>
-    <slot>slot_set_constant_a(double)</slot>
-    <slot>slot_set_constant_b(double)</slot>
-    <slot>slot_set_constant_c(double)</slot>
-   </slots>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -68,7 +68,7 @@ inline void generate_points_generate_count_derivatives_func(const std::function<
                                                             ModelName modelName,
                                                             const std::vector<long double> &constants) {
     switch (modelName) {
-        case ModelName::Rossler : {
+        case ModelName::ROSSLER : {
             long double a = constants[0];
             long double b = constants[1];
             long double c = constants[2];
@@ -89,7 +89,7 @@ inline void generate_points_generate_count_derivatives_func(const std::function<
                                                      count_derivatives);
         }
             break;
-        case ModelName::Lorenz : {
+        case ModelName::LORENZ : {
             long double sigma = constants[0];
             long double r = constants[1];
             long double b = constants[2];

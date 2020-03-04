@@ -10,10 +10,10 @@
 #include "Camera.h"
 #include "Locus.h"
 
-class VisualOpenGLWidget : public QGLWidget {
+class PointsViewQGLWidget : public QGLWidget {
 public:
-    explicit VisualOpenGLWidget(QWidget *parent = nullptr);
-    ~VisualOpenGLWidget() = default;
+    explicit PointsViewQGLWidget(QWidget *parent = nullptr);
+    ~PointsViewQGLWidget() = default;
 
     void clearAll();
 
