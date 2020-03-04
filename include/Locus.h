@@ -3,7 +3,6 @@
 #include <QGLShaderProgram>
 #include <QVector3D>
 #include <QVector>
-#include <QColor>
 
 namespace Locus {
 
@@ -40,9 +39,8 @@ public:
     void clear();
 
     void draw(QGLShaderProgram &shaderProgram, size_t amount) const;
-
-        QVector<Locus> data;
 private:
+    QVector<Locus> data;
 };
 
 } //namespace Locus

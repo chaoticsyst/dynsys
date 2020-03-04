@@ -23,13 +23,13 @@ add_executable(DynamicSystems
     src/main.cpp
     src/Model.cpp
     src/Camera.cpp
-    src/visual_opengl_widget.cpp
-    src/window.cpp
+    src/PointsViewQGLWidget.cpp
+    src/Window.cpp
     src/Locus.cpp
     include/Camera.h
     include/Model.h
-    include/window.h
-    include/visual_opengl_widget.h
+    include/Window.h
+    include/PointsViewQGLWidget.h
     include/Locus.h
     src/form.ui
 )

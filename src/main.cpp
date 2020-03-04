@@ -1,9 +1,7 @@
 #include <QApplication>
 #include <QGLWidget>
-#include <iostream>
-#include <fstream>
 
-#include "window.h"
+#include "Window.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);

@@ -1,10 +1,10 @@
 #include <QtWidgets>
 
 #include "Model.h"
-#include "window.h"
+#include "Window.h"
 #include "ui_form.h"
 
-#include "visual_opengl_widget.h"
+#include "PointsViewQGLWidget.h"
 
 // Timer constants
 constexpr int SLIDER_TIMER_INTERVAL = 10;
@@ -32,11 +32,11 @@ QVector3D getQPoint(const Model::Point &point) {
 }
 
 void Window::slot_restart_button() {
-    Model::ModelName modelName = Model::ModelName::Rossler;
+    Model::ModelName modelName = Model::ModelName::ROSSLER;
     if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
-        modelName = Model::ModelName::Lorenz;
+        modelName = Model::ModelName::LORENZ;
     } else if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
-        modelName = Model::ModelName::Rossler;
+        modelName = Model::ModelName::ROSSLER;
     }
 
     std::vector<long double> constants = {
@@ -45,7 +45,7 @@ void Window::slot_restart_button() {
         ui->doubleSpinBox_3->value()
     };
 
-    ui->visualOpenGLWidget->clearAll();
+    ui->pointsViewQGLWidget->clearAll();
     QVector<QVector3D> buffer;
     auto pushBackVector = [&buffer](const Model::Point &point) {
         buffer.push_back(
@@ -61,7 +61,7 @@ void Window::slot_restart_button() {
                            TAU,
                            modelName,
                            constants);
-    ui->visualOpenGLWidget->addNewLocus(buffer);
+    ui->pointsViewQGLWidget->addNewLocus(buffer);
 
     timeValue = 0;
     ui->horizontalSlider->setValue(timeValue);
@@ -70,13 +70,13 @@ void Window::slot_restart_button() {
 
 void Window::slot_time_slider(int timeValue_) {
     timeValue = timeValue_;
-    ui->visualOpenGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
+    ui->pointsViewQGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
 }
 
 void Window::updateSlider() {
     ui->horizontalSlider->setValue(++timeValue);
-    ui->visualOpenGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
-    ui->visualOpenGLWidget->repaint();
+    ui->pointsViewQGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
+    ui->pointsViewQGLWidget->repaint();
 }
 
 Window::~Window() {
@@ -87,11 +87,11 @@ void Window::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape)
         close();
     else {
-        ui->visualOpenGLWidget->keyPressEvent(event);
+        ui->pointsViewQGLWidget->keyPressEvent(event);
     }
 }
 
 void Window::keyReleaseEvent(QKeyEvent *event) {
-    ui->visualOpenGLWidget->keyReleaseEvent(event);
+    ui->pointsViewQGLWidget->keyReleaseEvent(event);
 }
 
