@@ -1,8 +1,5 @@
 #include "Locus.h"
 
-
-#include <iostream>
-
 namespace Locus {
 
 constexpr size_t AMOUNT_TAIL_POINTS = 100;

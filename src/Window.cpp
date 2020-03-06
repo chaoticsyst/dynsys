@@ -6,9 +6,6 @@
 
 #include "PointsViewQGLWidget.h"
 
-
-#include <iostream>
-
 // Timer constants
 constexpr int SLIDER_TIMER_INTERVAL = 1;
 
