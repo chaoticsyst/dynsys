@@ -2,6 +2,8 @@
 
 namespace Locus {
 
+constexpr size_t AMOUNT_TAIL_POINTS = 100;
+
 const char *VERTEX_NAME = "vertex";
 const char *COLOR_NAME = "color";
 
@@ -43,7 +45,9 @@ void LocusController::draw(QGLShaderProgram &shaderProgram, size_t amount) const
         shaderProgram.setAttributeArray(COLOR_NAME, locus.colorsData());
         shaderProgram.enableAttributeArray(VERTEX_NAME);
         shaderProgram.enableAttributeArray(COLOR_NAME);
-        glDrawArrays(GL_LINE_STRIP, 0, std::min(locus.size(), amount));
+        glDrawArrays(GL_POINTS,
+                     std::max<int>(0, (int)std::min(locus.size(), amount) - AMOUNT_TAIL_POINTS),
+                     std::min(AMOUNT_TAIL_POINTS, amount));
     }
     shaderProgram.disableAttributeArray(COLOR_NAME);
     shaderProgram.disableAttributeArray(VERTEX_NAME);
