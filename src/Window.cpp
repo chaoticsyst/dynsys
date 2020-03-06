@@ -8,6 +8,7 @@
 
 // Timer constants
 constexpr int SLIDER_TIMER_INTERVAL = 1;
+constexpr int DELTA_TIME = 3;
 
 // Model constants
 constexpr Model::Point START_POINT = {1, 1, 1};
@@ -16,9 +17,27 @@ constexpr int STEPS_PER_COUNT = 1;
 constexpr double TAU = 0.02;
 constexpr int DIV_NORMALIZE = 8;
 
+// View constants
 constexpr size_t AMOUNT_LOCUS = 500;
 
-constexpr int DELTA_TIME = 3;
+std::vector<std::pair<QString, std::vector<double>>> goodParamsRossler = {
+    {"Классические значения", {0.2, 0.2, 5.7}},
+    {"Устойчивый предельный цикл", {0.2, 0.2, 3}},
+    {"Популярные значения", {0.1, 0.1, 14}},
+    {"Расхождение аттрактора", {0.3, 0.1, 14}}
+};
+
+std::vector<std::pair<QString, std::vector<double>>> goodParamsLorenz = {
+    {"Классические значения", {10, 28, 8.0 / 3.0,}},
+    {"Схождение в цикл", {10, 100, 8.0 / 3.0}}
+};
+
+void Window::insertConstants(std::vector<std::pair<QString, std::vector<double>>>& goodParams) {
+    ui->constantsBox->clear();
+    for (auto& [name, params] : goodParams) {
+        ui->constantsBox->addItem(name);
+    }
+}
 
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     ui->setupUi(this);
@@ -28,6 +47,8 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     sliderTimer->setInterval(SLIDER_TIMER_INTERVAL);
 
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
+
+    insertConstants(goodParamsRossler);
 }
 
 QVector3D getQPoint(const Model::Point &point) {
@@ -73,6 +94,31 @@ void Window::slot_restart_button() {
     timeValue = 0;
     ui->horizontalSlider->setValue(timeValue);
     sliderTimer->start();
+}
+
+void Window::slot_model_selection(QString currentModel) {
+    if (currentModel == "Аттрактор Рёсслера") {
+        insertConstants(goodParamsRossler);
+    } else if (currentModel == "Аттрактор Лоренца") {
+        insertConstants(goodParamsLorenz);
+    }
+}
+
+void Window::slot_constants_selection(QString currentConstants) {
+    std::vector<std::pair<QString, std::vector<double>>> goodParams;
+    if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
+        goodParams = goodParamsRossler;
+    } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
+        goodParams = goodParamsLorenz;
+    }
+    for (auto& [name, params] : goodParams) {
+        if (name == currentConstants) {
+            ui->doubleSpinBox->setValue(params[0]);
+            ui->doubleSpinBox_2->setValue(params[1]);
+            ui->doubleSpinBox_3->setValue(params[2]);
+            break;
+        }
+    }
 }
 
 void Window::slot_time_slider(int timeValue_) {

@@ -17,6 +17,8 @@ public:
 public slots:
     void slot_restart_button();
     void slot_time_slider(int);
+    void slot_model_selection(QString);
+    void slot_constants_selection(QString);
     void updateSlider();
 
 protected:
@@ -24,6 +26,8 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
+    void insertConstants(std::vector<std::pair<QString, std::vector<double>>>&);
+
     int timeValue = 0;
 
     QTimer *sliderTimer;
