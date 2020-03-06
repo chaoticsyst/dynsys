@@ -6,15 +6,22 @@
 
 #include "PointsViewQGLWidget.h"
 
+
+#include <iostream>
+
 // Timer constants
-constexpr int SLIDER_TIMER_INTERVAL = 10;
+constexpr int SLIDER_TIMER_INTERVAL = 1;
 
 // Model constants
 constexpr Model::Point START_POINT = {1, 1, 1};
-constexpr int COUNT_POINTS = 200'000;
-constexpr int STEPS_PER_COUNT = 10;
-constexpr double TAU = 0.001;
+constexpr int COUNT_POINTS = 20'000;
+constexpr int STEPS_PER_COUNT = 1;
+constexpr double TAU = 0.02;
 constexpr int DIV_NORMALIZE = 8;
+
+constexpr size_t AMOUNT_LOCUS = 500;
+
+constexpr int DELTA_TIME = 3;
 
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     ui->setupUi(this);
@@ -24,7 +31,6 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     sliderTimer->setInterval(SLIDER_TIMER_INTERVAL);
 
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
-
 }
 
 QVector3D getQPoint(const Model::Point &point) {
@@ -44,24 +50,28 @@ void Window::slot_restart_button() {
         ui->doubleSpinBox_2->value(),
         ui->doubleSpinBox_3->value()
     };
-
     ui->pointsViewQGLWidget->clearAll();
-    QVector<QVector3D> buffer;
-    auto pushBackVector = [&buffer](const Model::Point &point) {
-        buffer.push_back(
-            QVector3D(point.x / DIV_NORMALIZE,
-                      point.y / DIV_NORMALIZE,
-                      point.z / DIV_NORMALIZE)
-        );
-    };
-    Model::generate_points(pushBackVector,
-                           START_POINT,
-                           COUNT_POINTS,
-                           STEPS_PER_COUNT,
-                           TAU,
-                           modelName,
-                           constants);
-    ui->pointsViewQGLWidget->addNewLocus(buffer);
+    for (size_t i = 0; i < AMOUNT_LOCUS; i++) {
+        QVector<QVector3D> buffer;
+        auto pushBackVector = [&buffer](const Model::Point &point) {
+            buffer.push_back(
+                QVector3D(point.x / DIV_NORMALIZE,
+                          point.y / DIV_NORMALIZE,
+                          point.z / DIV_NORMALIZE)
+            );
+        };
+        double offset = 0.001 * i;
+        Model::generate_points(pushBackVector,
+                               Model::Point{START_POINT.x + offset,
+                                            START_POINT.y + offset,
+                                            START_POINT.z + offset},
+                               COUNT_POINTS,
+                               STEPS_PER_COUNT,
+                               TAU,
+                               modelName,
+                               constants);
+        ui->pointsViewQGLWidget->addNewLocus(buffer);
+    }
 
     timeValue = 0;
     ui->horizontalSlider->setValue(timeValue);
@@ -73,8 +83,9 @@ void Window::slot_time_slider(int timeValue_) {
     ui->pointsViewQGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
 }
 
+
 void Window::updateSlider() {
-    ui->horizontalSlider->setValue(++timeValue);
+    ui->horizontalSlider->setValue(timeValue += DELTA_TIME);
     ui->pointsViewQGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
     ui->pointsViewQGLWidget->repaint();
 }

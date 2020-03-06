@@ -7,6 +7,8 @@
 constexpr QSize MIN_WINDOW_SIZE = QSize(640, 480);
 constexpr QSize INIT_WINDOW_SIZE = QSize(1080, 720);
 
+constexpr long double COLOR_FUNCTION_DELTA = 0.01;
+
 PointsViewQGLWidget::PointsViewQGLWidget(QWidget *parent) :
     QGLWidget{QGLFormat(), parent} {}
 
@@ -18,8 +20,16 @@ QSize PointsViewQGLWidget::sizeHint() const {
     return INIT_WINDOW_SIZE;
 }
 
+QVector3D getNextColor(size_t index) {
+    long double func = COLOR_FUNCTION_DELTA * (index + 1);
+    return QVector3D(std::abs(std::sin(func)),
+                     std::abs(std::cos(func) * std::sin(func)),
+                     std::abs(std::cos(func)));
+}
+
 void PointsViewQGLWidget::addNewLocus(const QVector<QVector3D> &points) {
-    locusController.addLocus(Locus::Locus(points, QVector<QVector3D>(points.size(), QVector3D(1, 1, 1))));
+    QVector<QVector3D> colors = QVector(points.size(), getNextColor(locusController.size()));
+    locusController.addLocus(Locus::Locus(points, colors));
 }
 
 void PointsViewQGLWidget::setCurrentTime(const int currentTime_) {
