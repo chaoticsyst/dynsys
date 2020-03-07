@@ -9,6 +9,7 @@ namespace Locus {
 class Locus final {
 public:
     Locus(const QVector<QVector3D> &points_, const QVector<QVector3D> &colors_);
+    Locus() = default;
     ~Locus() = default;
 
     const QVector3D *pointsData() const;

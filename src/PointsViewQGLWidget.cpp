@@ -28,7 +28,7 @@ QVector3D getNextColor(size_t index) {
 }
 
 void PointsViewQGLWidget::addNewLocus(const QVector<QVector3D> &points) {
-    QVector<QVector3D> colors = QVector(points.size(), getNextColor(locusController.size()));
+    QVector<QVector3D> colors = QVector<QVector3D>(points.size(), getNextColor(locusController.size()));
     locusController.addLocus(Locus::Locus(points, colors));
 }
 
