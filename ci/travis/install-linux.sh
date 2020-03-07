@@ -21,3 +21,5 @@ sudo apt-add-repository --yes ppa:beineri/opt-qt551-trusty
 sudo apt-get -qq update
 
 sudo apt-get --yes install qt55base qt55imageformats qt55svg
+
+sudo apt-get --yes install ninja-build

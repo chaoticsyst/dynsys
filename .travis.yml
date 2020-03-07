@@ -14,5 +14,5 @@ before_script:
 script:
     - mkdir build
     - cd build
-    - cmake .. 
-    - make
+    - cmake -GNinja ..
+    - ninja
