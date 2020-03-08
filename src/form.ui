@@ -14,7 +14,7 @@
    <string>Динамические системы</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0" colspan="2">
+   <item row="1" column="0" colspan="3">
     <widget class="QSlider" name="horizontalSlider">
      <property name="maximum">
       <number>10000</number>
@@ -30,7 +30,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2">
+   <item row="5" column="0" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
@@ -60,7 +60,7 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="0" colspan="2">
+   <item row="6" column="0" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="label_2">
@@ -90,7 +90,7 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="1">
+   <item row="3" column="2">
     <widget class="QComboBox" name="comboBox">
      <item>
       <property name="text">
@@ -104,8 +104,15 @@
      </item>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item row="4" column="0" colspan="3">
     <widget class="QComboBox" name="constantsBox"/>
+   </item>
+   <item row="8" column="0" colspan="3">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Построить модель</string>
+     </property>
+    </widget>
    </item>
    <item row="3" column="0">
     <widget class="QPushButton" name="pauseButton">
@@ -132,7 +139,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="2">
+   <item row="0" column="0" colspan="3">
     <widget class="PointsViewQGLWidget" name="pointsViewQGLWidget" native="true">
      <property name="minimumSize">
       <size>
@@ -142,7 +149,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0" colspan="2">
+   <item row="7" column="0" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label_3">
@@ -172,10 +179,22 @@
      </item>
     </layout>
    </item>
-   <item row="8" column="0" colspan="2">
-    <widget class="QPushButton" name="pushButton">
+   <item row="3" column="1">
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>120</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="text">
-      <string>Построить модель</string>
+      <string>Настройки</string>
      </property>
     </widget>
    </item>
@@ -271,6 +290,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Window</receiver>
+   <slot>slot_open_preferences()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>243</x>
+     <y>413</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>377</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slot_restart_button()</slot>
@@ -278,5 +313,6 @@
   <slot>slot_model_selection(QString)</slot>
   <slot>slot_constants_selection(QString)</slot>
   <slot>slot_pause_button()</slot>
+  <slot>slot_open_preferences()</slot>
  </slots>
 </ui>

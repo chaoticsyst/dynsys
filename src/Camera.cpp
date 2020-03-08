@@ -3,22 +3,11 @@
 #include <QKeyEvent>
 #include <QTime>
 #include <QTimer>
+
 #include "Camera.h"
+#include "Preferences.h"
 
 namespace Camera {
-
-constexpr float eps = 0.001;
-
-constexpr float VERTICAL_ANGLE = 60.0;
-constexpr float NEAR_PLANE = 0.001;
-constexpr float FAR_PLANE = 1000;
-
-constexpr float speedMove = 0.08;
-constexpr float speedRotation = 0.01;
-
-constexpr float MAX_PITCH = M_PI / 2 - eps;
-
-constexpr int DELTA_TIME = 1;
 
 Camera::Camera() :
     cameraPosition{0, 0, 5}, cameraTarget{-cameraPosition},  pitch{0}, yaw{-M_PI / 2} {
@@ -34,13 +23,13 @@ void Camera::recalculateVectors() {
 
 void Camera::recalculatePerspective(int width, int height) {
     perspectiveMatrix.setToIdentity();
-    perspectiveMatrix.perspective(VERTICAL_ANGLE, static_cast<float>(width) / height, NEAR_PLANE, FAR_PLANE);
+    perspectiveMatrix.perspective(Preferences::VERTICAL_ANGLE, static_cast<float>(width) / height, Preferences::NEAR_PLANE, Preferences::FAR_PLANE);
     glViewport(0, 0, width, height);
 }
 
 void Camera::recalculateTarget(const QPoint &newMousePosition) {
-    float deltaX = (newMousePosition.x() - lastMousePosition.x()) * speedRotation;
-    float deltaY = (lastMousePosition.y() - newMousePosition.y()) * speedRotation;
+    float deltaX = (newMousePosition.x() - lastMousePosition.x()) * Preferences::speedRotation;
+    float deltaY = (lastMousePosition.y() - newMousePosition.y()) * Preferences::speedRotation;
 
     yaw += deltaX;
     pitch += deltaY;
@@ -56,11 +45,11 @@ void Camera::recalculateTarget(const QPoint &newMousePosition) {
 }
 
 void Camera::normalizeAngles() {
-    if (pitch > MAX_PITCH) {
-        pitch = MAX_PITCH;
+    if (pitch > Preferences::MAX_PITCH) {
+        pitch = Preferences::MAX_PITCH;
     }
-    if (pitch < -MAX_PITCH) {
-        pitch = -MAX_PITCH;
+    if (pitch < -Preferences::MAX_PITCH) {
+        pitch = -Preferences::MAX_PITCH;
     }
 }
 
@@ -81,17 +70,17 @@ void Camera::setPosition(const QVector3D &position) {
 }
 
 void Camera::moveForward(float force) {
-    cameraPosition += cameraForward * (-force) * speedMove;
+    cameraPosition += cameraForward * (-force) * Preferences::speedMove;
     recalculateVectors();
 }
 
 void Camera::moveRight(float force) {
-    cameraPosition += cameraRight * force * speedMove;
+    cameraPosition += cameraRight * force * Preferences::speedMove;
     recalculateVectors();
 }
 
 void Camera::moveUp(float force) {
-    cameraPosition += cameraUp * force * speedMove;
+    cameraPosition += cameraUp * force * Preferences::speedMove;
     recalculateVectors();
 }
 
@@ -102,7 +91,7 @@ void Camera::resetMousePosition(const QPoint &newMousePosition) {
 
 KeyboardAndMouseController::KeyboardAndMouseController() {
     timer = new QTimer(this);
-    timer->setInterval(DELTA_TIME);
+    timer->setInterval(Preferences::DELTA_TIME);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateKeys()));
     timer->start();
 }

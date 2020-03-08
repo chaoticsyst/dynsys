@@ -2,6 +2,9 @@
 
 #include <QWidget>
 #include <QSlider>
+#include <QVector>
+
+#include "WindowPreferences.h"
 
 namespace Ui {
 class Window;
@@ -20,6 +23,7 @@ public slots:
     void slot_model_selection(QString);
     void slot_constants_selection(QString);
     void slot_pause_button();
+    void slot_open_preferences();
     void updateSlider();
 
 protected:
@@ -27,7 +31,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
-    void insertConstants(std::vector<std::pair<QString, std::vector<double>>>&);
+    void insertConstants(QVector<std::pair<QString, QVector<double>>>&);
 
     int timeValue = 0;
 
@@ -35,5 +39,6 @@ private:
 
     QTimer *sliderTimer;
 
+    WindowPreferences *windowPreferences;
     Ui::Window *ui;
 };
