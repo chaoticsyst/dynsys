@@ -6,15 +6,31 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>568</height>
+    <width>854</width>
+    <height>598</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Динамические системы</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="5" column="0">
+   <item row="1" column="0" colspan="2">
+    <widget class="QSlider" name="horizontalSlider">
+     <property name="maximum">
+      <number>10000</number>
+     </property>
+     <property name="singleStep">
+      <number>10</number>
+     </property>
+     <property name="sliderPosition">
+      <number>0</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
@@ -44,7 +60,7 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="0">
+   <item row="6" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="label_2">
@@ -74,7 +90,59 @@
      </item>
     </layout>
    </item>
-   <item row="7" column="0">
+   <item row="3" column="1">
+    <widget class="QComboBox" name="comboBox">
+     <item>
+      <property name="text">
+       <string>Аттрактор Рёсслера</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Лоренца</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QComboBox" name="constantsBox"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QPushButton" name="pauseButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>88</width>
+       <height>24</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>120</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Пауза</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="PointsViewQGLWidget" name="pointsViewQGLWidget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>370</width>
+       <height>370</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label_3">
@@ -104,55 +172,12 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
-    <widget class="QComboBox" name="comboBox">
-     <item>
-      <property name="text">
-       <string>Аттрактор Рёсслера</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Аттрактор Лоренца</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="8" column="0">
+   <item row="8" column="0" colspan="2">
     <widget class="QPushButton" name="pushButton">
      <property name="text">
       <string>Построить модель</string>
      </property>
     </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QSlider" name="horizontalSlider">
-     <property name="maximum">
-      <number>10000</number>
-     </property>
-     <property name="singleStep">
-      <number>10</number>
-     </property>
-     <property name="sliderPosition">
-      <number>0</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="PointsViewQGLWidget" name="pointsViewQGLWidget" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>370</width>
-       <height>370</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QComboBox" name="constantsBox"/>
    </item>
   </layout>
  </widget>
@@ -173,8 +198,8 @@
    <slot>slot_restart_button()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>394</x>
-     <y>558</y>
+     <x>403</x>
+     <y>588</y>
     </hint>
     <hint type="destinationlabel">
      <x>414</x>
@@ -189,8 +214,8 @@
    <slot>slot_time_slider(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>36</x>
-     <y>369</y>
+     <x>45</x>
+     <y>397</y>
     </hint>
     <hint type="destinationlabel">
      <x>7</x>
@@ -205,8 +230,8 @@
    <slot>slot_model_selection(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>487</x>
-     <y>390</y>
+     <x>583</x>
+     <y>428</y>
     </hint>
     <hint type="destinationlabel">
      <x>507</x>
@@ -221,12 +246,28 @@
    <slot>slot_constants_selection(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>462</x>
-     <y>419</y>
+     <x>471</x>
+     <y>459</y>
     </hint>
     <hint type="destinationlabel">
      <x>508</x>
      <y>422</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pauseButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Window</receiver>
+   <slot>slot_pause_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>24</x>
+     <y>413</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>413</y>
     </hint>
    </hints>
   </connection>
@@ -236,5 +277,6 @@
   <slot>slot_time_slider(int)</slot>
   <slot>slot_model_selection(QString)</slot>
   <slot>slot_constants_selection(QString)</slot>
+  <slot>slot_pause_button()</slot>
  </slots>
 </ui>

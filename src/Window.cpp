@@ -126,10 +126,20 @@ void Window::slot_time_slider(int timeValue_) {
     ui->pointsViewQGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
 }
 
+void Window::slot_pause_button() {
+    pauseState ^= 1;
+    if (!pauseState) {
+        ui->pauseButton->setText("Пауза");
+    } else {
+        ui->pauseButton->setText("Продолжить");
+    }
+}
 
 void Window::updateSlider() {
-    ui->horizontalSlider->setValue(timeValue += DELTA_TIME);
-    ui->pointsViewQGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
+    if (!pauseState) {
+        ui->horizontalSlider->setValue(timeValue += DELTA_TIME);
+        ui->pointsViewQGLWidget->setCurrentTime((COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
+    }
     ui->pointsViewQGLWidget->repaint();
 }
 
@@ -138,9 +148,11 @@ Window::~Window() {
 }
 
 void Window::keyPressEvent(QKeyEvent *event) {
-    if (event->key() == Qt::Key_Escape)
-        close();
-    else {
+    if (event->key() == Qt::Key_Space) {
+        slot_pause_button();
+    } else if (event->key() == Qt::Key_Enter) {
+        slot_restart_button();
+    } else {
         ui->pointsViewQGLWidget->keyPressEvent(event);
     }
 }
