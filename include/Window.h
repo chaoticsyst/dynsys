@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include <QSlider>
+#include <QVector>
 
 namespace Ui {
 class Window;
@@ -27,7 +28,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
-    void insertConstants(std::vector<std::pair<QString, std::vector<double>>>&);
+    void insertConstants(QVector<std::pair<QString, QVector<double>>>&);
 
     int timeValue = 0;
 

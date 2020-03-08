@@ -1,9 +1,9 @@
 #include <QtWidgets>
 
 #include "Model.h"
+#include "AttractorsParams.h"
 #include "Window.h"
 #include "ui_form.h"
-
 #include "PointsViewQGLWidget.h"
 
 // Timer constants
@@ -20,19 +20,7 @@ constexpr int DIV_NORMALIZE = 8;
 // View constants
 constexpr size_t AMOUNT_LOCUS = 500;
 
-std::vector<std::pair<QString, std::vector<double>>> goodParamsRossler = {
-    {"Классические значения", {0.2, 0.2, 5.7}},
-    {"Устойчивый предельный цикл", {0.2, 0.2, 3}},
-    {"Популярные значения", {0.1, 0.1, 14}},
-    {"Расхождение аттрактора", {0.3, 0.1, 14}}
-};
-
-std::vector<std::pair<QString, std::vector<double>>> goodParamsLorenz = {
-    {"Классические значения", {10, 28, 8.0 / 3.0,}},
-    {"Схождение в цикл", {10, 100, 8.0 / 3.0}}
-};
-
-void Window::insertConstants(std::vector<std::pair<QString, std::vector<double>>>& goodParams) {
+void Window::insertConstants(QVector<std::pair<QString, QVector<double>>>& goodParams) {
     ui->constantsBox->clear();
     for (auto& [name, params] : goodParams) {
         ui->constantsBox->addItem(name);
@@ -48,7 +36,7 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
 
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
 
-    insertConstants(goodParamsRossler);
+    insertConstants(AttractorsParams::goodParamsRossler);
 }
 
 QVector3D getQPoint(const Model::Point &point) {
@@ -94,22 +82,24 @@ void Window::slot_restart_button() {
     timeValue = 0;
     ui->horizontalSlider->setValue(timeValue);
     sliderTimer->start();
+
+    clearFocus();
 }
 
 void Window::slot_model_selection(QString currentModel) {
     if (currentModel == "Аттрактор Рёсслера") {
-        insertConstants(goodParamsRossler);
+        insertConstants(AttractorsParams::goodParamsRossler);
     } else if (currentModel == "Аттрактор Лоренца") {
-        insertConstants(goodParamsLorenz);
+        insertConstants(AttractorsParams::goodParamsLorenz);
     }
 }
 
 void Window::slot_constants_selection(QString currentConstants) {
-    std::vector<std::pair<QString, std::vector<double>>> goodParams;
+    QVector<std::pair<QString, QVector<double>>> goodParams;
     if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
-        goodParams = goodParamsRossler;
+        goodParams = AttractorsParams::goodParamsRossler;
     } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
-        goodParams = goodParamsLorenz;
+        goodParams = AttractorsParams::goodParamsLorenz;
     }
     for (auto& [name, params] : goodParams) {
         if (name == currentConstants) {
