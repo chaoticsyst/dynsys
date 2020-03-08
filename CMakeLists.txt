@@ -21,19 +21,23 @@ find_package(OpenGL REQUIRED)
 
 add_executable(DynamicSystems
     src/main.cpp
+    src/WindowPreferences.cpp
     src/Model.cpp
     src/Camera.cpp
     src/PointsViewQGLWidget.cpp
     src/Window.cpp
     src/Locus.cpp
+    src/Preferences.cpp
     include/AttractorsParams.h
     include/Preferences.h
     include/Camera.h
+    include/WindowPreferences.h
     include/Model.h
     include/Window.h
     include/PointsViewQGLWidget.h
     include/Locus.h
     src/form.ui
+    src/formPreferences.ui
 )
 
 qt5_use_modules(DynamicSystems Widgets OpenGL)

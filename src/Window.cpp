@@ -6,17 +6,17 @@
 #include "ui_form.h"
 #include "PointsViewQGLWidget.h"
 #include "Preferences.h"
+#include "WindowPreferences.h"
 
-void Window::insertConstants(QVector<std::pair<QString, QVector<double>>>& goodParams) {
-    ui->constantsBox->clear();
-    for (auto& [name, params] : goodParams) {
-        ui->constantsBox->addItem(name);
-    }
-}
+#include <iostream>
 
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
-    ui->setupUi(this);
+    Preferences::setDefaultValues();
+
+    windowPreferences = nullptr;
+
     setFocusPolicy(Qt::StrongFocus);
+    ui->setupUi(this);
 
     sliderTimer = new QTimer(this);
     sliderTimer->setInterval(Preferences::SLIDER_TIMER_INTERVAL);
@@ -24,6 +24,13 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
 
     insertConstants(AttractorsParams::goodParamsRossler);
+}
+
+void Window::insertConstants(QVector<std::pair<QString, QVector<double>>>& goodParams) {
+    ui->constantsBox->clear();
+    for (auto& [name, params] : goodParams) {
+        ui->constantsBox->addItem(name);
+    }
 }
 
 QVector3D getQPoint(const Model::Point &point) {
@@ -106,7 +113,7 @@ void Window::slot_time_slider(int timeValue_) {
 }
 
 void Window::slot_pause_button() {
-    pauseState ^= 1;
+    pauseState ^= true;
     if (!pauseState) {
         ui->pauseButton->setText("Пауза");
     } else {
@@ -114,8 +121,13 @@ void Window::slot_pause_button() {
     }
 }
 
+void Window::slot_open_preferences() {
+    windowPreferences = new WindowPreferences();
+    windowPreferences->show();
+}
+
 void Window::updateSlider() {
-    if (!pauseState) {
+    if (!pauseState && timeValue <= Preferences::COUNT_POINTS) {
         ui->horizontalSlider->setValue(timeValue += Preferences::DELTA_TIME_TIMER);
         ui->pointsViewQGLWidget->setCurrentTime((Preferences::COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
     }
@@ -123,6 +135,7 @@ void Window::updateSlider() {
 }
 
 Window::~Window() {
+    delete windowPreferences;
     delete ui;
 }
 

@@ -4,6 +4,8 @@
 #include <QSlider>
 #include <QVector>
 
+#include "WindowPreferences.h"
+
 namespace Ui {
 class Window;
 }
@@ -21,6 +23,7 @@ public slots:
     void slot_model_selection(QString);
     void slot_constants_selection(QString);
     void slot_pause_button();
+    void slot_open_preferences();
     void updateSlider();
 
 protected:
@@ -36,5 +39,6 @@ private:
 
     QTimer *sliderTimer;
 
+    WindowPreferences *windowPreferences;
     Ui::Window *ui;
 };
