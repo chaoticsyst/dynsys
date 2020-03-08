@@ -16,4 +16,4 @@ QVector<std::pair<QString, QVector<double>>> goodParamsLorenz = {
     {"Схождение в цикл", {10, 100, 8.0 / 3.0}}
 };
 
-};
+}

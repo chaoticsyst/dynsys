@@ -1,27 +1,24 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+
 #include "PointsViewQGLWidget.h"
+#include "Preferences.h"
 
-// Window size constants
-constexpr QSize MIN_WINDOW_SIZE = QSize(640, 480);
-constexpr QSize INIT_WINDOW_SIZE = QSize(1080, 720);
-
-constexpr long double COLOR_FUNCTION_DELTA = 0.01;
 
 PointsViewQGLWidget::PointsViewQGLWidget(QWidget *parent) :
     QGLWidget{QGLFormat(), parent} {}
 
 QSize PointsViewQGLWidget::minimumSizeHint() const {
-    return MIN_WINDOW_SIZE;
+    return Preferences::MIN_WINDOW_SIZE;
 }
 
 QSize PointsViewQGLWidget::sizeHint() const {
-    return INIT_WINDOW_SIZE;
+    return Preferences::INIT_WINDOW_SIZE;
 }
 
 QVector3D getNextColor(size_t index) {
-    long double func = COLOR_FUNCTION_DELTA * (index + 1);
+    long double func = Preferences::COLOR_FUNCTION_DELTA * (index + 1);
     return QVector3D(std::abs(std::sin(func)),
                      std::abs(std::cos(func) * std::sin(func)),
                      std::abs(std::cos(func)));

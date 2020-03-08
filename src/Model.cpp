@@ -1,8 +1,8 @@
 #include <vector>
 #include <cassert>
-#include "Model.h"
 
-constexpr long double COORDINATE_VALUE_LIMIT = 1000; //generation stops if the coordinate value becomes greater
+#include "Model.h"
+#include "Preferences.h"
 
 namespace Model {
 
@@ -18,7 +18,7 @@ void generate_points_generate_points(const std::function<void(const Point &)> &n
             point = next_point(point);
         }
         if ((point.x == previous_point.x && point.y == previous_point.y && point.z == previous_point.z) ||
-            point.x > COORDINATE_VALUE_LIMIT || point.y > COORDINATE_VALUE_LIMIT || point.z > COORDINATE_VALUE_LIMIT) {
+            point.x > Preferences::COORDINATE_VALUE_LIMIT || point.y > Preferences::COORDINATE_VALUE_LIMIT || point.z > Preferences::COORDINATE_VALUE_LIMIT) {
             break;
         }
         previous_point = point;
