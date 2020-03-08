@@ -7,24 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>512</width>
-    <height>512</height>
+    <height>568</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Аттрактор Рёсслера</string>
+   <string>Динамические системы</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="VisualOpenGLWidget" name="visualOpenGLWidget" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>450</width>
-       <height>370</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
+   <item row="5" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
@@ -38,6 +28,12 @@
        <property name="decimals">
         <number>5</number>
        </property>
+       <property name="minimum">
+        <double>-1000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>1000.000000000000000</double>
+       </property>
        <property name="singleStep">
         <double>0.100000000000000</double>
        </property>
@@ -48,7 +44,7 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item row="6" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="label_2">
@@ -62,6 +58,12 @@
        <property name="decimals">
         <number>5</number>
        </property>
+       <property name="minimum">
+        <double>-1000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>1000.000000000000000</double>
+       </property>
        <property name="singleStep">
         <double>0.100000000000000</double>
        </property>
@@ -72,7 +74,7 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
+   <item row="7" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label_3">
@@ -86,6 +88,12 @@
        <property name="decimals">
         <number>5</number>
        </property>
+       <property name="minimum">
+        <double>-1000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>1000.000000000000000</double>
+       </property>
        <property name="singleStep">
         <double>0.100000000000000</double>
        </property>
@@ -96,78 +104,68 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0">
+   <item row="3" column="0">
+    <widget class="QComboBox" name="comboBox">
+     <item>
+      <property name="text">
+       <string>Аттрактор Рёсслера</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Лоренца</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="8" column="0">
     <widget class="QPushButton" name="pushButton">
      <property name="text">
       <string>Построить модель</string>
      </property>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QSlider" name="horizontalSlider">
+     <property name="maximum">
+      <number>10000</number>
+     </property>
+     <property name="singleStep">
+      <number>10</number>
+     </property>
+     <property name="sliderPosition">
+      <number>0</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="PointsViewQGLWidget" name="pointsViewQGLWidget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>370</width>
+       <height>370</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QComboBox" name="constantsBox"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>VisualOpenGLWidget</class>
+   <class>PointsViewQGLWidget</class>
    <extends>QWidget</extends>
-   <header>visual_opengl_widget.h</header>
+   <header>PointsViewQGLWidget.h</header>
    <container>1</container>
-   <slots>
-    <slot>slot_set_constant_a(double)</slot>
-    <slot>slot_set_constant_b(double)</slot>
-    <slot>slot_set_constant_c(double)</slot>
-   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>doubleSpinBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>Window</receiver>
-   <slot>slot_set_constant_a(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>501</x>
-     <y>405</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>509</x>
-     <y>393</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>doubleSpinBox_2</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>Window</receiver>
-   <slot>slot_set_constant_b(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>501</x>
-     <y>438</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>507</x>
-     <y>445</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>doubleSpinBox_3</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>Window</receiver>
-   <slot>slot_set_constant_c(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>501</x>
-     <y>471</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>506</x>
-     <y>478</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
@@ -175,8 +173,8 @@
    <slot>slot_restart_button()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>385</x>
-     <y>489</y>
+     <x>394</x>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
      <x>414</x>
@@ -184,11 +182,59 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>horizontalSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Window</receiver>
+   <slot>slot_time_slider(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>36</x>
+     <y>369</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>7</x>
+     <y>348</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>Window</receiver>
+   <slot>slot_model_selection(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>487</x>
+     <y>390</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>507</x>
+     <y>380</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>constantsBox</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>Window</receiver>
+   <slot>slot_constants_selection(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>462</x>
+     <y>419</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>508</x>
+     <y>422</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>slot_set_constant_a(double)</slot>
-  <slot>slot_set_constant_b(double)</slot>
-  <slot>slot_set_constant_c(double)</slot>
   <slot>slot_restart_button()</slot>
+  <slot>slot_time_slider(int)</slot>
+  <slot>slot_model_selection(QString)</slot>
+  <slot>slot_constants_selection(QString)</slot>
  </slots>
 </ui>

@@ -11,25 +11,31 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -Wall -Wextra")
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Ofast -pipe -Wall -Wextra")
 
 include_directories("include/")
 
-find_package(Qt5Widgets)
-find_package(Qt5OpenGL)
-find_package(OpenGL)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5OpenGL REQUIRED)
+find_package(OpenGL REQUIRED)
 
 add_executable(DynamicSystems
     src/main.cpp
     src/Model.cpp
-    src/visual_opengl_widget.cpp
-    src/window.cpp
+    src/Camera.cpp
+    src/PointsViewQGLWidget.cpp
+    src/Window.cpp
+    src/Locus.cpp
+    include/Camera.h
     include/Model.h
-    include/window.h
-    include/visual_opengl_widget.h
+    include/Window.h
+    include/PointsViewQGLWidget.h
+    include/Locus.h
     src/form.ui
 )
 
 qt5_use_modules(DynamicSystems Widgets OpenGL)
+
+add_subdirectory(test/)
 
 target_link_libraries(DynamicSystems ${QT_LIBRARIES} ${OPENGL_LIBRARIES})

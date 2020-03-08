@@ -4,7 +4,9 @@
 
 namespace Model {
 
-enum class ModelName{Rossler, Lorenz};
+enum class ModelName {
+    ROSSLER, LORENZ
+};
 
 struct Point {
     long double x, y, z;
@@ -19,4 +21,4 @@ void generate_points(
         ModelName modelName,
         const std::vector<long double> &constants);
 
-}//namespace Model
+} // namespace Model

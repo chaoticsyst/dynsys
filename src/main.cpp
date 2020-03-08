@@ -1,10 +1,7 @@
 #include <QApplication>
 #include <QGLWidget>
-#include <iostream>
-#include <fstream>
 
-#include "window.h"
-#include "Model.h"
+#include "Window.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -13,7 +10,7 @@ int main(int argc, char *argv[]) {
 
     w.resize(w.sizeHint());
 
-    w.show();
+    w.showMaximized();
 
     return app.exec();
 }
