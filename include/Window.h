@@ -19,6 +19,7 @@ public slots:
     void slot_time_slider(int);
     void slot_model_selection(QString);
     void slot_constants_selection(QString);
+    void slot_pause_button();
     void updateSlider();
 
 protected:
@@ -29,6 +30,8 @@ private:
     void insertConstants(std::vector<std::pair<QString, std::vector<double>>>&);
 
     int timeValue = 0;
+
+    bool pauseState = 0;
 
     QTimer *sliderTimer;
 
