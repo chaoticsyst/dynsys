@@ -3,23 +3,24 @@
 #include <QGLShaderProgram>
 #include <QVector3D>
 #include <QVector>
+#include <QColor>
 
 namespace Locus {
 
 class Locus final {
 public:
-    Locus(QVector<QVector3D> &&points_, QVector<QVector3D> &&colors_);
+    Locus(QVector<QVector3D> &&points_, const QColor &color_);
     Locus() = default;
     ~Locus() = default;
 
     const QVector3D *pointsData() const;
-    const QVector3D *colorsData() const;
+    const QColor &colorData() const;
 
     size_t size() const;
 
 private:
     QVector<QVector3D> points;
-    QVector<QVector3D> colors;
+    QColor color;
 
     QVector3D getInterpolatedPoint(float offset, size_t startIndex);
 

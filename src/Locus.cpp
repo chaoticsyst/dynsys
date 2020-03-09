@@ -6,8 +6,8 @@ namespace Locus {
 const char *VERTEX_NAME = "vertex";
 const char *COLOR_NAME = "color";
 
-Locus::Locus(QVector<QVector3D> &&points_, QVector<QVector3D> &&colors_) :
-    points{std::move(points_)}, colors{std::move(colors_)} {
+Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_) :
+    points{std::move(points_)}, color{color_} {
 
     interpolate();
 }
@@ -16,8 +16,8 @@ const QVector3D *Locus::pointsData() const {
     return points.constData();
 }
 
-const QVector3D *Locus::colorsData() const {
-    return colors.constData();
+const QColor &Locus::colorData() const {
+    return color;
 }
 
 size_t Locus::size() const {
@@ -25,6 +25,9 @@ size_t Locus::size() const {
 }
 
 QVector3D Locus::getInterpolatedPoint(float offset, size_t startIndex) {
+    if (startIndex + 3 >= static_cast<size_t>(points.size())) {
+        return points[startIndex];
+    }
     QVector3D &pivotPrev   = points[startIndex];
     QVector3D &pivotFirst  = points[startIndex + 1];
     QVector3D &pivotSecond = points[startIndex + 2];
@@ -73,16 +76,16 @@ void LocusController::clear() {
 }
 
 void LocusController::draw(QGLShaderProgram &shaderProgram, size_t amount) const {
+    size_t index = 0;
     for (const auto &locus : data) {
+        index++;
         shaderProgram.setAttributeArray(VERTEX_NAME, locus.pointsData());
-        shaderProgram.setAttributeArray(COLOR_NAME, locus.colorsData());
+        shaderProgram.setUniformValue(COLOR_NAME, locus.colorData());
         shaderProgram.enableAttributeArray(VERTEX_NAME);
-        shaderProgram.enableAttributeArray(COLOR_NAME);
         glDrawArrays(GL_LINE_STRIP,
-                     std::max<int>(0, (int)std::min(locus.size(), amount) - Preferences::AMOUNT_TAIL_POINTS),
+                     std::max<int>(0, static_cast<int>(std::min(locus.size(), amount)) - Preferences::AMOUNT_TAIL_POINTS),
                      std::min(Preferences::AMOUNT_TAIL_POINTS, amount));
     }
-    shaderProgram.disableAttributeArray(COLOR_NAME);
     shaderProgram.disableAttributeArray(VERTEX_NAME);
 }
 
