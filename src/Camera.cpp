@@ -10,9 +10,22 @@
 namespace Camera {
 
 Camera::Camera() :
-    cameraPosition{0, 0, 5}, cameraTarget{-cameraPosition},  pitch{0}, yaw{-M_PI / 2} {
+    cameraPosition{0, 0, 5},
+    cameraTarget{-cameraPosition},
+    pitch{0},
+    yaw{-M_PI / 2},
+    invalidState{false} {
 
     recalculateVectors();
+}
+
+Camera &Camera::operator=(const Camera &&other) {
+    cameraPosition = other.cameraPosition;
+    cameraTarget   = other.cameraTarget;
+    pitch          = other.pitch;
+    yaw            = other.yaw;
+
+    return *this;
 }
 
 void Camera::recalculateVectors() {
@@ -28,9 +41,13 @@ void Camera::recalculatePerspective(int width, int height) {
 }
 
 void Camera::recalculateTarget(const QPoint &newMousePosition) {
+    if (invalidState) {
+        lastMousePosition = newMousePosition;
+        invalidState = false;
+        return;
+    }
     float deltaX = (newMousePosition.x() - lastMousePosition.x()) * Preferences::SENSITIVITY;
     float deltaY = (lastMousePosition.y() - newMousePosition.y()) * Preferences::SENSITIVITY;
-
     yaw += deltaX;
     pitch += deltaY;
     normalizeAngles();
@@ -88,10 +105,16 @@ void Camera::resetMousePosition(const QPoint &newMousePosition) {
     lastMousePosition = newMousePosition;
 }
 
+void Camera::setDefault() {
+    *this = Camera();
+
+    invalidState = true;
+}
+
 
 KeyboardAndMouseController::KeyboardAndMouseController() {
     timer = new QTimer(this);
-    timer->setInterval(Preferences::DELTA_TIME);
+    timer->setInterval(Preferences::CAMERA_TIMER_DELTA);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateKeys()));
     timer->start();
 }
@@ -142,6 +165,9 @@ void KeyboardAndMouseController::updateKeys() {
     }
     if (keys.contains(Qt::Key_E)) {
         camera.moveUp(-1);
+    }
+    if (keys.contains(Qt::Key_F)) {
+        camera.setDefault();
     }
 }
 

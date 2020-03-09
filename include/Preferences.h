@@ -66,7 +66,7 @@ struct Preferences {
 
     static float MAX_PITCH;
 
-    static int DELTA_TIME;
+    static int   CAMERA_TIMER_DELTA;
 
 /* Shaders */
 

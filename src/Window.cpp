@@ -8,8 +8,6 @@
 #include "Preferences.h"
 #include "WindowPreferences.h"
 
-#include <iostream>
-
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     Preferences::setDefaultValues();
 

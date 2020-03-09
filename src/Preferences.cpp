@@ -25,7 +25,7 @@ float        Preferences::FAR_PLANE              = 0.0f;
 float        Preferences::SPEED_MOVE             = 0.0f;
 float        Preferences::SENSITIVITY            = 0.0f;
 float        Preferences::MAX_PITCH              = 0.0f;
-int          Preferences::DELTA_TIME             = 0;
+int          Preferences::CAMERA_TIMER_DELTA     = 0;
 const char  *Preferences::VERTEX_NAME            = "vertex";
 const char  *Preferences::COLOR_NAME             = "color";
 const char  *Preferences::MATRIX_NAME            = "matrix";
@@ -82,7 +82,7 @@ void Preferences::setDefaultValues() {
 
     MAX_PITCH = M_PI / 2 - EPS;
 
-    DELTA_TIME = 1;
+    CAMERA_TIMER_DELTA = 1;
 }
 
 void Preferences::setValuesBeautifulLorenz() {
