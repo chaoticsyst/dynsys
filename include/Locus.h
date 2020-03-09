@@ -20,6 +20,10 @@ public:
 private:
     QVector<QVector3D> points;
     QVector<QVector3D> colors;
+
+    QVector3D getInterpolatedPoint(float offset, size_t startIndex);
+
+    void interpolate();
 };
 
 class LocusController final {
