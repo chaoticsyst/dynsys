@@ -62,7 +62,7 @@ void Window::slot_restart_button() {
                           point.z / Preferences::DIV_NORMALIZE)
             );
         };
-        double offset = 0.001 * i;
+        double offset = Preferences::START_POINT_DELTA * i;
         Model::generate_points(pushBackVector,
                                Model::Point{Preferences::START_POINT.x + offset,
                                             Preferences::START_POINT.y + offset,

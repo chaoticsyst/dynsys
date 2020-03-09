@@ -31,6 +31,7 @@ struct Preferences {
         COORDINATE_VALUE_LIMIT = 1000;
 
         AMOUNT_TAIL_POINTS = 100;
+        START_POINT_DELTA = 0.001;
         DISTANCE_DELTA = 0.15;
 
         eps = 0.001;
@@ -95,6 +96,7 @@ struct Preferences {
 /* Locus constants */
 
     static size_t AMOUNT_TAIL_POINTS;
+    static float  START_POINT_DELTA;
     static float  DISTANCE_DELTA;
 
 

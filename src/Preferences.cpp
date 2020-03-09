@@ -16,6 +16,7 @@ long double  Preferences::COLOR_FUNCTION_DELTA   = 0.0l;
 bool         Preferences::TAILS_VIEW             = false;
 long double  Preferences::COORDINATE_VALUE_LIMIT = 0.0l;
 size_t       Preferences::AMOUNT_TAIL_POINTS     = 0ul;
+float        Preferences::START_POINT_DELTA      = 0.0f;
 float        Preferences::DISTANCE_DELTA         = 0;
 float        Preferences::eps                    = 0.0f;
 float        Preferences::VERTICAL_ANGLE         = 0.0f;
