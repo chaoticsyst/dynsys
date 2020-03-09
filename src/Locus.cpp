@@ -39,11 +39,15 @@ QVector3D Locus::getInterpolatedPoint(float offset, size_t startIndex) {
 }
 
 void Locus::interpolate() {
+    if (points.size() < 2) {
+        return;
+    }
+
     QVector<QVector3D> result;
     result.reserve(2 * points.size());
 
     result << points[0];
-    for (size_t i = 0; i < static_cast<size_t>(points.size() - 2); i++) {
+    for (size_t i = 1; i < static_cast<size_t>(points.size() - 2); i++) {
         result.push_back(points[i]);
 
         float distance = points[i].distanceToPoint(points[i + 1]);
