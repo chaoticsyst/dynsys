@@ -22,10 +22,27 @@ float        Preferences::EPS                    = 0.0f;
 float        Preferences::VERTICAL_ANGLE         = 0.0f;
 float        Preferences::NEAR_PLANE             = 0.0f;
 float        Preferences::FAR_PLANE              = 0.0f;
-float        Preferences::SPEED_MOVE              = 0.0f;
-float        Preferences::SENSITIVITY          = 0.0f;
+float        Preferences::SPEED_MOVE             = 0.0f;
+float        Preferences::SENSITIVITY            = 0.0f;
 float        Preferences::MAX_PITCH              = 0.0f;
 int          Preferences::DELTA_TIME             = 0;
+const char  *Preferences::VERTEX_NAME            = "vertex";
+const char  *Preferences::COLOR_NAME             = "color";
+const char  *Preferences::MATRIX_NAME            = "matrix";
+
+
+const char *Preferences::VERTEX_SHADER   = "attribute highp vec4 vertex;"
+                                          "uniform highp mat4 matrix;"
+                                          "void main(void)"
+                                          "{"
+                                          "    gl_Position = matrix * vertex;"
+                                          "}";
+
+const char *Preferences::FRAGMENT_SHADER = "uniform highp vec4 color;"
+                                          "void main(void)"
+                                          "{"
+                                          "   gl_FragColor = color;"
+                                          "}";
 
 
 void Preferences::setDefaultValues() {

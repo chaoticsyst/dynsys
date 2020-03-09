@@ -37,28 +37,14 @@ void PointsViewQGLWidget::clearAll() {
     locusController.clear();
 }
 
-
-const char *vertexShader =  "attribute highp vec4 vertex;"
-                            "uniform highp mat4 matrix;"
-                            "void main(void)"
-                            "{"
-                            "    gl_Position = matrix * vertex;"
-                            "}";
-
-const char *fragmentShader = "uniform highp vec4 color;\n"
-                             "void main(void)\n"
-                             "{\n"
-                             "   gl_FragColor = color;\n"
-                             "}";
-
 void PointsViewQGLWidget::initializeGL() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
     qglClearColor(QColor(Qt::black));
 
-    shaderProgram.addShaderFromSourceCode(QGLShader::Vertex, vertexShader);
-    shaderProgram.addShaderFromSourceCode(QGLShader::Fragment, fragmentShader);
+    shaderProgram.addShaderFromSourceCode(QGLShader::Vertex, Preferences::VERTEX_SHADER);
+    shaderProgram.addShaderFromSourceCode(QGLShader::Fragment, Preferences::FRAGMENT_SHADER);
     shaderProgram.link();
 }
 
@@ -69,7 +55,7 @@ void PointsViewQGLWidget::resizeGL(int width, int height) {
 void PointsViewQGLWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shaderProgram.bind();
-    shaderProgram.setUniformValue("matrix", cameraController.getMatrix());
+    shaderProgram.setUniformValue(Preferences::MATRIX_NAME, cameraController.getMatrix());
     locusController.draw(shaderProgram, currentTime);
     shaderProgram.release();
 }
