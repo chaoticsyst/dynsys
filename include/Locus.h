@@ -8,7 +8,7 @@ namespace Locus {
 
 class Locus final {
 public:
-    Locus(const QVector<QVector3D> &points_, const QVector<QVector3D> &colors_);
+    Locus(QVector<QVector3D> &&points_, QVector<QVector3D> &&colors_);
     Locus() = default;
     ~Locus() = default;
 
@@ -38,7 +38,7 @@ public:
 
     size_t size() const;
 
-    void addLocus(const Locus &locus);
+    void addLocus(Locus &&locus);
     void removeLocus(size_t index);
 
     void clear();

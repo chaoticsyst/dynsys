@@ -72,7 +72,7 @@ void Window::slot_restart_button() {
                                Preferences::TAU,
                                modelName,
                                constants);
-        ui->pointsViewQGLWidget->addNewLocus(buffer);
+        ui->pointsViewQGLWidget->addNewLocus(std::move(buffer));
     }
 
     timeValue = 0;

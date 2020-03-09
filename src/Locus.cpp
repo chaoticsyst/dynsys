@@ -6,8 +6,8 @@ namespace Locus {
 const char *VERTEX_NAME = "vertex";
 const char *COLOR_NAME = "color";
 
-Locus::Locus(const QVector<QVector3D> &points_, const QVector<QVector3D> &colors_) :
-    points{points_}, colors{colors_} {
+Locus::Locus(QVector<QVector3D> &&points_, QVector<QVector3D> &&colors_) :
+    points{std::move(points_)}, colors{std::move(colors_)} {
 
     interpolate();
 }
@@ -60,8 +60,8 @@ size_t LocusController::size() const {
     return static_cast<size_t>(data.size());
 }
 
-void LocusController::addLocus(const Locus &locus) {
-    data.push_back(locus);
+void LocusController::addLocus(Locus &&locus) {
+    data.push_back(std::move(locus));
 }
 
 void LocusController::removeLocus(size_t index) {
