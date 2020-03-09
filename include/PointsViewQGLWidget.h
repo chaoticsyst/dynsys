@@ -22,7 +22,7 @@ public:
 
     void setCurrentTime(const int currentTime_);
 
-    void addNewLocus(const QVector<QVector3D> &points);
+    void addNewLocus(QVector<QVector3D> &&points);
 
 protected:
     void initializeGL() override;
@@ -40,6 +40,7 @@ private:
     Q_OBJECT
 
     QGLShaderProgram shaderProgram;
+
     Locus::LocusController locusController;
 
     Camera::KeyboardAndMouseController cameraController;

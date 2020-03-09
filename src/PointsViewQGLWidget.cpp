@@ -17,16 +17,16 @@ QSize PointsViewQGLWidget::sizeHint() const {
     return Preferences::INIT_WINDOW_SIZE;
 }
 
-QVector3D getNextColor(size_t index) {
+QColor getNextColor(size_t index) {
     long double func = Preferences::COLOR_FUNCTION_DELTA * (index + 1);
-    return QVector3D(std::abs(std::sin(func)),
-                     std::abs(std::cos(func) * std::sin(func)),
-                     std::abs(std::cos(func)));
+    return QColor(std::abs(std::sin(func)) * 255,
+                     std::abs(std::cos(func) * std::sin(func)) * 255,
+                     std::abs(std::cos(func)) * 255);
 }
 
-void PointsViewQGLWidget::addNewLocus(const QVector<QVector3D> &points) {
-    QVector<QVector3D> colors = QVector<QVector3D>(points.size(), getNextColor(locusController.size()));
-    locusController.addLocus(Locus::Locus(points, colors));
+void PointsViewQGLWidget::addNewLocus(QVector<QVector3D> &&points) {
+    QColor color = getNextColor(locusController.size());
+    locusController.addLocus(Locus::Locus(std::move(points), color));
 }
 
 void PointsViewQGLWidget::setCurrentTime(const int currentTime_) {
@@ -39,19 +39,16 @@ void PointsViewQGLWidget::clearAll() {
 
 
 const char *vertexShader =  "attribute highp vec4 vertex;"
-                            "attribute highp vec4 color;"
                             "uniform highp mat4 matrix;"
-                            "varying highp vec4 varyingColor;"
                             "void main(void)"
                             "{"
-                            "    varyingColor = color;"
                             "    gl_Position = matrix * vertex;"
                             "}";
 
-const char *fragmentShader = "varying highp vec4 varyingColor;\n"
+const char *fragmentShader = "uniform highp vec4 color;\n"
                              "void main(void)\n"
                              "{\n"
-                             "   gl_FragColor = varyingColor;\n"
+                             "   gl_FragColor = color;\n"
                              "}";
 
 void PointsViewQGLWidget::initializeGL() {
