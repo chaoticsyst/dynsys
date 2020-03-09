@@ -18,8 +18,8 @@ void WindowPreferences::setCurrentStateInUI() {
     ui->zCoord->setValue(Preferences::START_POINT.z);
 
 /* Camera settings */
-    ui->sensSlider->setValue((Preferences::speedRotation - 0.0005) / (0.03 - 0.0005) * 100);
-    ui->speedSlider->setValue((Preferences::speedMove - 0.05) / (0.3 - 0.05) * 100);
+    ui->sensSlider->setValue((Preferences::SENSITIVITY - 0.0005) / (0.03 - 0.0005) * 100);
+    ui->speedSlider->setValue((Preferences::SPEED_MOVE - 0.05) / (0.3 - 0.05) * 100);
 
 /* View settings */
     ui->tailSize->setValue(Preferences::AMOUNT_TAIL_POINTS);
@@ -38,8 +38,8 @@ void WindowPreferences::setStateFromUI() {
     Preferences::START_POINT.z = ui->zCoord->value();
 
 /* Camera settings */
-    Preferences::speedMove     = 0.05 + ui->speedSlider->value() / 100.0 * (0.3 - 0.05);
-    Preferences::speedRotation = 0.0005 + ui->sensSlider->value() / 100.0 * (0.03 - 0.0005);
+    Preferences::SPEED_MOVE     = 0.05 + ui->speedSlider->value() / 100.0 * (0.3 - 0.05);
+    Preferences::SENSITIVITY = 0.0005 + ui->sensSlider->value() / 100.0 * (0.03 - 0.0005);
 
 /* View settings */
     Preferences::AMOUNT_TAIL_POINTS = ui->tailSize->value();

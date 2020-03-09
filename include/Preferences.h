@@ -55,14 +55,14 @@ struct Preferences {
 
 /* Camera constants */
 
-    static float eps;
+    static float EPS;
 
     static float VERTICAL_ANGLE;
     static float NEAR_PLANE;
     static float FAR_PLANE;
 
-    static float speedMove;
-    static float speedRotation;
+    static float SPEED_MOVE;
+    static float SENSITIVITY;
 
     static float MAX_PITCH;
 

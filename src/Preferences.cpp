@@ -18,12 +18,12 @@ long double  Preferences::COORDINATE_VALUE_LIMIT = 0.0l;
 size_t       Preferences::AMOUNT_TAIL_POINTS     = 0ul;
 float        Preferences::START_POINT_DELTA      = 0.0f;
 float        Preferences::DISTANCE_DELTA         = 0;
-float        Preferences::eps                    = 0.0f;
+float        Preferences::EPS                    = 0.0f;
 float        Preferences::VERTICAL_ANGLE         = 0.0f;
 float        Preferences::NEAR_PLANE             = 0.0f;
 float        Preferences::FAR_PLANE              = 0.0f;
-float        Preferences::speedMove              = 0.0f;
-float        Preferences::speedRotation          = 0.0f;
+float        Preferences::SPEED_MOVE              = 0.0f;
+float        Preferences::SENSITIVITY          = 0.0f;
 float        Preferences::MAX_PITCH              = 0.0f;
 int          Preferences::DELTA_TIME             = 0;
 
@@ -54,16 +54,16 @@ void Preferences::setDefaultValues() {
     START_POINT_DELTA = 0.001;
     DISTANCE_DELTA = 0.15;
 
-    eps = 0.001;
+    EPS = 0.001;
 
     VERTICAL_ANGLE = 60.0;
     NEAR_PLANE     = 0.001;
     FAR_PLANE      = 1000;
 
-    speedMove     = 0.08;
-    speedRotation = 0.01;
+    SPEED_MOVE     = 0.08;
+    SENSITIVITY = 0.01;
 
-    MAX_PITCH = M_PI / 2 - eps;
+    MAX_PITCH = M_PI / 2 - EPS;
 
     DELTA_TIME = 1;
 }

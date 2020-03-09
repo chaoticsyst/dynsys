@@ -28,8 +28,8 @@ void Camera::recalculatePerspective(int width, int height) {
 }
 
 void Camera::recalculateTarget(const QPoint &newMousePosition) {
-    float deltaX = (newMousePosition.x() - lastMousePosition.x()) * Preferences::speedRotation;
-    float deltaY = (lastMousePosition.y() - newMousePosition.y()) * Preferences::speedRotation;
+    float deltaX = (newMousePosition.x() - lastMousePosition.x()) * Preferences::SENSITIVITY;
+    float deltaY = (lastMousePosition.y() - newMousePosition.y()) * Preferences::SENSITIVITY;
 
     yaw += deltaX;
     pitch += deltaY;
@@ -70,17 +70,17 @@ void Camera::setPosition(const QVector3D &position) {
 }
 
 void Camera::moveForward(float force) {
-    cameraPosition += cameraForward * (-force) * Preferences::speedMove;
+    cameraPosition += cameraForward * (-force) * Preferences::SPEED_MOVE;
     recalculateVectors();
 }
 
 void Camera::moveRight(float force) {
-    cameraPosition += cameraRight * force * Preferences::speedMove;
+    cameraPosition += cameraRight * force * Preferences::SPEED_MOVE;
     recalculateVectors();
 }
 
 void Camera::moveUp(float force) {
-    cameraPosition += cameraUp * force * Preferences::speedMove;
+    cameraPosition += cameraUp * force * Preferences::SPEED_MOVE;
     recalculateVectors();
 }
 
