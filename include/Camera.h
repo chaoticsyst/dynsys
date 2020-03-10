@@ -14,8 +14,7 @@ public:
 
     Camera(const Camera &)            = delete;
     Camera(Camera &&)                 = delete;
-    Camera &operator=(const Camera &) = delete;
-    Camera &operator=(Camera &&)      = delete;
+    Camera &operator=(Camera &)       = delete;
 
     QMatrix4x4 getMatrix() const;
 
@@ -29,6 +28,8 @@ public:
     void moveUp(float force);
 
     void resetMousePosition(const QPoint &point);
+
+    void setDefault();
 
 private:
     constexpr static QVector3D worldUp = QVector3D(0, 1, 0);
@@ -45,6 +46,10 @@ private:
     float pitch;
     float yaw;
     QPoint lastMousePosition;
+
+    bool invalidState;
+
+    Camera &operator=(const Camera &&other);
 
     void recalculateVectors();
     void normalizeAngles();

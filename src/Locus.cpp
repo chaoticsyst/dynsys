@@ -3,9 +3,6 @@
 
 namespace Locus {
 
-const char *VERTEX_NAME = "vertex";
-const char *COLOR_NAME = "color";
-
 Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_) :
     points{std::move(points_)}, color{color_} {
 
@@ -39,11 +36,15 @@ QVector3D Locus::getInterpolatedPoint(float offset, size_t startIndex) {
 }
 
 void Locus::interpolate() {
+    if (points.size() < 2) {
+        return;
+    }
+
     QVector<QVector3D> result;
     result.reserve(2 * points.size());
 
     result << points[0];
-    for (size_t i = 0; i < static_cast<size_t>(points.size() - 2); i++) {
+    for (size_t i = 1; i < static_cast<size_t>(points.size() - 2); i++) {
         result.push_back(points[i]);
 
         float distance = points[i].distanceToPoint(points[i + 1]);
@@ -79,14 +80,14 @@ void LocusController::draw(QGLShaderProgram &shaderProgram, size_t amount) const
     size_t index = 0;
     for (const auto &locus : data) {
         index++;
-        shaderProgram.setAttributeArray(VERTEX_NAME, locus.pointsData());
-        shaderProgram.setUniformValue(COLOR_NAME, locus.colorData());
-        shaderProgram.enableAttributeArray(VERTEX_NAME);
+        shaderProgram.setAttributeArray(Preferences::VERTEX_NAME, locus.pointsData());
+        shaderProgram.setUniformValue(Preferences::COLOR_NAME, locus.colorData());
+        shaderProgram.enableAttributeArray(Preferences::VERTEX_NAME);
         glDrawArrays(GL_LINE_STRIP,
                      std::max<int>(0, static_cast<int>(std::min(locus.size(), amount)) - Preferences::AMOUNT_TAIL_POINTS),
                      std::min(Preferences::AMOUNT_TAIL_POINTS, amount));
     }
-    shaderProgram.disableAttributeArray(VERTEX_NAME);
+    shaderProgram.disableAttributeArray(Preferences::VERTEX_NAME);
 }
 
 } //namespace Locus
