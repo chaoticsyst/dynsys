@@ -102,6 +102,186 @@
        <string>Аттрактор Лоренца</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Chen-Lee</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Aizawa</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Henon</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор HR3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Chua</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Gin</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Anishchenko-Astakhov</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Arnedo</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Bouali</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Burke-Shaw</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Chen-Celikovsky</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Coullet</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Dadras</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Dequan-Li</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Finance</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Four-wing</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Genesio-Tesi</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Hadley</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Halvorsen</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Liu-Chen</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Lorenz mod 1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Lorenz mod 2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Lu-Chen</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Newton-Leipnik</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Nose-Hoover</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Qi-Chen</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Rayleigh-Benard</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Rucklidge</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Sakaraya</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Shimizu-Morioka</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Thomas</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор TSUCS1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор TSUCS2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Wang-Sun</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Wimol-Banlue</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Аттрактор Yu-Wang</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="4" column="0" colspan="3">

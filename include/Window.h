@@ -4,6 +4,7 @@
 #include <QSlider>
 #include <QVector>
 
+#include "Model.h"
 #include "WindowPreferences.h"
 
 namespace Ui {
@@ -31,6 +32,8 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
+    Model::ModelName getModelName() const;
+
     void insertConstants(QVector<std::pair<QString, QVector<double>>>&);
 
     int timeValue = 0;
