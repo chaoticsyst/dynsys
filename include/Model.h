@@ -5,7 +5,44 @@
 namespace Model {
 
 enum class ModelName {
-    ROSSLER, LORENZ
+    ROSSLER,
+    LORENZ,
+    CHEN_LEE,
+    AIZAWA,
+    HENON,
+    HR3,
+    CHUA,
+    GIN,
+    ANISHCHENKO_ASTAKHOV,
+    ARNEODO,
+    BOUALI_2,
+    BURKE_SHAW,
+    CHEN_CELIKOVSKY,
+    COULLET,
+    DADRAS,
+    DEQUAN_LI,
+    FINANCE,
+    FOUR_WING,
+    GENESIO_TESI,
+    HADLEY,
+    HALVORSEN,
+    LIU_CHEN,
+    LORENZ_MOD_1,
+    LORENZ_MOD_2,
+    LU_CHEN,
+    NEWTON_LEIPNIK,
+    NOSE_HOOVER,
+    QI_CHEN,
+    RAYLEIGH_BENARD,
+    RUCKLIDGE,
+    SAKARAYA,
+    SHIMIZU_MORIOKA,
+    THOMAS,
+    TSUCS1,
+    TSUCS2,
+    WANG_SUN,
+    WIMOL_BANLUE,
+    YU_WANG
 };
 
 struct Point {
