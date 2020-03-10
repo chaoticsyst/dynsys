@@ -4,13 +4,23 @@
 namespace Locus {
 
 Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_) :
-    points{std::move(points_)}, color{color_} {
+    color{color_} {
 
-    interpolate();
+    points_ = interpolate(std::move(points_));
+    pointsBuffer = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
+    pointsBuffer.create();
+    pointsBuffer.bind();
+    pointsBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    pointsBuffer.allocate(points_.begin(), points_.size() * 3 * sizeof(float));
+    pointsBuffer.release();
 }
 
-const QVector3D *Locus::pointsData() const {
-    return points.constData();
+void Locus::startWork() {
+    pointsBuffer.bind();
+}
+
+void Locus::endWork() {
+    pointsBuffer.release();
 }
 
 const QColor &Locus::colorData() const {
@@ -18,26 +28,26 @@ const QColor &Locus::colorData() const {
 }
 
 size_t Locus::size() const {
-    return static_cast<size_t>(points.size());
+    return static_cast<size_t>(pointsBuffer.size() / 3 / sizeof(float));
 }
 
-QVector3D Locus::getInterpolatedPoint(float offset, size_t startIndex) {
+QVector3D Locus::getInterpolatedPoint(float offset, const QVector<QVector3D> &points, size_t startIndex) {
     if (startIndex + 3 >= static_cast<size_t>(points.size())) {
         return points[startIndex];
     }
-    QVector3D &pivotPrev   = points[startIndex];
-    QVector3D &pivotFirst  = points[startIndex + 1];
-    QVector3D &pivotSecond = points[startIndex + 2];
-    QVector3D &pivotNext   = points[startIndex + 3];
+    const QVector3D &pivotPrev   = points[startIndex];
+    const QVector3D &pivotFirst  = points[startIndex + 1];
+    const QVector3D &pivotSecond = points[startIndex + 2];
+    const QVector3D &pivotNext   = points[startIndex + 3];
     return 0.5f * ((2 * pivotFirst)
                 + offset * ((-pivotPrev + pivotSecond)
                 + offset * ((2 * pivotPrev - 5 * pivotFirst + 4 * pivotSecond - pivotNext)
                 + offset * (-pivotPrev + 3 * pivotFirst - 3 * pivotSecond + pivotNext))));
 }
 
-void Locus::interpolate() {
+QVector<QVector3D> Locus::interpolate(const QVector<QVector3D> &points) {
     if (points.size() < 2) {
-        return;
+        return points;
     }
 
     QVector<QVector3D> result;
@@ -51,12 +61,12 @@ void Locus::interpolate() {
         size_t cuts = distance / Preferences::DISTANCE_DELTA;
         float dt = 1.0 / (cuts + 1);
         for (size_t j = 0; j < cuts; j++) {
-            result.push_back(getInterpolatedPoint(dt * (j + 1), i - 1));
+            result.push_back(getInterpolatedPoint(dt * (j + 1), points, i - 1));
         }
     }
     result << points[points.size() - 2] << points[points.size() - 1];
 
-    points = std::move(result);
+    return result;
 }
 
 
@@ -76,18 +86,17 @@ void LocusController::clear() {
     data.clear();
 }
 
-void LocusController::draw(QGLShaderProgram &shaderProgram, size_t amount) const {
-    size_t index = 0;
-    for (const auto &locus : data) {
-        index++;
-        shaderProgram.setAttributeArray(Preferences::VERTEX_NAME, locus.pointsData());
+void LocusController::draw(QGLShaderProgram &shaderProgram, size_t amount) {
+    for (auto &locus : data) {
+        locus.startWork();
+        shaderProgram.setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
         shaderProgram.setUniformValue(Preferences::COLOR_NAME, locus.colorData());
-        shaderProgram.enableAttributeArray(Preferences::VERTEX_NAME);
         glDrawArrays(GL_LINE_STRIP,
                      std::max<int>(0, static_cast<int>(std::min(locus.size(), amount)) - Preferences::AMOUNT_TAIL_POINTS),
                      std::min(Preferences::AMOUNT_TAIL_POINTS, amount));
+
+        locus.endWork();
     }
-    shaderProgram.disableAttributeArray(Preferences::VERTEX_NAME);
 }
 
 } //namespace Locus

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QGLShaderProgram>
+#include <QOpenGLBuffer>
 #include <QVector3D>
 #include <QVector>
 #include <QColor>
@@ -13,18 +14,20 @@ public:
     Locus() = default;
     ~Locus() = default;
 
-    const QVector3D *pointsData() const;
     const QColor &colorData() const;
 
     size_t size() const;
 
+    void startWork();
+    void endWork();
+
 private:
-    QVector<QVector3D> points;
+    QOpenGLBuffer pointsBuffer;
     QColor color;
 
-    QVector3D getInterpolatedPoint(float offset, size_t startIndex);
+    static QVector3D getInterpolatedPoint(float offset, const QVector<QVector3D> &points, size_t startIndex);
 
-    void interpolate();
+    static QVector<QVector3D> interpolate(const QVector<QVector3D> &points);
 };
 
 class LocusController final {
@@ -44,7 +47,7 @@ public:
 
     void clear();
 
-    void draw(QGLShaderProgram &shaderProgram, size_t amount) const;
+    void draw(QGLShaderProgram &shaderProgram, size_t amount);
 private:
     QVector<Locus> data;
 };

@@ -5,7 +5,6 @@
 #include "PointsViewQGLWidget.h"
 #include "Preferences.h"
 
-
 PointsViewQGLWidget::PointsViewQGLWidget(QWidget *parent) :
     QGLWidget{QGLFormat(), parent} {}
 
@@ -25,8 +24,10 @@ QColor getNextColor(size_t index) {
 }
 
 void PointsViewQGLWidget::addNewLocus(QVector<QVector3D> &&points) {
+    shaderProgram.bind();
     QColor color = getNextColor(locusController.size());
     locusController.addLocus(Locus::Locus(std::move(points), color));
+    shaderProgram.release();
 }
 
 void PointsViewQGLWidget::setCurrentTime(const int currentTime_) {
@@ -56,7 +57,9 @@ void PointsViewQGLWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shaderProgram.bind();
     shaderProgram.setUniformValue(Preferences::MATRIX_NAME, cameraController.getMatrix());
+    shaderProgram.enableAttributeArray(Preferences::VERTEX_NAME);
     locusController.draw(shaderProgram, currentTime);
+    shaderProgram.disableAttributeArray(Preferences::VERTEX_NAME);
     shaderProgram.release();
 }
 
