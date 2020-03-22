@@ -9,6 +9,7 @@
 #include <QTimer>
 #include "Camera.h"
 #include "Locus.h"
+#include "VideoEncoder.h"
 
 class PointsViewQGLWidget : public QGLWidget {
 public:
@@ -44,6 +45,8 @@ private:
     Locus::LocusController locusController;
 
     Camera::KeyboardAndMouseController cameraController;
+
+    VideoEncoder::VideoEncoder videoEncoder;
 
     int currentTime;
 };

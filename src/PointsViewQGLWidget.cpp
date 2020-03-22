@@ -61,6 +61,10 @@ void PointsViewQGLWidget::paintGL() {
     locusController.draw(shaderProgram, currentTime);
     shaderProgram.disableAttributeArray(Preferences::VERTEX_NAME);
     shaderProgram.release();
+
+    if (videoEncoder.isWorking()) {
+        videoEncoder.write(grabFrameBuffer());
+    }
 }
 
 void PointsViewQGLWidget::mouseMoveEvent(QMouseEvent *event) {
@@ -73,6 +77,23 @@ void PointsViewQGLWidget::mousePressEvent(QMouseEvent *event) {
 
 void PointsViewQGLWidget::keyPressEvent(QKeyEvent *event) {
     cameraController.applyKeyPressEvent(event);
+
+    if (event->key() == Qt::Key_Z) {
+        static size_t videoCounter = 0;
+
+        videoEncoder.endEncoding();
+        resize(width() / 4 * 4, height());
+
+        try {
+            const char *filename = ("video" + std::to_string(videoCounter++) + ".avi").c_str();
+            videoEncoder.startEncoding(width(), height(), filename);
+        } catch(const std::exception &e) {
+            //TODO alert
+        }
+    }
+    if (event->key() == Qt::Key_X) {
+        videoEncoder.endEncoding();
+    }
 }
 
 void PointsViewQGLWidget::keyReleaseEvent(QKeyEvent *event) {
