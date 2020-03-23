@@ -7,7 +7,7 @@
 
 namespace Model {
 
-constexpr long double COORDINATE_VALUE_LIMIT = 100000;
+constexpr long double COORDINATE_VALUE_LIMIT = 1e10;
 
 template<typename LambdaDerivatives, typename LambdaNewPointAction>
 void generate_points_generate_points(LambdaNewPointAction new_point_action,
@@ -21,8 +21,7 @@ void generate_points_generate_points(LambdaNewPointAction new_point_action,
             point = next_point(point);
         }
         if ((point.x == previous_point.x && point.y == previous_point.y && point.z == previous_point.z) ||
-            point.x > COORDINATE_VALUE_LIMIT || point.y > COORDINATE_VALUE_LIMIT ||
-            point.z > COORDINATE_VALUE_LIMIT) {
+            point.x > COORDINATE_VALUE_LIMIT || point.y > COORDINATE_VALUE_LIMIT || point.z > COORDINATE_VALUE_LIMIT) {
             break;
         }
         previous_point = point;
