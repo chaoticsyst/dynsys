@@ -13,7 +13,15 @@ include_directories(
     ${GTEST_INCLUDE_DIRS}        
 )
 
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5OpenGL REQUIRED)
+find_package(OpenGL REQUIRED)
+
 add_executable(TestDynSys test_all.cpp ../src)
+
+qt5_use_modules(TestDynSys Widgets OpenGL)
+
+target_link_libraries(TestDynSys ${QT_LIBRARIES} ${OPENGL_LIBRARIES})
 
 target_link_libraries(TestDynSys ${GTEST_LIBRARIES} Threads::Threads)
 
