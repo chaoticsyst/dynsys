@@ -18,5 +18,5 @@ void generate_points(LambdaNewPointAction new_point_action,
 
 } // namespace Model
 
-#include "DynamicSystemsDefault.hpp"
 #include "ModelImpl.hpp"
+#include "DynamicSystemsDefault.hpp"
