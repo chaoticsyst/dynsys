@@ -16,16 +16,29 @@ QSize PointsViewQGLWidget::sizeHint() const {
     return Preferences::INIT_WINDOW_SIZE;
 }
 
-QColor getNextColor(size_t index) {
-    long double func = Preferences::COLOR_FUNCTION_DELTA * (index + 1);
-    return QColor(std::abs(std::sin(func)) * 255,
-                     std::abs(std::cos(func) * std::sin(func)) * 255,
-                     std::abs(std::cos(func)) * 255);
+QColor getColorByIndex(size_t index) {
+    static const QVector<QColor> colors = {QColor(Qt::red), QColor(Qt::yellow), QColor(Qt::blue)};
+
+    size_t bunchSize = Preferences::AMOUNT_LOCUS / (colors.size() - 1);
+    float coef = 1.0 * (index % bunchSize) / bunchSize;
+
+    QColor result;
+    for (size_t i = 0; i < static_cast<size_t>(colors.size()) - 1; i++) {
+        if (index >= (i + 1) * Preferences::AMOUNT_LOCUS / (colors.size() - 1)) {
+            continue;
+        }
+        result.setRed  (colors[i].red()   + (colors[i + 1].red()   - colors[i].red())   * coef);
+        result.setGreen(colors[i].green() + (colors[i + 1].green() - colors[i].green()) * coef);
+        result.setBlue (colors[i].blue()  + (colors[i + 1].blue()  - colors[i].blue())  * coef);
+
+        break;
+    }
+    return result;
 }
 
 void PointsViewQGLWidget::addNewLocus(QVector<QVector3D> &&points) {
     shaderProgram.bind();
-    QColor color = getNextColor(locusController.size());
+    QColor color = getColorByIndex(locusController.size());
     locusController.addLocus(Locus::Locus(std::move(points), color));
     shaderProgram.release();
 }

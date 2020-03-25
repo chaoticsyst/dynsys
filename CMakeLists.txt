@@ -18,8 +18,6 @@ include_directories("include/")
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(Qt5Multimedia REQUIRED)
-find_package(Qt5MultimediaWidgets REQUIRED)
 
 
 set(CMAKE_CXX_FLAGS "-D__STDC_CONSTANT_MACROS")
