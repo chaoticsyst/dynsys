@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QSize>
+#include <QVector3D>
 #include <cmath>
 
 #include "Model.h"
@@ -67,6 +68,11 @@ struct Preferences {
     static float MAX_PITCH;
 
     static int   CAMERA_TIMER_DELTA;
+
+    static QVector3D INIT_CAMERA_POSITION;
+    static QVector3D INIT_CAMERA_TARGET;
+    static float     INIT_PITCH;
+    static float     INIT_YAW;
 
 /* Shaders */
 

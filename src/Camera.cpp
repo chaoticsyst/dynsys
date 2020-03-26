@@ -10,10 +10,10 @@
 namespace Camera {
 
 Camera::Camera() :
-    cameraPosition{0, 0, 5},
-    cameraTarget{-cameraPosition},
-    pitch{0},
-    yaw{-M_PI / 2},
+    cameraPosition{Preferences::INIT_CAMERA_POSITION},
+    cameraTarget{Preferences::INIT_CAMERA_TARGET},
+    pitch{Preferences::INIT_PITCH},
+    yaw{Preferences::INIT_YAW},
     invalidState{false} {
 
     recalculateVectors();
@@ -106,9 +106,13 @@ void Camera::resetMousePosition(const QPoint &newMousePosition) {
 }
 
 void Camera::setDefault() {
-    *this = Camera();
-
+    cameraPosition = Preferences::INIT_CAMERA_POSITION;
+    cameraTarget   = Preferences::INIT_CAMERA_TARGET;
+    pitch          = Preferences::INIT_PITCH;
+    yaw            = Preferences::INIT_YAW;
     invalidState = true;
+
+    recalculateVectors();
 }
 
 

@@ -3,20 +3,24 @@
 
 namespace Locus {
 
-Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_) :
-    color{color_} {
+Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_, QGLShaderProgram *shaderProgram_) :
+    color{color_}, shaderProgram{shaderProgram_} {
 
     points_ = interpolate(std::move(points_));
+    shaderProgram->bind();
     pointsBuffer = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
     pointsBuffer.create();
     pointsBuffer.bind();
     pointsBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
     pointsBuffer.allocate(points_.begin(), points_.size() * 3 * sizeof(float));
     pointsBuffer.release();
+    shaderProgram->release();
 }
 
 void Locus::startWork() {
     pointsBuffer.bind();
+    shaderProgram->setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
+    shaderProgram->setUniformValue(Preferences::COLOR_NAME, colorData());
 }
 
 void Locus::endWork() {
@@ -61,7 +65,7 @@ QVector<QVector3D> Locus::interpolate(const QVector<QVector3D> &points) {
         size_t cuts = distance / Preferences::DISTANCE_DELTA;
         float dt = 1.0 / (cuts + 1);
         for (size_t j = 0; j < cuts; j++) {
-            result.push_back(getInterpolatedPoint(dt * (j + 1), points, i - 1));
+            result << getInterpolatedPoint(dt * (j + 1), points, i - 1);
         }
     }
     result << points[points.size() - 2] << points[points.size() - 1];
@@ -78,19 +82,13 @@ void LocusController::addLocus(Locus &&locus) {
     data.push_back(std::move(locus));
 }
 
-void LocusController::removeLocus(size_t index) {
-    data.removeAt(index);
-}
-
 void LocusController::clear() {
     data.clear();
 }
 
-void LocusController::draw(QGLShaderProgram &shaderProgram, size_t amount) {
+void LocusController::draw(size_t amount) {
     for (auto &locus : data) {
         locus.startWork();
-        shaderProgram.setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
-        shaderProgram.setUniformValue(Preferences::COLOR_NAME, locus.colorData());
         glDrawArrays(GL_LINE_STRIP,
                      std::max<int>(0, static_cast<int>(std::min(locus.size(), amount)) - Preferences::AMOUNT_TAIL_POINTS),
                      std::min(Preferences::AMOUNT_TAIL_POINTS, amount));

@@ -37,10 +37,8 @@ QColor getColorByIndex(size_t index) {
 }
 
 void PointsViewQGLWidget::addNewLocus(QVector<QVector3D> &&points) {
-    shaderProgram.bind();
     QColor color = getColorByIndex(locusController.size());
-    locusController.addLocus(Locus::Locus(std::move(points), color));
-    shaderProgram.release();
+    locusController.addLocus(Locus::Locus(std::move(points), color, &shaderProgram));
 }
 
 void PointsViewQGLWidget::setCurrentTime(const int currentTime_) {
@@ -71,7 +69,7 @@ void PointsViewQGLWidget::paintGL() {
     shaderProgram.bind();
     shaderProgram.setUniformValue(Preferences::MATRIX_NAME, cameraController.getMatrix());
     shaderProgram.enableAttributeArray(Preferences::VERTEX_NAME);
-    locusController.draw(shaderProgram, currentTime);
+    locusController.draw(currentTime);
     shaderProgram.disableAttributeArray(Preferences::VERTEX_NAME);
     shaderProgram.release();
 
@@ -101,7 +99,8 @@ void PointsViewQGLWidget::keyPressEvent(QKeyEvent *event) {
             const char *filename = ("video" + std::to_string(videoCounter++) + ".avi").c_str();
             videoEncoder.startEncoding(width(), height(), filename);
         } catch(const std::exception &e) {
-            //TODO alert
+            videoEncoder.endEncoding();
+            //TODO an alert
         }
     }
     if (event->key() == Qt::Key_X) {
