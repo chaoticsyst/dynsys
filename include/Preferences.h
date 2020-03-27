@@ -76,8 +76,6 @@ struct Preferences {
 
 /* Shaders */
 
-    static const char *VERTEX_SHADER;
-    static const char *FRAGMENT_SHADER;
     static const char *VERTEX_NAME;
     static const char *COLOR_NAME;
     static const char *MATRIX_NAME;

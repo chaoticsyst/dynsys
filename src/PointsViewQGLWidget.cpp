@@ -55,8 +55,8 @@ void PointsViewQGLWidget::initializeGL() {
 
     qglClearColor(QColor(Qt::black));
 
-    shaderProgram.addShaderFromSourceCode(QGLShader::Vertex, Preferences::VERTEX_SHADER);
-    shaderProgram.addShaderFromSourceCode(QGLShader::Fragment, Preferences::FRAGMENT_SHADER);
+    shaderProgram.addShaderFromSourceFile(QGLShader::Vertex, QString(":/VertexShader.vsh"));
+    shaderProgram.addShaderFromSourceFile(QGLShader::Fragment, QString(":/FragmentShader.fsh"));
     shaderProgram.link();
 }
 

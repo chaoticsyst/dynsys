@@ -35,20 +35,6 @@ const char  *Preferences::COLOR_NAME             = "color";
 const char  *Preferences::MATRIX_NAME            = "matrix";
 
 
-const char *Preferences::VERTEX_SHADER   = "attribute highp vec4 vertex;"
-                                          "uniform highp mat4 matrix;"
-                                          "void main(void)"
-                                          "{"
-                                          "    gl_Position = matrix * vertex;"
-                                          "}";
-
-const char *Preferences::FRAGMENT_SHADER = "uniform highp vec4 color;"
-                                          "void main(void)"
-                                          "{"
-                                          "   gl_FragColor = color;"
-                                          "}";
-
-
 void Preferences::setDefaultValues() {
     SLIDER_TIMER_INTERVAL = 1;
     DELTA_TIME_TIMER = 3;
