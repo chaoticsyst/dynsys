@@ -14,7 +14,6 @@ QSize        Preferences::MIN_WINDOW_SIZE        = QSize(0, 0);
 QSize        Preferences::INIT_WINDOW_SIZE       = QSize(0, 0);
 long double  Preferences::COLOR_FUNCTION_DELTA   = 0.0l;
 bool         Preferences::TAILS_VIEW             = false;
-long double  Preferences::COORDINATE_VALUE_LIMIT = 0.0l;
 size_t       Preferences::AMOUNT_TAIL_POINTS     = 0ul;
 float        Preferences::START_POINT_DELTA      = 0.0f;
 float        Preferences::DISTANCE_DELTA         = 0;
@@ -64,8 +63,6 @@ void Preferences::setDefaultValues() {
     COLOR_FUNCTION_DELTA = 0.01;
 
     TAILS_VIEW = true;
-
-    COORDINATE_VALUE_LIMIT = 1000;
 
     AMOUNT_TAIL_POINTS = 100;
     START_POINT_DELTA = 0.001;

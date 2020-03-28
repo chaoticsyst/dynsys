@@ -4,21 +4,19 @@
 
 namespace Model {
 
-enum class ModelName {
-    ROSSLER, LORENZ
-};
-
 struct Point {
     long double x, y, z;
 };
 
-void generate_points(
-        const std::function<void(const Point &)> &new_point_action, //calls when generate new point
-        Point start_point,
-        int points_count,
-        int steps_per_point,
-        long double tau,
-        ModelName modelName,
-        const std::vector<long double> &constants);
+template<typename LambdaDerivatives, typename LambdaNewPointAction>
+void generate_points(LambdaNewPointAction new_point_action,
+                     Point point,
+                     int points_count,
+                     int steps_per_point,
+                     long double tau,
+                     LambdaDerivatives count_derivatives);
 
 } // namespace Model
+
+#include "ModelImpl.hpp"
+#include "DynamicSystemsDefault.hpp"

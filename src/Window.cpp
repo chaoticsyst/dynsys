@@ -38,26 +38,31 @@ QVector3D getQPoint(const Model::Point &point) {
 }
 
 void Window::slot_restart_button() {
-    Model::ModelName modelName = Model::ModelName::ROSSLER;
     if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
-        modelName = Model::ModelName::LORENZ;
+        auto derivatives_function = Model::get_derivatives_function_lorenz(
+                ui->doubleSpinBox->value(),
+                ui->doubleSpinBox_2->value(),
+                ui->doubleSpinBox_3->value());
+        count_points(derivatives_function);
     } else if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
-        modelName = Model::ModelName::ROSSLER;
+        auto derivatives_function = Model::get_derivatives_function_rossler(
+                ui->doubleSpinBox->value(),
+                ui->doubleSpinBox_2->value(),
+                ui->doubleSpinBox_3->value());
+        count_points(derivatives_function);
     }
+}
 
-    std::vector<long double> constants = {
-        ui->doubleSpinBox->value(),
-        ui->doubleSpinBox_2->value(),
-        ui->doubleSpinBox_3->value()
-    };
+template<typename Lambda>
+void Window::count_points(Lambda derivatives_function) {
     ui->pointsViewQGLWidget->clearAll();
     for (size_t i = 0; i < Preferences::AMOUNT_LOCUS; i++) {
         QVector<QVector3D> buffer;
         auto pushBackVector = [&buffer](const Model::Point &point) {
             buffer.push_back(
-                QVector3D(point.x / Preferences::DIV_NORMALIZE,
-                          point.y / Preferences::DIV_NORMALIZE,
-                          point.z / Preferences::DIV_NORMALIZE)
+                    QVector3D(point.x / Preferences::DIV_NORMALIZE,
+                              point.y / Preferences::DIV_NORMALIZE,
+                              point.z / Preferences::DIV_NORMALIZE)
             );
         };
         double offset = Preferences::START_POINT_DELTA * i;
@@ -68,8 +73,7 @@ void Window::slot_restart_button() {
                                Preferences::COUNT_POINTS,
                                Preferences::STEPS_PER_COUNT,
                                Preferences::TAU,
-                               modelName,
-                               constants);
+                               derivatives_function);
         ui->pointsViewQGLWidget->addNewLocus(std::move(buffer));
     }
 

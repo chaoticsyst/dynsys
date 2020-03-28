@@ -22,7 +22,6 @@ find_package(OpenGL REQUIRED)
 add_executable(DynamicSystems
     src/main.cpp
     src/WindowPreferences.cpp
-    src/Model.cpp
     src/Camera.cpp
     src/PointsViewQGLWidget.cpp
     src/Window.cpp

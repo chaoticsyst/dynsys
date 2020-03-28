@@ -41,11 +41,6 @@ struct Preferences {
     static bool TAILS_VIEW;
 
 
-/* Model constants */
-
-    static long double COORDINATE_VALUE_LIMIT; //generation stops if the coordinate value becomes greater
-
-
 /* Locus constants */
 
     static size_t AMOUNT_TAIL_POINTS;
