@@ -12,9 +12,10 @@ public:
     Camera();
     ~Camera() = default;
 
-    Camera(const Camera &)            = delete;
+    Camera(const Camera &)            = delete;            
     Camera(Camera &&)                 = delete;
-    Camera &operator=(Camera &)       = delete;
+    Camera &operator=(const Camera &) = delete;
+    Camera &operator=(Camera &&)      = delete;
 
     QMatrix4x4 getMatrix() const;
 

@@ -25,23 +25,13 @@ float        Preferences::SPEED_MOVE             = 0.0f;
 float        Preferences::SENSITIVITY            = 0.0f;
 float        Preferences::MAX_PITCH              = 0.0f;
 int          Preferences::CAMERA_TIMER_DELTA     = 0;
+QVector3D    Preferences::INIT_CAMERA_POSITION   = QVector3D();
+QVector3D    Preferences::INIT_CAMERA_TARGET     = QVector3D();
+float        Preferences::INIT_PITCH             = 0.0f;
+float        Preferences::INIT_YAW               = 0.0f;
 const char  *Preferences::VERTEX_NAME            = "vertex";
 const char  *Preferences::COLOR_NAME             = "color";
 const char  *Preferences::MATRIX_NAME            = "matrix";
-
-
-const char *Preferences::VERTEX_SHADER   = "attribute highp vec4 vertex;"
-                                          "uniform highp mat4 matrix;"
-                                          "void main(void)"
-                                          "{"
-                                          "    gl_Position = matrix * vertex;"
-                                          "}";
-
-const char *Preferences::FRAGMENT_SHADER = "uniform highp vec4 color;"
-                                          "void main(void)"
-                                          "{"
-                                          "   gl_FragColor = color;"
-                                          "}";
 
 
 void Preferences::setDefaultValues() {
@@ -66,7 +56,7 @@ void Preferences::setDefaultValues() {
 
     AMOUNT_TAIL_POINTS = 100;
     START_POINT_DELTA = 0.001;
-    DISTANCE_DELTA = 0.15;
+    DISTANCE_DELTA = 0.2;
 
     EPS = 0.001;
 
@@ -80,6 +70,10 @@ void Preferences::setDefaultValues() {
     MAX_PITCH = M_PI / 2 - EPS;
 
     CAMERA_TIMER_DELTA = 1;
+
+    INIT_CAMERA_POSITION = QVector3D(0, 0, 5);
+    INIT_CAMERA_TARGET   = QVector3D(-INIT_CAMERA_POSITION);
+    INIT_YAW              = -M_PI / 2;
 }
 
 void Preferences::setValuesBeautifulLorenz() {
