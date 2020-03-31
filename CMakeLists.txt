@@ -27,6 +27,8 @@ add_executable(DynamicSystems
     src/Window.cpp
     src/Locus.cpp
     src/Preferences.cpp
+    include/Parser.h
+    include/ParserImpl.h
     include/AttractorsParams.h
     include/Preferences.h
     include/Camera.h
