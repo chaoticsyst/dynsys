@@ -212,33 +212,22 @@ Node *parse(const char *expression, std::size_t &pos) {
     return node_stack[0];
 }
 
-auto parse_expressions(const std::string &x_expr, const std::string &y_expr, const std::string &z_expr) {
+Node *parse_expression(const std::string &x_expr) {
     std::stringstream string_stream{x_expr};
-    auto vec = std::vector<std::string>{std::istream_iterator<std::string>{string_stream}, std::istream_iterator<std::string>{}};
+    std::vector<std::string> vec = std::vector<std::string>{std::istream_iterator<std::string>{string_stream},
+                                                            std::istream_iterator<std::string>{}};
     std::string x_expr_clear;
-    for (const std::string &token : vec) {
+    for (std::string &token : vec) {
         x_expr_clear += token;
     }
     std::size_t pos = 0;
-    auto x_func = parse(x_expr_clear.c_str(), pos);
-    string_stream.clear();
-    string_stream << y_expr;
-    vec = std::vector<std::string>{std::istream_iterator<std::string>{string_stream}, std::istream_iterator<std::string>{}};
-    std::string y_expr_clear;
-    for (const std::string &token : vec) {
-        y_expr_clear += token;
-    }
-    pos = 0;
-    auto y_func = parse(y_expr.c_str(), pos);
-    string_stream.clear();
-    string_stream << z_expr;
-    vec = std::vector<std::string>{std::istream_iterator<std::string>{string_stream}, std::istream_iterator<std::string>{}};
-    std::string z_expr_clear;
-    for (const std::string &token : vec) {
-        z_expr_clear += token;
-    }
-    pos = 0;
-    auto z_func = parse(z_expr.c_str(), pos);
+    return parse(x_expr_clear.c_str(), pos);
+}
+
+auto parse_expressions(const std::string &x_expr, const std::string &y_expr, const std::string &z_expr) {
+    Node *x_func = parse_expression(x_expr);
+    Node *y_func = parse_expression(y_expr);
+    Node *z_func = parse_expression(z_expr);
     return [x_func, y_func, z_func](const Model::Point &point) {
         Node_var<var_type::X>::value = point.x;
         Node_var<var_type::Y>::value = point.y;
