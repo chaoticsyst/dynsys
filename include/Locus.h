@@ -17,18 +17,21 @@ public:
     const QColor &colorData() const;
 
     size_t size() const;
+    size_t initialSize() const;
+    size_t getStartIndex(size_t initialIndex) const;
 
     void startWork();
     void endWork();
-
 private:
     QOpenGLBuffer pointsBuffer;
     QColor color;
     QGLShaderProgram *shaderProgram;
+    QVector<size_t> startIndexes;
 
-    static QVector3D getInterpolatedPoint(float offset, const QVector<QVector3D> &points, size_t startIndex);
+    QVector3D getInterpolatedPoint(float offset, const QVector<QVector3D> &points, size_t startIndex);
 
-    static QVector<QVector3D> interpolate(const QVector<QVector3D> &points);
+    //it has to be called in constructor
+    QVector<QVector3D> interpolate(const QVector<QVector3D> &points);
 };
 
 class LocusController final {

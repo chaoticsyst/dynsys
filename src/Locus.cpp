@@ -35,6 +35,15 @@ size_t Locus::size() const {
     return static_cast<size_t>(pointsBuffer.size() / 3 / sizeof(float));
 }
 
+size_t Locus::initialSize() const {
+    return startIndexes.size();
+}
+
+size_t Locus::getStartIndex(size_t initialIndex) const {
+    initialIndex = std::min<size_t>(initialIndex, startIndexes.size() - 1);
+    return startIndexes[initialIndex];
+}
+
 QVector3D Locus::getInterpolatedPoint(float offset, const QVector<QVector3D> &points, size_t startIndex) {
     if (startIndex + 3 >= static_cast<size_t>(points.size())) {
         return points[startIndex];
@@ -58,7 +67,10 @@ QVector<QVector3D> Locus::interpolate(const QVector<QVector3D> &points) {
     result.reserve(2 * points.size());
 
     result << points[0];
+    startIndexes << 0;
     for (size_t i = 1; i < static_cast<size_t>(points.size() - 2); i++) {
+        startIndexes << result.size();
+
         result.push_back(points[i]);
 
         float distance = points[i].distanceToPoint(points[i + 1]);
@@ -68,6 +80,7 @@ QVector<QVector3D> Locus::interpolate(const QVector<QVector3D> &points) {
             result << getInterpolatedPoint(dt * (j + 1), points, i - 1);
         }
     }
+    startIndexes << result.size();
     result << points[points.size() - 2] << points[points.size() - 1];
 
     return result;
@@ -89,9 +102,10 @@ void LocusController::clear() {
 void LocusController::draw(size_t amount) {
     for (auto &locus : data) {
         locus.startWork();
-        glDrawArrays(GL_LINE_STRIP,
-                     std::max<int>(0, static_cast<int>(std::min(locus.size(), amount)) - Preferences::AMOUNT_TAIL_POINTS),
-                     std::min(Preferences::AMOUNT_TAIL_POINTS, amount));
+        int curAmount = std::min(locus.initialSize(), amount);
+        size_t start = std::max(0, curAmount - static_cast<int>(Preferences::AMOUNT_TAIL_POINTS));
+        size_t length = locus.getStartIndex(curAmount) - locus.getStartIndex(start);
+        glDrawArrays(GL_LINE_STRIP, locus.getStartIndex(start), length);
 
         locus.endWork();
     }
