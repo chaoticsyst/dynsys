@@ -28,7 +28,7 @@ private:
     QGLShaderProgram *shaderProgram;
     QVector<size_t> startIndexes;
 
-    QVector3D getInterpolatedPoint(float offset, const QVector<QVector3D> &points, size_t startIndex);
+    QVector3D getInterpolatedPoint(float offset, const QMatrix4x4 &matrix) const;
 
     //it has to be called in constructor
     QVector<QVector3D> interpolate(const QVector<QVector3D> &points);

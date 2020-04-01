@@ -44,19 +44,15 @@ size_t Locus::getStartIndex(size_t initialIndex) const {
     return startIndexes[initialIndex];
 }
 
-QVector3D Locus::getInterpolatedPoint(float offset, const QVector<QVector3D> &points, size_t startIndex) {
-    if (startIndex + 3 >= static_cast<size_t>(points.size())) {
-        return points[startIndex];
-    }
-    const QVector3D &pivotPrev   = points[startIndex];
-    const QVector3D &pivotFirst  = points[startIndex + 1];
-    const QVector3D &pivotSecond = points[startIndex + 2];
-    const QVector3D &pivotNext   = points[startIndex + 3];
-    return 0.5f * ((2 * pivotFirst)
-                + offset * ((-pivotPrev + pivotSecond)
-                + offset * ((2 * pivotPrev - 5 * pivotFirst + 4 * pivotSecond - pivotNext)
-                + offset * (-pivotPrev + 3 * pivotFirst - 3 * pivotSecond + pivotNext))));
+QVector3D Locus::getInterpolatedPoint(float offset, const QMatrix4x4 &matrix) const {
+    const static QMatrix4x4 curveMatrix( 0,  2,  0,  0,
+                                        -1,  0,  1,  0,
+                                         2, -5,  4, -1,
+                                        -1,  3, -3,  1);
+    auto res = 0.5 * QVector4D(1, offset, offset * offset, offset * offset * offset) * curveMatrix * matrix;
+    return {res.x(), res.y(), res.z()};
 }
+
 
 QVector<QVector3D> Locus::interpolate(const QVector<QVector3D> &points) {
     if (points.size() < 2) {
@@ -64,7 +60,7 @@ QVector<QVector3D> Locus::interpolate(const QVector<QVector3D> &points) {
     }
 
     QVector<QVector3D> result;
-    result.reserve(2 * points.size());
+    QMatrix4x4 curMatrix;
 
     result << points[0];
     startIndexes << 0;
@@ -75,9 +71,16 @@ QVector<QVector3D> Locus::interpolate(const QVector<QVector3D> &points) {
 
         float distance = points[i].distanceToPoint(points[i + 1]);
         size_t cuts = distance / Preferences::DISTANCE_DELTA;
+        if (cuts == 0) {
+            continue;
+        }
+        curMatrix.setRow(0, points[i - 1]);
+        curMatrix.setRow(1, points[i + 0]);
+        curMatrix.setRow(2, points[i + 1]);
+        curMatrix.setRow(3, points[i + 2]);
         float dt = 1.0 / (cuts + 1);
         for (size_t j = 0; j < cuts; j++) {
-            result << getInterpolatedPoint(dt * (j + 1), points, i - 1);
+            result << getInterpolatedPoint(dt * (j + 1), curMatrix);
         }
     }
     startIndexes << result.size();
