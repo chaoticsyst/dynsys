@@ -1,10 +1,13 @@
+#pragma once
+
 #include <string>
 #include <cassert>
 #include <cmath>
 #include <vector>
-#include <Model.h>
 #include <sstream>
 #include <iterator>
+#include "Model.h"
+#include "Parser.h"
 
 namespace Parser {
 
