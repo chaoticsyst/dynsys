@@ -17,15 +17,28 @@ Node *parse_expression(const std::string &expr, const std::array<long double *, 
 
 
 inline auto parse_expressions(const std::string &x_expr, const std::string &y_expr, const std::string &z_expr) {
-    auto arr = std::make_shared<std::array<long double, 3>>();
-    std::array<long double *, 3> arr_addresses = {&(*arr)[0], &(*arr)[1], &(*arr)[2]};
-    std::shared_ptr<Node> x_func{parse_expression(x_expr, arr_addresses)};
-    std::shared_ptr<Node> y_func{parse_expression(y_expr, arr_addresses)};
-    std::shared_ptr<Node> z_func{parse_expression(z_expr, arr_addresses)};
-    return [x_func, y_func, z_func, arr](const Model::Point &point) {
-        (*arr)[0] = point.x;
-        (*arr)[1] = point.y;
-        (*arr)[2] = point.z;
+    auto variables_array = std::make_shared<std::array<long double, 3>>();
+    std::array<long double *, 3> variables_addresses = {&(*variables_array)[0], &(*variables_array)[1], &(*variables_array)[2]};
+    std::shared_ptr<const Node> x_func, y_func, z_func;
+    try {
+        x_func = static_cast<std::shared_ptr<const Node>>(parse_expression(x_expr, variables_addresses));
+    } catch (const parse_error &exception) {
+        throw parse_error(std::string{"In first expression: "} + std::string{exception.what()});
+    }
+    try {
+        y_func = static_cast<std::shared_ptr<const Node>>(parse_expression(y_expr, variables_addresses));
+    } catch (const parse_error &exception) {
+        throw parse_error(std::string{"In second expression: "} + std::string{exception.what()});
+    }
+    try {
+        z_func = static_cast<std::shared_ptr<const Node>>(parse_expression(z_expr, variables_addresses));
+    } catch (const parse_error &exception) {
+        throw parse_error(std::string{"In third expression: "} + std::string{exception.what()});
+    }
+    return [x_func, y_func, z_func, variables_array](const Model::Point &point) {
+        (*variables_array)[0] = point.x;
+        (*variables_array)[1] = point.y;
+        (*variables_array)[2] = point.z;
         return Model::Point{x_func->calc(), y_func->calc(), z_func->calc()};
     };
 }

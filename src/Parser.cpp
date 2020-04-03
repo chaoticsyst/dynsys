@@ -6,6 +6,13 @@
 
 namespace Parser {
 
+parse_error::parse_error(std::string description) : description_{std::move(description)} {}
+
+const char *parse_error::what() const noexcept {
+    return description_.c_str();
+}
+
+
 namespace {
 
 enum class binary_operation {
@@ -158,7 +165,7 @@ std::unique_ptr<Node> read_node(parse_iterator iter, const std::array<long doubl
         ++iter;
         return std::make_unique<Node_var>(var_address[Z_VAR_POS]);
     }
-    throw 1;
+    throw parse_error(std::string{"symbol \""} + std::string{*iter} + std::string{"\" is not variable, constant or unary operator"});
 }
 
 binary_operation read_binary_operation(parse_iterator iter) {
@@ -172,7 +179,7 @@ binary_operation read_binary_operation(parse_iterator iter) {
         case '-':
             return binary_operation::MINUS;
         default:
-            throw 1;
+            throw parse_error(std::string{"symbol \""} + std::string{*iter} + std::string{"\" is not binary operator"});
     }
 }
 
