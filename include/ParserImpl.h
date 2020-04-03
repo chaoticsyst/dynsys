@@ -1,105 +1,30 @@
 #pragma once
 
 #include <string>
+#include <array>
 
 #include "Model.h"
-#include "Parser.h"
 
 namespace Parser {
 
-enum class binary_operation {
-    PLUS, MINUS, MULTIPLY, SUBTRACT
+struct Node {
+    virtual long double calc() const noexcept = 0;
 };
 
-enum class unary_operation {
-    MINUS
-};
-
-enum class var_type {
-    X, Y, Z
-};
-
-template<var_type>
-struct Node_var : Node {
-    static long double value;
-
-    long double calc() const noexcept override {
-        return value;
-    };
-};
-
-template<>
-long double Node_var<var_type::X>::value = 0;
-
-template<>
-long double Node_var<var_type::Y>::value = 0;
-
-template<>
-long double Node_var<var_type::Z>::value = 0;
+/// Order of variable addresses: [x,y,z]
+Node *parse_expression(const std::string &expr, const std::array<long double *, 3> &var_address);
 
 
-struct Node_constant : Node {
-    explicit Node_constant(long double v) : value{v} {}
-
-    const long double value;
-
-    long double calc() const noexcept override {
-        return value;
-    };
-};
-
-template<unary_operation>
-struct Node_unary_operation : Node {
-    explicit Node_unary_operation(const Node *node) : baby{node} {}
-
-    long double calc() const noexcept override;
-
-    const Node *baby;
-};
-
-template<>
-long double Node_unary_operation<unary_operation::MINUS>::calc() const noexcept {
-    return -baby->calc();
-}
-
-template<binary_operation>
-struct Node_binary_operation : Node {
-    Node_binary_operation(const Node *left, const Node *right) : l{left}, r{right} {}
-
-    long double calc() const noexcept override;
-
-    const Node *l, *r;
-};
-
-template<>
-long double Node_binary_operation<binary_operation::MINUS>::calc() const noexcept {
-    return l->calc() - r->calc();
-}
-
-template<>
-long double Node_binary_operation<binary_operation::PLUS>::calc() const noexcept {
-    return l->calc() + r->calc();
-}
-
-template<>
-long double Node_binary_operation<binary_operation::MULTIPLY>::calc() const noexcept {
-    return l->calc() * r->calc();
-}
-
-template<>
-long double Node_binary_operation<binary_operation::SUBTRACT>::calc() const noexcept {
-    return l->calc() / r->calc();
-}
-
-
-auto parse_expressions(const std::string &x_expr, const std::string &y_expr, const std::string &z_expr) {
-    Node *x_func = parse_expression(x_expr);
-    Node *y_func = parse_expression(y_expr);
-    Node *z_func = parse_expression(z_expr);
-    return [x_func, y_func, z_func](const Model::Point &point) {
-        Node_var<var_type::X>::value = point.x;
-        Node_var<var_type::Y>::value = point.y;
-        Node_var<var_type::Z>::value = point.z;
+inline auto parse_expressions(const std::string &x_expr, const std::string &y_expr, const std::string &z_expr) {
+    auto *arr = new std::array<long double, 3>{0, 0, 0};
+    std::array<long double *, 3> arr_addresses = {&(*arr)[0], &(*arr)[1], &(*arr)[2]};
+    Node *x_func = parse_expression(x_expr, arr_addresses);
+    Node *y_func = parse_expression(y_expr, arr_addresses);
+    Node *z_func = parse_expression(z_expr, arr_addresses);
+    return [x_func, y_func, z_func, arr](const Model::Point &point) {
+        (*arr)[0] = point.x;
+        (*arr)[1] = point.y;
+        (*arr)[2] = point.z;
         return Model::Point{x_func->calc(), y_func->calc(), z_func->calc()};
     };
 }
