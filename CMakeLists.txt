@@ -35,6 +35,8 @@ add_executable(DynamicSystems
     include/Camera.h
     include/WindowPreferences.h
     include/Model.hpp
+    include/ModelImpl.hpp
+    include/DynamicSystemsDefault.hpp
     include/Window.h
     include/PointsViewQGLWidget.h
     include/Locus.h
