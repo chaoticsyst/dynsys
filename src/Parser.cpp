@@ -8,6 +8,8 @@
 
 namespace Parser {
 
+namespace {
+
 enum class binary_operation {
     PLUS, MINUS, MULTIPLY, SUBTRACT
 };
@@ -196,6 +198,8 @@ std::unique_ptr<Node> parse(const char *expression, std::size_t &pos, const std:
     ++pos;
     return std::move(node_stack[0]);
 }
+
+} // namespace
 
 Node *parse_expression(const std::string &expr, const std::array<long double *, 3> &var_address) {
     std::stringstream string_stream{expr};
