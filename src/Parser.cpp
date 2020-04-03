@@ -102,8 +102,10 @@ struct parse_iterator {
     }
 
     const parse_iterator &operator++() {
-        ++pos;
-        while (*pos == ' ' || *pos == '\n') ++pos;
+        if (*pos != '\0') {
+            ++pos;
+            while (*pos == ' ' || *pos == '\n') ++pos;
+        }
         return *this;
     }
 
@@ -123,9 +125,9 @@ int get_priority(binary_operation op) {
 }
 
 
-std::unique_ptr<Node> parse(parse_iterator iter, const std::array<long double *, 3> &var_address);
+std::unique_ptr<Node> parse(parse_iterator &iter, const std::array<long double *, 3> &var_address);
 
-std::unique_ptr<Node> read_node(parse_iterator iter, const std::array<long double *, 3> &var_address) {
+std::unique_ptr<Node> read_node(parse_iterator &iter, const std::array<long double *, 3> &var_address) {
     if (*iter == '(') {
         ++iter;
         return parse(iter, var_address);
@@ -168,7 +170,7 @@ std::unique_ptr<Node> read_node(parse_iterator iter, const std::array<long doubl
     throw parse_error(std::string{"symbol \""} + std::string{*iter} + std::string{"\" is not variable, constant or unary operator"});
 }
 
-binary_operation read_binary_operation(parse_iterator iter) {
+binary_operation read_binary_operation(parse_iterator &iter) {
     switch (*(iter++)) {
         case '*':
             return binary_operation::MULTIPLY;
@@ -206,7 +208,7 @@ void merge_branches(std::vector<std::unique_ptr<Node>> &node_stack, std::vector<
     }
 }
 
-std::unique_ptr<Node> parse(parse_iterator iter, const std::array<long double *, 3> &var_address) {
+std::unique_ptr<Node> parse(parse_iterator &iter, const std::array<long double *, 3> &var_address) {
     std::vector<std::unique_ptr<Node>> node_stack;
     std::vector<binary_operation> binary_operations_stack;
     node_stack.push_back(read_node(iter, var_address));
@@ -229,7 +231,8 @@ std::unique_ptr<Node> parse(parse_iterator iter, const std::array<long double *,
 } // namespace
 
 Node *parse_expression(const std::string &expr, const std::array<long double *, 3> &var_address) {
-    return parse(parse_iterator{expr.c_str()}, var_address).release();
+    parse_iterator iter{expr.c_str()};
+    return parse(iter, var_address).release();
 }
 
 } // namespace Parser
