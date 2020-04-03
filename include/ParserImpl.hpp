@@ -4,7 +4,7 @@
 #include <array>
 #include <memory>
 
-#include "Model.h"
+#include "Model.hpp"
 
 namespace Parser {
 

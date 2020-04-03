@@ -1,7 +1,8 @@
 #include "gtest/gtest.h"
-#include "Model.h"
+#include "Model.hpp"
 #include "AttractorsParams.h"
-#include "Parser.h"
+#include "Parser.hpp"
+#include "DynamicSystemsDefault.hpp"
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

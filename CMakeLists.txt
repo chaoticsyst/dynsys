@@ -28,13 +28,13 @@ add_executable(DynamicSystems
     src/Locus.cpp
     src/Preferences.cpp
     src/Parser.cpp
-    include/Parser.h
-    include/ParserImpl.h
+    include/Parser.hpp
+    include/ParserImpl.hpp
     include/AttractorsParams.h
     include/Preferences.h
     include/Camera.h
     include/WindowPreferences.h
-    include/Model.h
+    include/Model.hpp
     include/Window.h
     include/PointsViewQGLWidget.h
     include/Locus.h

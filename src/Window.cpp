@@ -1,6 +1,7 @@
 #include <QtWidgets>
 
-#include "Model.h"
+#include "Model.hpp"
+#include "DynamicSystemsDefault.hpp"
 #include "AttractorsParams.h"
 #include "Window.h"
 #include "ui_form.h"
@@ -24,9 +25,9 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     insertConstants(AttractorsParams::goodParamsRossler);
 }
 
-void Window::insertConstants(QVector<std::pair<QString, QVector<double>>>& goodParams) {
+void Window::insertConstants(QVector<std::pair<QString, QVector<double>>> &goodParams) {
     ui->constantsBox->clear();
-    for (auto& [name, params] : goodParams) {
+    for (auto&[name, params] : goodParams) {
         ui->constantsBox->addItem(name);
     }
 }
@@ -99,7 +100,7 @@ void Window::slot_constants_selection(QString currentConstants) {
     } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
         goodParams = AttractorsParams::goodParamsLorenz;
     }
-    for (auto& [name, params] : goodParams) {
+    for (auto&[name, params] : goodParams) {
         if (name == currentConstants) {
             ui->doubleSpinBox->setValue(params[0]);
             ui->doubleSpinBox_2->setValue(params[1]);
