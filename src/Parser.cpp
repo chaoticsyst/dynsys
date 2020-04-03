@@ -230,9 +230,9 @@ std::unique_ptr<Node> parse(parse_iterator &iter, const std::array<long double *
 
 } // namespace
 
-Node *parse_expression(const std::string &expr, const std::array<long double *, 3> &var_address) {
+std::shared_ptr<Node> parse_expression(const std::string &expr, const std::array<long double *, 3> &var_address) {
     parse_iterator iter{expr.c_str()};
-    return parse(iter, var_address).release();
+    return parse(iter, var_address);
 }
 
 } // namespace Parser

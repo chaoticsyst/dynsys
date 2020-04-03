@@ -15,7 +15,7 @@ struct Node {
 };
 
 /// Order of variable addresses: [x,y,z]
-Node *parse_expression(const std::string &expr, const std::array<long double *, 3> &var_address);
+std::shared_ptr<Node> parse_expression(const std::string &expr, const std::array<long double *, 3> &var_address);
 
 
 inline auto parse_expressions(const std::string &x_expr, const std::string &y_expr, const std::string &z_expr) {
@@ -24,19 +24,19 @@ inline auto parse_expressions(const std::string &x_expr, const std::string &y_ex
     std::shared_ptr<const Node> x_func, y_func, z_func;
 
     try {
-        x_func = static_cast<std::shared_ptr<const Node>>(parse_expression(x_expr, variables_addresses));
+        x_func = parse_expression(x_expr, variables_addresses);
     } catch (const parse_error &exception) {
         throw parse_error(std::string{"In first expression: "} + std::string{exception.what()});
     }
 
     try {
-        y_func = static_cast<std::shared_ptr<const Node>>(parse_expression(y_expr, variables_addresses));
+        y_func = parse_expression(y_expr, variables_addresses);
     } catch (const parse_error &exception) {
         throw parse_error(std::string{"In second expression: "} + std::string{exception.what()});
     }
 
     try {
-        z_func = static_cast<std::shared_ptr<const Node>>(parse_expression(z_expr, variables_addresses));
+        z_func = parse_expression(z_expr, variables_addresses);
     } catch (const parse_error &exception) {
         throw parse_error(std::string{"In third expression: "} + std::string{exception.what()});
     }
