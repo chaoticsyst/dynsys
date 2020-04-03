@@ -1,5 +1,5 @@
+#include <memory>
 #include <string>
-#include <cmath>
 #include <vector>
 #include <sstream>
 #include <iterator>
@@ -40,11 +40,11 @@ struct Node_constant : Node {
 
 template<unary_operation>
 struct Node_unary_operation : Node {
-    explicit Node_unary_operation(const Node *baby) : baby_{baby} {}
+    explicit Node_unary_operation(std::unique_ptr<Node> baby) : baby_{std::move(baby)} {}
 
     long double calc() const noexcept override;
 
-    const Node *const baby_;
+    const std::unique_ptr<Node> baby_;
 };
 
 template<>
@@ -54,11 +54,11 @@ inline long double Node_unary_operation<unary_operation::MINUS>::calc() const no
 
 template<binary_operation>
 struct Node_binary_operation : Node {
-    Node_binary_operation(const Node *left, const Node *right) : left_{left}, right_{right} {}
+    Node_binary_operation(std::unique_ptr<Node> left, std::unique_ptr<Node> right) : left_{std::move(left)}, right_{std::move(right)} {}
 
     long double calc() const noexcept override;
 
-    const Node *const left_, *const right_;
+    const std::unique_ptr<Node> left_, right_;
 };
 
 template<>
@@ -94,16 +94,16 @@ inline int get_priority(binary_operation op) {
 }
 
 
-Node *parse(const char *expression, std::size_t &pos);
+std::unique_ptr<Node> parse(const char *expression, std::size_t &pos, const std::array<long double *, 3> &var_address);
 
-Node *read_node(const char *s, std::size_t &pos, const std::array<long double *, 3> &var_address) {
+std::unique_ptr<Node> read_node(const char *s, std::size_t &pos, const std::array<long double *, 3> &var_address) {
     if (s[pos] == '(') {
         ++pos;
-        return parse(s, pos);
+        return parse(s, pos, var_address);
     }
     if (s[pos] == '-') {
         ++pos;
-        return new Node_unary_operation<unary_operation::MINUS>{read_node(s, pos, var_address)};
+        return std::make_unique<Node_unary_operation<unary_operation::MINUS>>(read_node(s, pos, var_address));
     }
     if (s[pos] >= '0' && s[pos] <= '9') {
         long double val = 0;
@@ -122,19 +122,19 @@ Node *read_node(const char *s, std::size_t &pos, const std::array<long double *,
                 ++pos;
             }
         }
-        return new Node_constant{val};
+        return std::make_unique<Node_constant>(val);
     }
     if (s[pos] == 'x') {
         ++pos;
-        return new Node_var{var_address[X_VAR_POS]};
+        return std::make_unique<Node_var>(var_address[X_VAR_POS]);
     }
     if (s[pos] == 'y') {
         ++pos;
-        return new Node_var{var_address[Y_VAR_POS]};
+        return std::make_unique<Node_var>(var_address[Y_VAR_POS]);
     }
     if (s[pos] == 'z') {
         ++pos;
-        return new Node_var{var_address[Z_VAR_POS]};
+        return std::make_unique<Node_var>(var_address[Z_VAR_POS]);
     }
     throw 1;
 }
@@ -154,47 +154,47 @@ binary_operation read_binary_operation(const char *expression, std::size_t &pos)
     }
 }
 
-void merge_branches(std::vector<Node *> &node_stack, std::vector<binary_operation> &binary_operations_stack) {
+void merge_branches(std::vector<std::unique_ptr<Node>> &node_stack, std::vector<binary_operation> &binary_operations_stack) {
     binary_operation op = binary_operations_stack.back();
     binary_operations_stack.pop_back();
-    Node *r = node_stack.back();
+    std::unique_ptr<Node> r(node_stack.back().release());
     node_stack.pop_back();
-    Node *l = node_stack.back();
+    std::unique_ptr<Node> l(node_stack.back().release());
     node_stack.pop_back();
     switch (op) {
         case binary_operation::PLUS:
-            node_stack.push_back(new Node_binary_operation<binary_operation::PLUS>{l, r});
+            node_stack.push_back(std::make_unique<Node_binary_operation<binary_operation::PLUS>>(std::move(l), std::move(r)));
             break;
         case binary_operation::MINUS:
-            node_stack.push_back(new Node_binary_operation<binary_operation::MINUS>{l, r});
+            node_stack.push_back(std::make_unique<Node_binary_operation<binary_operation::MINUS>>(std::move(l), std::move(r)));
             break;
         case binary_operation::MULTIPLY:
-            node_stack.push_back(new Node_binary_operation<binary_operation::MULTIPLY>{l, r});
+            node_stack.push_back(std::make_unique<Node_binary_operation<binary_operation::MULTIPLY>>(std::move(l), std::move(r)));
             break;
         case binary_operation::SUBTRACT:
-            node_stack.push_back(new Node_binary_operation<binary_operation::SUBTRACT>{l, r});
+            node_stack.push_back(std::make_unique<Node_binary_operation<binary_operation::SUBTRACT>>(std::move(l), std::move(r)));
             break;
     }
 }
 
-Node *parse(const char *expression, std::size_t &pos, const std::array<long double *, 3> &var_address) {
-    std::vector<Node *> node_stack;
+std::unique_ptr<Node> parse(const char *expression, std::size_t &pos, const std::array<long double *, 3> &var_address) {
+    std::vector<std::unique_ptr<Node>> node_stack;
     std::vector<binary_operation> binary_operations_stack;
     node_stack.push_back(read_node(expression, pos, var_address));
     while (expression[pos] != ')' && expression[pos] != '\0') {
         binary_operation binary_operation = read_binary_operation(expression, pos);
-        Node *node = read_node(expression, pos, var_address);
+        std::unique_ptr<Node> node = read_node(expression, pos, var_address);
         while (!binary_operations_stack.empty() && get_priority(binary_operation) <= get_priority(binary_operations_stack.back())) {
             merge_branches(node_stack, binary_operations_stack);
         }
-        node_stack.push_back(node);
+        node_stack.push_back(std::move(node));
         binary_operations_stack.push_back(binary_operation);
     }
     while (!binary_operations_stack.empty()) {
         merge_branches(node_stack, binary_operations_stack);
     }
     ++pos;
-    return node_stack[0];
+    return std::move(node_stack[0]);
 }
 
 Node *parse_expression(const std::string &expr, const std::array<long double *, 3> &var_address) {
@@ -206,7 +206,7 @@ Node *parse_expression(const std::string &expr, const std::array<long double *, 
         x_expr_clear += token;
     }
     std::size_t pos = 0;
-    return parse(x_expr_clear.c_str(), pos, var_address);
+    return parse(x_expr_clear.c_str(), pos, var_address).release();
 }
 
 } // namespace Parser
