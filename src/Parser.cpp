@@ -89,7 +89,9 @@ long double Node_binary_operation<binary_operation::SUBTRACT>::calc() const noex
 }
 
 struct parse_iterator {
-    explicit parse_iterator(const char *string) : pos{string} {}
+    explicit parse_iterator(const char *string) : pos{string} {
+        while (*pos == ' ' || *pos == '\n') ++pos;
+    }
 
     char operator*() const {
         return *pos;
