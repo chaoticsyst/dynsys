@@ -1,8 +1,6 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <sstream>
-#include <iterator>
 
 #include "Parser.h"
 
@@ -83,6 +81,28 @@ long double Node_binary_operation<binary_operation::SUBTRACT>::calc() const noex
     return left_->calc() / right_->calc();
 }
 
+struct parse_iterator {
+    explicit parse_iterator(const char *string) : pos{string} {}
+
+    char operator*() const {
+        return *pos;
+    }
+
+    parse_iterator operator++(int) {
+        parse_iterator ret{pos};
+        ++*this;
+        return ret;
+    }
+
+    const parse_iterator &operator++() {
+        ++pos;
+        while (*pos == ' ' || *pos == '\n') ++pos;
+        return *this;
+    }
+
+private:
+    const char *pos;
+};
 
 int get_priority(binary_operation op) {
     switch (op) {
@@ -96,53 +116,53 @@ int get_priority(binary_operation op) {
 }
 
 
-std::unique_ptr<Node> parse(const char *expression, std::size_t &pos, const std::array<long double *, 3> &var_address);
+std::unique_ptr<Node> parse(parse_iterator iter, const std::array<long double *, 3> &var_address);
 
-std::unique_ptr<Node> read_node(const char *s, std::size_t &pos, const std::array<long double *, 3> &var_address) {
-    if (s[pos] == '(') {
-        ++pos;
-        return parse(s, pos, var_address);
+std::unique_ptr<Node> read_node(parse_iterator iter, const std::array<long double *, 3> &var_address) {
+    if (*iter == '(') {
+        ++iter;
+        return parse(iter, var_address);
     }
-    if (s[pos] == '-') {
-        ++pos;
-        return std::make_unique<Node_unary_operation<unary_operation::MINUS>>(read_node(s, pos, var_address));
+    if (*iter == '-') {
+        ++iter;
+        return std::make_unique<Node_unary_operation<unary_operation::MINUS>>(read_node(iter, var_address));
     }
-    if (s[pos] >= '0' && s[pos] <= '9') {
+    if (*iter >= '0' && *iter <= '9') {
         long double val = 0;
-        while (s[pos] >= '0' && s[pos] <= '9') {
+        while (*iter >= '0' && *iter <= '9') {
             val *= 10;
-            val += s[pos] - '0';
-            ++pos;
+            val += *iter - '0';
+            ++iter;
         }
-        if (s[pos] == '.' || s[pos] == ',') {
-            ++pos;
-            for (int i = 1; s[pos] >= '0' && s[pos] <= '9' && i < 20; ++i) {
-                val += (s[pos] - '0') * std::pow(10, -i);
-                ++pos;
+        if (*iter == '.' || *iter == ',') {
+            ++iter;
+            for (int i = 1; *iter >= '0' && *iter <= '9' && i < 20; ++i) {
+                val += (*iter - '0') * std::pow(10, -i);
+                ++iter;
             }
-            while (s[pos] >= '0' && s[pos] <= '9') {
-                ++pos;
+            while (*iter >= '0' && *iter <= '9') {
+                ++iter;
             }
         }
         return std::make_unique<Node_constant>(val);
     }
-    if (s[pos] == 'x') {
-        ++pos;
+    if (*iter == 'x') {
+        ++iter;
         return std::make_unique<Node_var>(var_address[X_VAR_POS]);
     }
-    if (s[pos] == 'y') {
-        ++pos;
+    if (*iter == 'y') {
+        ++iter;
         return std::make_unique<Node_var>(var_address[Y_VAR_POS]);
     }
-    if (s[pos] == 'z') {
-        ++pos;
+    if (*iter == 'z') {
+        ++iter;
         return std::make_unique<Node_var>(var_address[Z_VAR_POS]);
     }
     throw 1;
 }
 
-binary_operation read_binary_operation(const char *expression, std::size_t &pos) {
-    switch (expression[pos++]) {
+binary_operation read_binary_operation(parse_iterator iter) {
+    switch (*(iter++)) {
         case '*':
             return binary_operation::MULTIPLY;
         case '/':
@@ -179,13 +199,13 @@ void merge_branches(std::vector<std::unique_ptr<Node>> &node_stack, std::vector<
     }
 }
 
-std::unique_ptr<Node> parse(const char *expression, std::size_t &pos, const std::array<long double *, 3> &var_address) {
+std::unique_ptr<Node> parse(parse_iterator iter, const std::array<long double *, 3> &var_address) {
     std::vector<std::unique_ptr<Node>> node_stack;
     std::vector<binary_operation> binary_operations_stack;
-    node_stack.push_back(read_node(expression, pos, var_address));
-    while (expression[pos] != ')' && expression[pos] != '\0') {
-        binary_operation binary_operation = read_binary_operation(expression, pos);
-        std::unique_ptr<Node> node = read_node(expression, pos, var_address);
+    node_stack.push_back(read_node(iter, var_address));
+    while (*iter != ')' && *iter != '\0') {
+        binary_operation binary_operation = read_binary_operation(iter);
+        std::unique_ptr<Node> node = read_node(iter, var_address);
         while (!binary_operations_stack.empty() && get_priority(binary_operation) <= get_priority(binary_operations_stack.back())) {
             merge_branches(node_stack, binary_operations_stack);
         }
@@ -195,22 +215,14 @@ std::unique_ptr<Node> parse(const char *expression, std::size_t &pos, const std:
     while (!binary_operations_stack.empty()) {
         merge_branches(node_stack, binary_operations_stack);
     }
-    ++pos;
+    ++iter;
     return std::move(node_stack[0]);
 }
 
 } // namespace
 
 Node *parse_expression(const std::string &expr, const std::array<long double *, 3> &var_address) {
-    std::stringstream string_stream{expr};
-    std::vector<std::string> vec = std::vector<std::string>{std::istream_iterator<std::string>{string_stream},
-                                                            std::istream_iterator<std::string>{}};
-    std::string x_expr_clear;
-    for (std::string &token : vec) {
-        x_expr_clear += token;
-    }
-    std::size_t pos = 0;
-    return parse(x_expr_clear.c_str(), pos, var_address).release();
+    return parse(parse_iterator{expr.c_str()}, var_address).release();
 }
 
 } // namespace Parser
