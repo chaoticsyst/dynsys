@@ -50,7 +50,7 @@ struct Node_unary_operation : Node {
 };
 
 template<>
-inline long double Node_unary_operation<unary_operation::MINUS>::calc() const noexcept {
+long double Node_unary_operation<unary_operation::MINUS>::calc() const noexcept {
     return -baby_->calc();
 }
 
@@ -64,27 +64,27 @@ struct Node_binary_operation : Node {
 };
 
 template<>
-inline long double Node_binary_operation<binary_operation::MINUS>::calc() const noexcept {
+long double Node_binary_operation<binary_operation::MINUS>::calc() const noexcept {
     return left_->calc() - right_->calc();
 }
 
 template<>
-inline long double Node_binary_operation<binary_operation::PLUS>::calc() const noexcept {
+long double Node_binary_operation<binary_operation::PLUS>::calc() const noexcept {
     return left_->calc() + right_->calc();
 }
 
 template<>
-inline long double Node_binary_operation<binary_operation::MULTIPLY>::calc() const noexcept {
+long double Node_binary_operation<binary_operation::MULTIPLY>::calc() const noexcept {
     return left_->calc() * right_->calc();
 }
 
 template<>
-inline long double Node_binary_operation<binary_operation::SUBTRACT>::calc() const noexcept {
+long double Node_binary_operation<binary_operation::SUBTRACT>::calc() const noexcept {
     return left_->calc() / right_->calc();
 }
 
 
-inline int get_priority(binary_operation op) {
+int get_priority(binary_operation op) {
     switch (op) {
         case binary_operation::PLUS:
         case binary_operation::MINUS:
