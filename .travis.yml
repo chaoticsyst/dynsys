@@ -1,15 +1,15 @@
 language: C++
 sudo: required
-dist: trusty
+dist: xenial
 compiler: g++
 
 install:
     - source ci/travis/install-linux.sh
 
 before_script:
-    - QTDIR="/opt/qt55"
+    - QTDIR="/opt/qt57"
     - PATH="$QTDIR/bin:$PATH"
-    - source /opt/qt55/bin/qt55-env.sh
+    - source /opt/qt57/bin/qt57-env.sh
 
 script:
     - mkdir build

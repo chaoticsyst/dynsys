@@ -2,13 +2,10 @@
 
 #include <QImage>
 
-extern "C"{
+extern "C" {
     #include <libavformat/avformat.h>
-    #include <libavformat/avio.h>
-    #include <libavcodec/avcodec.h>
-    #include <libavformat/avformat.h>
-    #include <libavutil/imgutils.h>
     #include <libavutil/opt.h>
+    #include <libavutil/frame.h>
     #include <libavcodec/avcodec.h>
     #include <libswscale/swscale.h>
 }

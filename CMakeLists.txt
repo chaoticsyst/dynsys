@@ -31,9 +31,6 @@ find_library(AVFORMAT_LIBRARY avformat)
 find_path(AVUTIL_INCLUDE_DIR libavutil/avutil.h)
 find_library(AVUTIL_LIBRARY avutil)
 
-find_path(AVDEVICE_INCLUDE_DIR libavdevice/avdevice.h)
-find_library(AVDEVICE_LIBRARY avdevice)
-
 find_path(AVSWS_INCLUDE_DIR libswscale/swscale.h)
 find_library(AVSWS_LIBRARY swscale)
 
@@ -67,4 +64,4 @@ qt5_use_modules(DynamicSystems Widgets OpenGL)
 
 add_subdirectory(test/)
 
-target_link_libraries(DynamicSystems ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${AVCODEC_LIBRARY} ${AVFORMAT_LIBRARY} ${AVUTIL_LIBRARY} ${AVDEVICE_LIBRARY} ${AVSWS_LIBRARY})
+target_link_libraries(DynamicSystems ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${AVCODEC_LIBRARY} ${AVFORMAT_LIBRARY} ${AVUTIL_LIBRARY} ${AVSWS_LIBRARY})

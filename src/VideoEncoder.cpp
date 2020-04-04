@@ -3,6 +3,10 @@
 
 namespace VideoEncoder {
 
+#if LIBAVUTIL_VERSION_INT <= AV_VERSION_INT(52, 9, 0)
+#define av_frame_alloc avcodec_alloc_frame
+#endif
+
 const AVPixelFormat INPUT_PIX_FORMAT = AV_PIX_FMT_RGB32;
 const AVPixelFormat OUTPUT_PIX_FORMAT = AV_PIX_FMT_YUV420P;
 
