@@ -31,6 +31,9 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
+    template<typename Lambda>
+    void count_points(Lambda derivatives_function);
+
     void insertConstants(QVector<std::pair<QString, QVector<double>>>&);
 
     int timeValue = 0;

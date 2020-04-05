@@ -4,7 +4,7 @@
 #include <QVector3D>
 #include <cmath>
 
-#include "Model.h"
+#include "Model.hpp"
 
 struct Preferences {
     Preferences() = delete;
@@ -40,11 +40,6 @@ struct Preferences {
     static long double COLOR_FUNCTION_DELTA;
 
     static bool TAILS_VIEW;
-
-
-/* Model constants */
-
-    static long double COORDINATE_VALUE_LIMIT; //generation stops if the coordinate value becomes greater
 
 
 /* Locus constants */

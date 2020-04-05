@@ -37,18 +37,22 @@ find_library(AVSWS_LIBRARY swscale)
 add_executable(DynamicSystems
     src/main.cpp
     src/WindowPreferences.cpp
-    src/Model.cpp
     src/Camera.cpp
     src/PointsViewQGLWidget.cpp
     src/Window.cpp
     src/Locus.cpp
     src/Preferences.cpp
     src/VideoEncoder.cpp
+    src/Parser.cpp
+    include/Parser.hpp
+    include/ParserImpl.hpp
     include/AttractorsParams.h
     include/Preferences.h
     include/Camera.h
     include/WindowPreferences.h
-    include/Model.h
+    include/Model.hpp
+    include/ModelImpl.hpp
+    include/DynamicSystemsDefault.hpp
     include/Window.h
     include/PointsViewQGLWidget.h
     include/Locus.h
