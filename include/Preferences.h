@@ -3,7 +3,7 @@
 #include <QSize>
 #include <cmath>
 
-#include "Model.h"
+#include "Model.hpp"
 
 struct Preferences {
     Preferences() = delete;

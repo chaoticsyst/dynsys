@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "Model.h"
+#include "Model.hpp"
 
 namespace Model {
 

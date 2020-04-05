@@ -3,7 +3,7 @@
 #include <vector>
 #include <cassert>
 
-#include "Model.h"
+#include "Model.hpp"
 
 namespace Model {
 
