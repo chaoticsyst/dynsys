@@ -19,15 +19,26 @@ tar --strip-components=1 -xzf $CMAKE_TAR -C $CMAKE_DIR
 export PATH=$CMAKE_DIR/bin:$PATH
 
 # Qt libraries install
-sudo apt-add-repository --yes ppa:beineri/opt-qt551-trusty
+sudo add-apt-repository --yes ppa:beineri/opt-qt571-xenial
 sudo apt-get -qq update
-
-sudo apt-get --yes install qt55base qt55imageformats qt55svg
+sudo apt-get install --yes qt5-default
+sudo apt-get install --yes qt57base 
+sudo apt-get install --yes qt57imageformats 
+sudo apt-get install --yes qt57svg
 
 # Ninja install
 sudo apt-get --yes install ninja-build
 
-sudo apt-get install libgtest-dev
+# video librarries install
+sudo add-apt-repository --yes ppa:mc3man/xerus-media
+sudo apt-get -qq update
+sudo apt-get install --yes libavcodec-dev 
+sudo apt-get install --yes libavformat-dev 
+sudo apt-get install --yes libswscale-dev 
+sudo apt-get install --yes libavutil-dev
+
+# Google tests install
+sudo apt-get install --yes libgtest-dev
 cd /usr/src/gtest
 sudo env "PATH=$PATH" cmake CMakeLists.txt
 sudo make

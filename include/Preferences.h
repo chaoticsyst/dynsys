@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QSize>
+#include <QVector3D>
 #include <cmath>
 
 #include "Model.hpp"
@@ -63,10 +64,13 @@ struct Preferences {
 
     static int   CAMERA_TIMER_DELTA;
 
+    static QVector3D INIT_CAMERA_POSITION;
+    static QVector3D INIT_CAMERA_TARGET;
+    static float     INIT_PITCH;
+    static float     INIT_YAW;
+
 /* Shaders */
 
-    static const char *VERTEX_SHADER;
-    static const char *FRAGMENT_SHADER;
     static const char *VERTEX_NAME;
     static const char *COLOR_NAME;
     static const char *MATRIX_NAME;

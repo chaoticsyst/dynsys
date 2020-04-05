@@ -3,20 +3,24 @@
 
 namespace Locus {
 
-Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_) :
-    color{color_} {
+Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_, QGLShaderProgram *shaderProgram_) :
+    color{color_}, shaderProgram{shaderProgram_} {
 
     points_ = interpolate(std::move(points_));
+    shaderProgram->bind();
     pointsBuffer = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
     pointsBuffer.create();
     pointsBuffer.bind();
     pointsBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
     pointsBuffer.allocate(points_.begin(), points_.size() * 3 * sizeof(float));
     pointsBuffer.release();
+    shaderProgram->release();
 }
 
 void Locus::startWork() {
     pointsBuffer.bind();
+    shaderProgram->setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
+    shaderProgram->setUniformValue(Preferences::COLOR_NAME, colorData());
 }
 
 void Locus::endWork() {
@@ -31,19 +35,24 @@ size_t Locus::size() const {
     return static_cast<size_t>(pointsBuffer.size() / 3 / sizeof(float));
 }
 
-QVector3D Locus::getInterpolatedPoint(float offset, const QVector<QVector3D> &points, size_t startIndex) {
-    if (startIndex + 3 >= static_cast<size_t>(points.size())) {
-        return points[startIndex];
-    }
-    const QVector3D &pivotPrev   = points[startIndex];
-    const QVector3D &pivotFirst  = points[startIndex + 1];
-    const QVector3D &pivotSecond = points[startIndex + 2];
-    const QVector3D &pivotNext   = points[startIndex + 3];
-    return 0.5f * ((2 * pivotFirst)
-                + offset * ((-pivotPrev + pivotSecond)
-                + offset * ((2 * pivotPrev - 5 * pivotFirst + 4 * pivotSecond - pivotNext)
-                + offset * (-pivotPrev + 3 * pivotFirst - 3 * pivotSecond + pivotNext))));
+size_t Locus::initialSize() const {
+    return startIndexes.size();
 }
+
+size_t Locus::getStartIndex(size_t initialIndex) const {
+    initialIndex = std::min<size_t>(initialIndex, startIndexes.size() - 1);
+    return startIndexes[initialIndex];
+}
+
+QVector3D Locus::getInterpolatedPoint(float offset, const QMatrix4x4 &matrix) const {
+    const static QMatrix4x4 curveMatrix( 0,  2,  0,  0,
+                                        -1,  0,  1,  0,
+                                         2, -5,  4, -1,
+                                        -1,  3, -3,  1);
+    auto res = 0.5 * QVector4D(1, offset, offset * offset, offset * offset * offset) * curveMatrix * matrix;
+    return {res.x(), res.y(), res.z()};
+}
+
 
 QVector<QVector3D> Locus::interpolate(const QVector<QVector3D> &points) {
     if (points.size() < 2) {
@@ -51,19 +60,30 @@ QVector<QVector3D> Locus::interpolate(const QVector<QVector3D> &points) {
     }
 
     QVector<QVector3D> result;
-    result.reserve(2 * points.size());
+    QMatrix4x4 curMatrix;
 
     result << points[0];
+    startIndexes << 0;
     for (size_t i = 1; i < static_cast<size_t>(points.size() - 2); i++) {
+        startIndexes << result.size();
+
         result.push_back(points[i]);
 
         float distance = points[i].distanceToPoint(points[i + 1]);
         size_t cuts = distance / Preferences::DISTANCE_DELTA;
+        if (cuts == 0) {
+            continue;
+        }
+        curMatrix.setRow(0, points[i - 1]);
+        curMatrix.setRow(1, points[i + 0]);
+        curMatrix.setRow(2, points[i + 1]);
+        curMatrix.setRow(3, points[i + 2]);
         float dt = 1.0 / (cuts + 1);
         for (size_t j = 0; j < cuts; j++) {
-            result.push_back(getInterpolatedPoint(dt * (j + 1), points, i - 1));
+            result << getInterpolatedPoint(dt * (j + 1), curMatrix);
         }
     }
+    startIndexes << result.size();
     result << points[points.size() - 2] << points[points.size() - 1];
 
     return result;
@@ -78,22 +98,17 @@ void LocusController::addLocus(Locus &&locus) {
     data.push_back(std::move(locus));
 }
 
-void LocusController::removeLocus(size_t index) {
-    data.removeAt(index);
-}
-
 void LocusController::clear() {
     data.clear();
 }
 
-void LocusController::draw(QGLShaderProgram &shaderProgram, size_t amount) {
+void LocusController::draw(size_t amount) {
     for (auto &locus : data) {
         locus.startWork();
-        shaderProgram.setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
-        shaderProgram.setUniformValue(Preferences::COLOR_NAME, locus.colorData());
-        glDrawArrays(GL_LINE_STRIP,
-                     std::max<int>(0, static_cast<int>(std::min(locus.size(), amount)) - Preferences::AMOUNT_TAIL_POINTS),
-                     std::min(Preferences::AMOUNT_TAIL_POINTS, amount));
+        int curAmount = std::min(locus.initialSize(), amount);
+        size_t start = std::max(0, curAmount - static_cast<int>(Preferences::AMOUNT_TAIL_POINTS));
+        size_t length = locus.getStartIndex(curAmount) - locus.getStartIndex(start);
+        glDrawArrays(GL_LINE_STRIP, locus.getStartIndex(start), length);
 
         locus.endWork();
     }

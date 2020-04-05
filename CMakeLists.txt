@@ -19,6 +19,21 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
 find_package(OpenGL REQUIRED)
 
+
+set(CMAKE_CXX_FLAGS "-D__STDC_CONSTANT_MACROS")
+
+find_path(AVCODEC_INCLUDE_DIR libavcodec/avcodec.h)
+find_library(AVCODEC_LIBRARY avcodec)
+
+find_path(AVFORMAT_INCLUDE_DIR libavformat/avformat.h)
+find_library(AVFORMAT_LIBRARY avformat)
+
+find_path(AVUTIL_INCLUDE_DIR libavutil/avutil.h)
+find_library(AVUTIL_LIBRARY avutil)
+
+find_path(AVSWS_INCLUDE_DIR libswscale/swscale.h)
+find_library(AVSWS_LIBRARY swscale)
+
 add_executable(DynamicSystems
     src/main.cpp
     src/WindowPreferences.cpp
@@ -27,6 +42,7 @@ add_executable(DynamicSystems
     src/Window.cpp
     src/Locus.cpp
     src/Preferences.cpp
+    src/VideoEncoder.cpp
     src/Parser.cpp
     include/Parser.hpp
     include/ParserImpl.hpp
@@ -40,12 +56,16 @@ add_executable(DynamicSystems
     include/Window.h
     include/PointsViewQGLWidget.h
     include/Locus.h
+    include/VideoEncoder.h
     src/form.ui
     src/formPreferences.ui
+    materials/Resources.qrc
+    materials/FragmentShader.fsh
+    materials/VertexShader.vsh
 )
 
 qt5_use_modules(DynamicSystems Widgets OpenGL)
 
 add_subdirectory(test/)
 
-target_link_libraries(DynamicSystems ${QT_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(DynamicSystems ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${AVCODEC_LIBRARY} ${AVFORMAT_LIBRARY} ${AVUTIL_LIBRARY} ${AVSWS_LIBRARY})
