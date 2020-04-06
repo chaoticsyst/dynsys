@@ -7,7 +7,8 @@ const AVPixelFormat INPUT_PIX_FORMAT = AV_PIX_FMT_RGB32;
 const AVPixelFormat OUTPUT_PIX_FORMAT = AV_PIX_FMT_YUV420P;
 
 VideoEncoder::VideoEncoder() :
-    working{false} {}
+    working{false},
+    built{false} {}
 
 bool VideoEncoder::isWorking() const {
     return working;
@@ -18,11 +19,21 @@ void VideoEncoder::startEncoding(int width, int height, const char *filename) {
         endEncoding();
     }
     working = true;
+
+    formatContext        = nullptr;
+    stream               = nullptr;
+    yuvFrame             = nullptr;
+    rgbFrame             = nullptr;
+    codecContext         = nullptr;
+    convertFramesContext = nullptr;
+
     AVOutputFormat *outputFormat = nullptr;
-    AVCodec *codec = nullptr;
-    AVDictionary *formatOptions = nullptr;
+    AVCodec *codec               = nullptr;
+    AVDictionary *formatOptions  = nullptr;
 
     av_register_all();
+
+    av_log_set_level(AV_LOG_QUIET);
 
     formatContext = avformat_alloc_context();
     if (formatContext == nullptr) {
@@ -72,8 +83,6 @@ void VideoEncoder::startEncoding(int width, int height, const char *filename) {
     av_opt_set(codecContext->priv_data, "preset", "ultrafast", 0);
     av_opt_set(codecContext->priv_data, "b-pyramid", "0", 0);
 
-    av_log_set_level(AV_LOG_QUIET);
-
     if (avcodec_open2(codecContext, codec, nullptr) < 0) {
         throw std::logic_error("Could not initialize a codec context.");
     }
@@ -113,25 +122,36 @@ void VideoEncoder::startEncoding(int width, int height, const char *filename) {
                                           SWS_FAST_BILINEAR, nullptr, nullptr, nullptr);
 
     frameNumber = 0;
+
+    built = true;
 }
 
 void VideoEncoder::endEncoding() {
     if (working == false) {
         return;
     }
-    while (write(nullptr) == true);
-
-    av_write_trailer(formatContext);
-    avio_close(formatContext->pb);
-    avformat_free_context(formatContext);
-//    avcodec_free_context(&codecContext);
-    av_freep(&yuvFrame->data[0]);
-//    av_frame_free(&yuvFrame);
-//    av_freep(&rgbFrame->data[0]);
-//    av_frame_free(&rgbFrame);
-    sws_freeContext(convertFramesContext);
+    while (built && write(nullptr) == true);
+    if (formatContext != nullptr) {
+        if (built) {
+            av_write_trailer(formatContext);
+        }
+        if (formatContext->pb != nullptr) {
+            avio_close(formatContext->pb);
+        }
+        avformat_free_context(formatContext);
+    }
+    if (yuvFrame != nullptr) {
+        av_frame_free(&yuvFrame);
+    }
+    if (rgbFrame != nullptr) {
+        av_frame_free(&rgbFrame);
+    }
+    if (convertFramesContext != nullptr) {
+        sws_freeContext(convertFramesContext);
+    }
 
     working = false;
+    built = false;
 }
 
 VideoEncoder::~VideoEncoder() {

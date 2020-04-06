@@ -40,6 +40,7 @@ private:
     size_t frameNumber;
 
     bool working;
+    bool built;
 
     bool write(AVFrame *frame);
 };

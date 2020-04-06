@@ -93,7 +93,7 @@ void PointsViewQGLWidget::keyPressEvent(QKeyEvent *event) {
         static size_t videoCounter = 0;
 
         videoEncoder.endEncoding();
-        resize(width() / 4 * 4, height());
+        resize(width() / 4 * 4, height() / 2 * 2);
 
         try {
             const char *filename = ("video" + std::to_string(videoCounter++) + ".avi").c_str();
