@@ -159,7 +159,7 @@ VideoEncoder::~VideoEncoder() {
 }
 
 bool VideoEncoder::write(AVFrame *frame) {
-    AVPacket packet = {0};
+    AVPacket packet;
     av_init_packet(&packet);
     if (frame != nullptr) {
         frame->pts = frameNumber++;
