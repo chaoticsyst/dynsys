@@ -16,6 +16,15 @@ QSize PointsViewQGLWidget::sizeHint() const {
     return Preferences::INIT_WINDOW_SIZE;
 }
 
+void PointsViewQGLWidget::fixSizes() {
+    if (width() % 4 != 0) {
+        resize(width() / 4 * 4, height());
+    }
+    if (height() % 2 != 0) {
+        resize(width(), height() / 2 * 2);
+    }
+}
+
 QColor getColorByIndex(size_t index) {
     static const QVector<QColor> colors = {QColor(Qt::red), QColor(Qt::yellow), QColor(Qt::blue)};
 
@@ -65,6 +74,8 @@ void PointsViewQGLWidget::resizeGL(int width, int height) {
 }
 
 void PointsViewQGLWidget::paintGL() {
+    fixSizes();
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shaderProgram.bind();
     shaderProgram.setUniformValue(Preferences::MATRIX_NAME, cameraController.getMatrix());
@@ -93,7 +104,7 @@ void PointsViewQGLWidget::keyPressEvent(QKeyEvent *event) {
         static size_t videoCounter = 0;
 
         videoEncoder.endEncoding();
-        resize(width() / 4 * 4, height() / 2 * 2);
+        fixSizes();
 
         try {
             const char *filename = ("video" + std::to_string(videoCounter++) + ".avi").c_str();
