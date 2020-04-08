@@ -25,6 +25,8 @@ public:
 
     void addNewLocus(QVector<QVector3D> &&points);
 
+    void fixSizes();
+
 protected:
     void initializeGL() override;
     void resizeGL(int width, int height) override;
