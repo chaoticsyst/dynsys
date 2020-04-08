@@ -50,8 +50,6 @@ private:
 
     bool invalidState;
 
-    Camera &operator=(const Camera &&other);
-
     void recalculateVectors();
     void normalizeAngles();
 };

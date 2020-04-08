@@ -19,15 +19,6 @@ Camera::Camera() :
     recalculateVectors();
 }
 
-Camera &Camera::operator=(const Camera &&other) {
-    cameraPosition = other.cameraPosition;
-    cameraTarget   = other.cameraTarget;
-    pitch          = other.pitch;
-    yaw            = other.yaw;
-
-    return *this;
-}
-
 void Camera::recalculateVectors() {
     cameraForward = (-cameraTarget).normalized();
     cameraRight = QVector3D::crossProduct(worldUp, cameraForward).normalized();
