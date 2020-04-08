@@ -6,7 +6,7 @@
 #include "Preferences.h"
 
 PointsViewQGLWidget::PointsViewQGLWidget(QWidget *parent) :
-    QGLWidget{QGLFormat(), parent} {}
+    QGLWidget{QGLFormat(), parent}, locusController{shaderProgram} {}
 
 QSize PointsViewQGLWidget::minimumSizeHint() const {
     return Preferences::MIN_WINDOW_SIZE;
@@ -47,7 +47,7 @@ QColor getColorByIndex(size_t index) {
 
 void PointsViewQGLWidget::addNewLocus(QVector<QVector3D> &&points) {
     QColor color = getColorByIndex(locusController.size());
-    locusController.addLocus(Locus::Locus(std::move(points), color, &shaderProgram));
+    locusController.addLocus(std::move(points), color);
 }
 
 void PointsViewQGLWidget::setCurrentTime(const int currentTime_) {
@@ -61,6 +61,8 @@ void PointsViewQGLWidget::clearAll() {
 void PointsViewQGLWidget::initializeGL() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+    glEnable(GL_POINT_SMOOTH);
 
     qglClearColor(QColor(Qt::black));
 
@@ -78,10 +80,8 @@ void PointsViewQGLWidget::paintGL() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shaderProgram.bind();
-    shaderProgram.setUniformValue(Preferences::MATRIX_NAME, cameraController.getMatrix());
-    shaderProgram.enableAttributeArray(Preferences::VERTEX_NAME);
+    shaderProgram.setUniformValue("matrix", cameraController.getMatrix());
     locusController.draw(currentTime);
-    shaderProgram.disableAttributeArray(Preferences::VERTEX_NAME);
     shaderProgram.release();
 
     if (videoEncoder.isWorking()) {

@@ -10,7 +10,7 @@ namespace Locus {
 
 class Locus final {
 public:
-    Locus(QVector<QVector3D> &&points_, const QColor &color_, QGLShaderProgram *shaderProgram_);
+    Locus(QVector<QVector3D> &&points_, const QColor &color_);
     Locus() = default;
     ~Locus() = default;
 
@@ -25,7 +25,6 @@ public:
 private:
     QOpenGLBuffer pointsBuffer;
     QColor color;
-    QGLShaderProgram *shaderProgram;
     QVector<size_t> startIndexes;
 
     QVector3D getInterpolatedPoint(float offset, const QMatrix4x4 &matrix) const;
@@ -36,7 +35,7 @@ private:
 
 class LocusController final {
 public:
-    LocusController()  = default;
+    LocusController(QGLShaderProgram &shaderProgram_);
     ~LocusController() = default;
 
     LocusController(const LocusController &)            = delete;
@@ -46,13 +45,14 @@ public:
 
     size_t size() const;
 
-    void addLocus(Locus &&locus);
+    void addLocus(QVector<QVector3D> &&points_, const QColor &color_);
 
     void clear();
 
-    void draw(size_t amount);
+    void draw(size_t length);
 private:
     QVector<Locus> data;
+    QGLShaderProgram &shaderProgram;
 };
 
 } //namespace Locus

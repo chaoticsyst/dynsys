@@ -1,3 +1,5 @@
+#include <QtOpenGL/qgl.h>
+
 #include "Preferences.h"
 
 // Sorry...
@@ -12,11 +14,14 @@ size_t       Preferences::AMOUNT_LOCUS           = 0ul;
 bool         Preferences::NEW_PREFERENCES        = false;
 QSize        Preferences::MIN_WINDOW_SIZE        = QSize(0, 0);
 QSize        Preferences::INIT_WINDOW_SIZE       = QSize(0, 0);
-long double  Preferences::COLOR_FUNCTION_DELTA   = 0.0l;
 bool         Preferences::TAILS_VIEW             = false;
 size_t       Preferences::AMOUNT_TAIL_POINTS     = 0ul;
 float        Preferences::START_POINT_DELTA      = 0.0f;
 float        Preferences::DISTANCE_DELTA         = 0;
+bool         Preferences::ARCADE_MODE_ON         = false;
+float        Preferences::START_POINT_SIZE       = 0.0f;
+float        Preferences::FINAL_POINT_SIZE       = 0.0f;
+int          Preferences::PRIMITIVE              = 0;
 float        Preferences::EPS                    = 0.0f;
 float        Preferences::VERTICAL_ANGLE         = 0.0f;
 float        Preferences::NEAR_PLANE             = 0.0f;
@@ -29,9 +34,6 @@ QVector3D    Preferences::INIT_CAMERA_POSITION   = QVector3D();
 QVector3D    Preferences::INIT_CAMERA_TARGET     = QVector3D();
 float        Preferences::INIT_PITCH             = 0.0f;
 float        Preferences::INIT_YAW               = 0.0f;
-const char  *Preferences::VERTEX_NAME            = "vertex";
-const char  *Preferences::COLOR_NAME             = "color";
-const char  *Preferences::MATRIX_NAME            = "matrix";
 
 
 void Preferences::setDefaultValues() {
@@ -50,13 +52,15 @@ void Preferences::setDefaultValues() {
     MIN_WINDOW_SIZE  = QSize(640, 480);
     INIT_WINDOW_SIZE = QSize(1080, 720);
 
-    COLOR_FUNCTION_DELTA = 0.01;
-
     TAILS_VIEW = true;
 
     AMOUNT_TAIL_POINTS = 100;
-    START_POINT_DELTA = 0.001;
-    DISTANCE_DELTA = 0.2;
+    START_POINT_DELTA = 0.01;
+    DISTANCE_DELTA = 0.15;
+
+    START_POINT_SIZE = 0.0;
+    FINAL_POINT_SIZE = 15.0;
+    PRIMITIVE = GL_LINE_STRIP;
 
     EPS = 0.001;
 
@@ -85,4 +89,14 @@ void Preferences::setValuesBeautifulLorenz() {
     AMOUNT_LOCUS = 500;
 
     AMOUNT_TAIL_POINTS = 150;
+}
+
+void Preferences::enableArcadeMode() {
+    ARCADE_MODE_ON = true;
+    PRIMITIVE = GL_POINTS;
+}
+
+void Preferences::disableArcadeMode() {
+    ARCADE_MODE_ON = false;
+    PRIMITIVE = GL_LINE_STRIP;
 }
