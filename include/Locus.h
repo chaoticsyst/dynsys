@@ -20,7 +20,7 @@ public:
     size_t initialSize() const;
     size_t getStartIndex(size_t initialIndex) const;
 
-    void startWork();
+    void startWork(size_t pointsNumber, size_t startIndex);
     void endWork();
 private:
     QOpenGLBuffer pointsBuffer;

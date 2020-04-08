@@ -17,10 +17,15 @@ Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_, QGLShaderProgra
     shaderProgram->release();
 }
 
-void Locus::startWork() {
+void Locus::startWork(size_t pointsNumber, size_t startIndex) {
     pointsBuffer.bind();
     shaderProgram->setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
     shaderProgram->setUniformValue(Preferences::COLOR_NAME, colorData());
+    shaderProgram->setUniformValue("decreasingTailMode", true);
+    shaderProgram->setUniformValue("startTailSize", 1.0f);
+    shaderProgram->setUniformValue("finalTailSize", 15.0f);
+    shaderProgram->setUniformValue("pointsNumber", static_cast<int>(pointsNumber));
+    shaderProgram->setUniformValue("startIndex", static_cast<int>(startIndex));
 }
 
 void Locus::endWork() {
@@ -104,11 +109,12 @@ void LocusController::clear() {
 
 void LocusController::draw(size_t amount) {
     for (auto &locus : data) {
-        locus.startWork();
+        locus.startWork(0, 0);
         int curAmount = std::min(locus.initialSize(), amount);
         size_t start = std::max(0, curAmount - static_cast<int>(Preferences::AMOUNT_TAIL_POINTS));
         size_t length = locus.getStartIndex(curAmount) - locus.getStartIndex(start);
-        glDrawArrays(GL_LINE_STRIP, locus.getStartIndex(start), length);
+        locus.startWork(length, locus.getStartIndex(start));
+        glDrawArrays(GL_POINTS, locus.getStartIndex(start), length);
 
         locus.endWork();
     }

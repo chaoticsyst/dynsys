@@ -59,7 +59,7 @@ void Preferences::setDefaultValues() {
 
     AMOUNT_TAIL_POINTS = 100;
     START_POINT_DELTA = 0.001;
-    DISTANCE_DELTA = 0.2;
+    DISTANCE_DELTA = 0.02;
 
     EPS = 0.001;
 
