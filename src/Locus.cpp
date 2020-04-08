@@ -3,29 +3,21 @@
 
 namespace Locus {
 
-Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_, QGLShaderProgram *shaderProgram_) :
-    color{color_}, shaderProgram{shaderProgram_} {
+Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_) :
+    color{color_} {
 
     points_ = interpolate(std::move(points_));
-    shaderProgram->bind();
+
     pointsBuffer = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
     pointsBuffer.create();
     pointsBuffer.bind();
     pointsBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
     pointsBuffer.allocate(points_.begin(), points_.size() * 3 * sizeof(float));
     pointsBuffer.release();
-    shaderProgram->release();
 }
 
-void Locus::startWork(size_t pointsNumber, size_t startIndex) {
+void Locus::startWork() {
     pointsBuffer.bind();
-    shaderProgram->setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
-    shaderProgram->setUniformValue(Preferences::COLOR_NAME, colorData());
-    shaderProgram->setUniformValue("decreasingTailMode", true);
-    shaderProgram->setUniformValue("startTailSize", 1.0f);
-    shaderProgram->setUniformValue("finalTailSize", 15.0f);
-    shaderProgram->setUniformValue("pointsNumber", static_cast<int>(pointsNumber));
-    shaderProgram->setUniformValue("startIndex", static_cast<int>(startIndex));
 }
 
 void Locus::endWork() {
@@ -95,29 +87,49 @@ QVector<QVector3D> Locus::interpolate(const QVector<QVector3D> &points) {
 }
 
 
+LocusController::LocusController(QGLShaderProgram &shaderProgram_) :
+    shaderProgram{shaderProgram_} {}
+
 size_t LocusController::size() const {
     return static_cast<size_t>(data.size());
 }
 
-void LocusController::addLocus(Locus &&locus) {
-    data.push_back(std::move(locus));
+void LocusController::addLocus(QVector<QVector3D> &&points_, const QColor &color_) {
+    shaderProgram.bind();
+    data.push_back(Locus(std::move(points_), color_));
+    shaderProgram.release();
 }
 
 void LocusController::clear() {
     data.clear();
 }
 
-void LocusController::draw(size_t amount) {
+void LocusController::draw(size_t length) {
+    shaderProgram.enableAttributeArray("vertex");
     for (auto &locus : data) {
-        locus.startWork(0, 0);
-        int curAmount = std::min(locus.initialSize(), amount);
+        locus.startWork();
+        if (locus.initialSize() == 0) {
+            continue;
+        }
+
+        int curAmount = std::min(locus.initialSize(), length);
         size_t start = std::max(0, curAmount - static_cast<int>(Preferences::AMOUNT_TAIL_POINTS));
-        size_t length = locus.getStartIndex(curAmount) - locus.getStartIndex(start);
-        locus.startWork(length, locus.getStartIndex(start));
-        glDrawArrays(GL_POINTS, locus.getStartIndex(start), length);
+        size_t actualLength = locus.getStartIndex(curAmount) - locus.getStartIndex(start);
+
+        shaderProgram.setAttributeArray("vertex", GL_FLOAT, 0, 3);
+        shaderProgram.setUniformValue("color", locus.colorData());
+
+        shaderProgram.setUniformValue("decreasingTailMode", Preferences::ARCADE_MODE_ON);
+        shaderProgram.setUniformValue("startTailSize", Preferences::START_POINT_SIZE);
+        shaderProgram.setUniformValue("finalTailSize", Preferences::FINAL_POINT_SIZE);
+        shaderProgram.setUniformValue("length", static_cast<int>(actualLength));
+        shaderProgram.setUniformValue("startIndex", static_cast<int>(locus.getStartIndex(start)));
+
+        glDrawArrays(Preferences::PRIMITIVE, locus.getStartIndex(start), actualLength);
 
         locus.endWork();
     }
+    shaderProgram.disableAttributeArray("vertex");
 }
 
 } //namespace Locus

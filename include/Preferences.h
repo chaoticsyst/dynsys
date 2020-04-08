@@ -13,6 +13,9 @@ struct Preferences {
 
     static void setValuesBeautifulLorenz();
 
+    static void enableArcadeMode();
+    static void disableArcadeMode();
+
 /* Controller constants */
 
     // Timer constants
@@ -37,8 +40,6 @@ struct Preferences {
     static QSize MIN_WINDOW_SIZE;
     static QSize INIT_WINDOW_SIZE;
 
-    static long double COLOR_FUNCTION_DELTA;
-
     static bool TAILS_VIEW;
 
 
@@ -52,6 +53,11 @@ struct Preferences {
     static size_t AMOUNT_TAIL_POINTS;
     static float  START_POINT_DELTA;
     static float  DISTANCE_DELTA;
+
+    static bool  ARCADE_MODE_ON;
+    static float START_POINT_SIZE;
+    static float FINAL_POINT_SIZE;
+    static int   PRIMITIVE;
 
 
 /* Camera constants */
@@ -73,10 +79,4 @@ struct Preferences {
     static QVector3D INIT_CAMERA_TARGET;
     static float     INIT_PITCH;
     static float     INIT_YAW;
-
-/* Shaders */
-
-    static const char *VERTEX_NAME;
-    static const char *COLOR_NAME;
-    static const char *MATRIX_NAME;
 };
