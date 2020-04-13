@@ -55,8 +55,8 @@ void Preferences::setDefaultValues() {
     TAILS_VIEW = true;
 
     AMOUNT_TAIL_POINTS = 100;
-    START_POINT_DELTA = 0.01;
-    DISTANCE_DELTA = 0.15;
+    START_POINT_DELTA  = 0.01;
+    DISTANCE_DELTA     = 0.2;
 
     START_POINT_SIZE = 0.0;
     FINAL_POINT_SIZE = 15.0;

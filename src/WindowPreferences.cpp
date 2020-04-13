@@ -13,6 +13,7 @@ void WindowPreferences::setCurrentStateInUI() {
 /* Model settings */
     ui->countPoints->setValue(Preferences::AMOUNT_LOCUS);
     ui->pointsOneStart->setValue(Preferences::COUNT_POINTS);
+    ui->deltaStart->setValue(Preferences::START_POINT_DELTA);
     ui->tauBox->setValue(Preferences::TAU);
     ui->xCoord->setValue(Preferences::START_POINT.x);
     ui->yCoord->setValue(Preferences::START_POINT.y);
@@ -24,21 +25,20 @@ void WindowPreferences::setCurrentStateInUI() {
 
 /* View settings */
     ui->tailSize->setValue(Preferences::AMOUNT_TAIL_POINTS);
+    ui->timerSpeed->setValue(Preferences::DELTA_TIME_TIMER);
     ui->interDegree->setValue((0.21 - Preferences::DISTANCE_DELTA) / 0.002);
-    ui->tailsCheckBox->setDown(Preferences::TAILS_VIEW);
-    if (Preferences::TAILS_VIEW)
-        ui->tailsCheckBox->click();
 
 }
 
 void WindowPreferences::setStateFromUI() {
 /* Model settings */
-    Preferences::AMOUNT_LOCUS  = ui->countPoints->value();
-    Preferences::COUNT_POINTS  = ui->pointsOneStart->value();
-    Preferences::TAU           = ui->tauBox->value();
-    Preferences::START_POINT.x = ui->xCoord->value();
-    Preferences::START_POINT.y = ui->yCoord->value();
-    Preferences::START_POINT.z = ui->zCoord->value();
+    Preferences::AMOUNT_LOCUS      = ui->countPoints->value();
+    Preferences::COUNT_POINTS      = ui->pointsOneStart->value();
+    Preferences::START_POINT_DELTA = ui->deltaStart->value();
+    Preferences::TAU               = ui->tauBox->value();
+    Preferences::START_POINT.x     = ui->xCoord->value();
+    Preferences::START_POINT.y     = ui->yCoord->value();
+    Preferences::START_POINT.z     = ui->zCoord->value();
 
 /* Camera settings */
     Preferences::SPEED_MOVE     = 0.05 + ui->speedSlider->value() / 100.0 * (0.3 - 0.05);
@@ -46,8 +46,8 @@ void WindowPreferences::setStateFromUI() {
 
 /* View settings */
     Preferences::AMOUNT_TAIL_POINTS = ui->tailSize->value();
+    Preferences::DELTA_TIME_TIMER   = ui->speedSlider->value();
     Preferences::DISTANCE_DELTA     = 0.21 - ui->interDegree->value() * 0.002;
-    Preferences::TAILS_VIEW         = ui->tailsCheckBox->isDown();
 
     Preferences::NEW_PREFERENCES = true;
 }
@@ -65,6 +65,7 @@ void WindowPreferences::slot_apply_button() {
 void WindowPreferences::slot_set_default_button() {
     Preferences::setDefaultValues();
     setCurrentStateInUI();
+    this->hide();
 }
 
 WindowPreferences::~WindowPreferences() {

@@ -1,4 +1,6 @@
 #include <QtWidgets>
+#include <thread>
+#include <future>
 
 #include "Model.hpp"
 #include "DynamicSystemsDefault.hpp"
@@ -19,7 +21,6 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
 
     sliderTimer = new QTimer(this);
     sliderTimer->setInterval(Preferences::SLIDER_TIMER_INTERVAL);
-
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
 
     insertConstants(AttractorsParams::goodParamsRossler);
@@ -67,6 +68,7 @@ void Window::count_points(Lambda derivatives_function) {
             );
         };
         double offset = Preferences::START_POINT_DELTA * i;
+
         Model::generate_points(pushBackVector,
                                Model::Point{Preferences::START_POINT.x + offset,
                                             Preferences::START_POINT.y + offset,
@@ -75,6 +77,7 @@ void Window::count_points(Lambda derivatives_function) {
                                Preferences::STEPS_PER_COUNT,
                                Preferences::TAU,
                                derivatives_function);
+
         ui->pointsViewQGLWidget->addNewLocus(std::move(buffer));
     }
 
@@ -155,4 +158,3 @@ void Window::keyPressEvent(QKeyEvent *event) {
 void Window::keyReleaseEvent(QKeyEvent *event) {
     ui->pointsViewQGLWidget->keyReleaseEvent(event);
 }
-

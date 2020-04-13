@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>552</width>
+    <width>556</width>
     <height>404</height>
    </rect>
   </property>
@@ -57,7 +57,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabModel">
       <attribute name="title">
@@ -65,6 +65,30 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="3" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Tau</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="tauBox">
+           <property name="decimals">
+            <number>10</number>
+           </property>
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.001000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
           <widget class="QLabel" name="label_3">
@@ -157,24 +181,24 @@
         </layout>
        </item>
        <item row="2" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
-          <widget class="QLabel" name="label_7">
+          <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>Tau</string>
+            <string>Расстояние между стартовыми точками</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="tauBox">
+          <widget class="QDoubleSpinBox" name="deltaStart">
            <property name="decimals">
-            <number>10</number>
+            <number>5</number>
            </property>
            <property name="maximum">
-            <double>1.000000000000000</double>
+            <double>10.000000000000000</double>
            </property>
            <property name="singleStep">
-            <double>0.001000000000000</double>
+            <double>0.010000000000000</double>
            </property>
           </widget>
          </item>
@@ -264,17 +288,6 @@
         </layout>
        </item>
        <item row="2" column="0">
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QRadioButton" name="tailsCheckBox">
-           <property name="text">
-            <string>Показывать хвосты точек, а не траекторию целиком (Not working)</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_9">
          <item>
           <widget class="QLabel" name="label_8">
@@ -290,6 +303,27 @@
            </property>
            <property name="maximum">
             <number>100</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>Скорость ползунка</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="timerSpeed">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>20</number>
            </property>
           </widget>
          </item>
@@ -311,7 +345,6 @@
   <tabstop>sensSlider</tabstop>
   <tabstop>speedSlider</tabstop>
   <tabstop>tailSize</tabstop>
-  <tabstop>tailsCheckBox</tabstop>
   <tabstop>cancelButton</tabstop>
   <tabstop>setDefaultButton</tabstop>
   <tabstop>applyButton</tabstop>
