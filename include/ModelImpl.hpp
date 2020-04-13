@@ -7,7 +7,7 @@
 
 namespace Model {
 
-constexpr long double COORDINATE_VALUE_LIMIT = 1e10;
+constexpr long double COORDINATE_VALUE_LIMIT = 1e3;
 
 template<typename LambdaDerivatives, typename LambdaNewPointAction>
 void generate_points_generate_points(LambdaNewPointAction new_point_action,
