@@ -4,7 +4,7 @@
 
 namespace ShaderController {
 
-class ShaderController {
+class ShaderController final {
 public:
     ShaderController()  = default;
     ~ShaderController() = default;

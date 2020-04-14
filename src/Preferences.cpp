@@ -35,6 +35,9 @@ QVector3D    Preferences::INIT_CAMERA_POSITION   = QVector3D();
 QVector3D    Preferences::INIT_CAMERA_TARGET     = QVector3D();
 float        Preferences::INIT_PITCH             = 0.0f;
 float        Preferences::INIT_YAW               = 0.0f;
+int          Preferences::VIDEO_WIDTH            = 1920;
+int          Preferences::VIDEO_HEIGHT           = 1080;
+int          Preferences::VIDEO_QUALITY          = 1;
 
 
 void Preferences::setDefaultValues() {

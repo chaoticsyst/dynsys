@@ -16,15 +16,6 @@ QSize PointsViewQGLWidget::sizeHint() const {
     return Preferences::INIT_WINDOW_SIZE;
 }
 
-void PointsViewQGLWidget::fixSizes() {
-    if (width() % 4 != 0) {
-        resize(width() / 4 * 4, height());
-    }
-    if (height() % 2 != 0) {
-        resize(width(), height() / 2 * 2);
-    }
-}
-
 QColor getColorByIndex(size_t index) {
     static const QVector<QColor> colors = {QColor(Qt::red), QColor(Qt::yellow), QColor(Qt::blue)};
 
@@ -74,14 +65,12 @@ void PointsViewQGLWidget::resizeGL(int width, int height) {
 }
 
 void PointsViewQGLWidget::paintGL() {
-    fixSizes();
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     locusController.draw(cameraController.getMatrix(), currentTime);
 
     if (videoEncoder.isWorking()) {
-        videoEncoder.write(grabFrameBuffer());
+        videoEncoder.writeState({cameraController.getPosition(),
+                                 cameraController.getTarget(),
+                                 currentTime});
     }
 }
 
@@ -96,22 +85,24 @@ void PointsViewQGLWidget::mousePressEvent(QMouseEvent *event) {
 void PointsViewQGLWidget::keyPressEvent(QKeyEvent *event) {
     cameraController.applyKeyPressEvent(event);
 
-    if (event->key() == Qt::Key_Z) {
+    if (event->key() == Qt::Key_Z && !videoEncoder.isWorking()) {
         static size_t videoCounter = 0;
-
-        videoEncoder.endEncoding();
-        fixSizes();
 
         try {
             const char *filename = ("video" + std::to_string(videoCounter++) + ".avi").c_str();
-            videoEncoder.startEncoding(width(), height(), filename);
+            videoEncoder.startEncoding(Preferences::VIDEO_WIDTH,
+                                       Preferences::VIDEO_HEIGHT,
+                                       filename);
         } catch(const std::exception &e) {
             videoEncoder.endEncoding();
             //TODO an alert
         }
     }
     if (event->key() == Qt::Key_X) {
-        videoEncoder.endEncoding();
+        auto drawFunc = [&lc = locusController](const QMatrix4x4 &projMatrix, size_t time) {
+            lc.draw(projMatrix, time);
+        };
+        videoEncoder.endEncoding(drawFunc);
     }
 }
 

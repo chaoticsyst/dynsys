@@ -79,4 +79,10 @@ struct Preferences {
     static QVector3D INIT_CAMERA_TARGET;
     static float     INIT_PITCH;
     static float     INIT_YAW;
+
+/* Video recording constants */
+    static int VIDEO_WIDTH;
+    static int VIDEO_HEIGHT;
+
+    static int VIDEO_QUALITY;
 };

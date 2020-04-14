@@ -106,6 +106,8 @@ void LocusController::clear() {
 }
 
 void LocusController::draw(const QMatrix4x4 &projMatrix, size_t length) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     shaderController.startWork();
     shaderController.setMatrix(projMatrix);
     for (auto &locus : data) {
