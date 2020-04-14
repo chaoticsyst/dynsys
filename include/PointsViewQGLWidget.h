@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QGLWidget>
-#include <QGLShaderProgram>
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QKeyEvent>
@@ -41,8 +40,6 @@ protected:
 
 private:
     Q_OBJECT
-
-    QGLShaderProgram shaderProgram;
 
     Locus::LocusController locusController;
 

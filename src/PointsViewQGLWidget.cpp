@@ -6,7 +6,7 @@
 #include "Preferences.h"
 
 PointsViewQGLWidget::PointsViewQGLWidget(QWidget *parent) :
-    QGLWidget{QGLFormat(), parent}, locusController{shaderProgram} {}
+    QGLWidget{QGLFormat(), parent} {}
 
 QSize PointsViewQGLWidget::minimumSizeHint() const {
     return Preferences::MIN_WINDOW_SIZE;
@@ -66,9 +66,7 @@ void PointsViewQGLWidget::initializeGL() {
 
     qglClearColor(QColor(Qt::black));
 
-    shaderProgram.addShaderFromSourceFile(QGLShader::Vertex, QString(":/VertexShader.vsh"));
-    shaderProgram.addShaderFromSourceFile(QGLShader::Fragment, QString(":/FragmentShader.fsh"));
-    shaderProgram.link();
+    locusController.initialize();
 }
 
 void PointsViewQGLWidget::resizeGL(int width, int height) {
@@ -79,10 +77,8 @@ void PointsViewQGLWidget::paintGL() {
     fixSizes();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    shaderProgram.bind();
-    shaderProgram.setUniformValue("matrix", cameraController.getMatrix());
-    locusController.draw(currentTime);
-    shaderProgram.release();
+
+    locusController.draw(cameraController.getMatrix(), currentTime);
 
     if (videoEncoder.isWorking()) {
         videoEncoder.write(grabFrameBuffer());

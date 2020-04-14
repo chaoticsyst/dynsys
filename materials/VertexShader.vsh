@@ -3,17 +3,17 @@
 in highp vec4 vertex;
 uniform highp mat4 matrix;
 
-uniform bool decreasingTailMode;
+uniform bool arcadeMode;
 uniform float startTailSize;
 uniform float finalTailSize;
-uniform highp int length;
+uniform highp int tailLength;
 uniform highp int startIndex;
 
 void main(void) {
     gl_Position = matrix * vertex;
 
-    if (decreasingTailMode == true) {
-        float delta = (finalTailSize - startTailSize) / float(length);
+    if (arcadeMode == true) {
+        float delta = (finalTailSize - startTailSize) / float(tailLength);
         gl_PointSize = startTailSize + delta * float(gl_VertexID - startIndex);
     }
 }
