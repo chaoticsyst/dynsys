@@ -46,8 +46,21 @@ void ShaderController::setStartVertexIndex(size_t index) {
     shaderProgram.setUniformValue("startIndex", static_cast<int>(index));
 }
 
-void ShaderController::setColor(const QColor &color) {
-    shaderProgram.setUniformValue("color", color);
+void ShaderController::setTailColoringMode(bool enabled) {
+    shaderProgram.setUniformValue("tailColoringMode", enabled);
+}
+
+void ShaderController::setTrajectoryIndex(size_t index) {
+    shaderProgram.setUniformValue("trajectoryIndex", static_cast<int>(index));
+}
+
+void ShaderController::setTrajectoriesNumber(size_t number) {
+    shaderProgram.setUniformValue("trajectoriesNumber", static_cast<int>(number));
+}
+
+void ShaderController::setColors(const QVector<QVector4D> &colors) {
+    shaderProgram.setUniformValue("colorsNumber", colors.size());
+    shaderProgram.setUniformValueArray("colors", colors.constData(), colors.size());
 }
 
 } //namespace ShaderController

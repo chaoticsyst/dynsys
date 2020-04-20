@@ -3,9 +3,7 @@
 
 namespace Locus {
 
-Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_) :
-    color{color_} {
-
+Locus::Locus(QVector<QVector3D> &&points_) {
     points_ = interpolate(std::move(points_));
 
     pointsBuffer = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
@@ -22,10 +20,6 @@ void Locus::startWork() {
 
 void Locus::endWork() {
     pointsBuffer.release();
-}
-
-const QColor &Locus::colorData() const {
-    return color;
 }
 
 size_t Locus::size() const {
@@ -95,9 +89,9 @@ size_t LocusController::size() const {
     return static_cast<size_t>(data.size());
 }
 
-void LocusController::addLocus(QVector<QVector3D> &&points_, const QColor &color_) {
+void LocusController::addLocus(QVector<QVector3D> &&points_) {
     shaderController.startWork();
-    data.push_back(Locus(std::move(points_), color_));
+    data.push_back(Locus(std::move(points_)));
     shaderController.endWork();
 }
 
@@ -110,7 +104,15 @@ void LocusController::draw(const QMatrix4x4 &projMatrix, size_t length) {
 
     shaderController.startWork();
     shaderController.setMatrix(projMatrix);
-    for (auto &locus : data) {
+
+    shaderController.setArcadeMode(Preferences::ARCADE_MODE_ON);
+
+    shaderController.setTailColoringMode(Preferences::TAIL_COLORING_MODE);
+    shaderController.setTrajectoriesNumber(static_cast<size_t>(data.size()));
+    shaderController.setColors(Preferences::COLORS);
+    for (size_t i = 0; i < static_cast<size_t>(data.size()); i++) {
+        auto &locus = data[i];
+
         locus.startWork();
         if (locus.initialSize() == 0) {
             continue;
@@ -121,13 +123,12 @@ void LocusController::draw(const QMatrix4x4 &projMatrix, size_t length) {
         size_t actualLength = locus.getStartIndex(curAmount) - locus.getStartIndex(start);
 
         shaderController.setVertex();
-        shaderController.setColor(locus.colorData());
 
-        shaderController.setArcadeMode(Preferences::ARCADE_MODE_ON);
         shaderController.setStartTailSize(Preferences::START_POINT_SIZE);
         shaderController.setFinalTailSize(Preferences::FINAL_POINT_SIZE);
         shaderController.setTailLength(actualLength);
         shaderController.setStartVertexIndex(locus.getStartIndex(start));
+        shaderController.setTrajectoryIndex(i);
 
         glDrawArrays(Preferences::PRIMITIVE, locus.getStartIndex(start), actualLength);
 

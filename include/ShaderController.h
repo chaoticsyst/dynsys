@@ -26,7 +26,10 @@ public:
     void setFinalTailSize(float size);
     void setTailLength(size_t length);
     void setStartVertexIndex(size_t index);
-    void setColor(const QColor &color);
+    void setTailColoringMode(bool enabled);
+    void setTrajectoryIndex(size_t index);
+    void setTrajectoriesNumber(size_t number);
+    void setColors(const QVector<QVector4D> &colors);
 private:
     QGLShaderProgram shaderProgram;
 };

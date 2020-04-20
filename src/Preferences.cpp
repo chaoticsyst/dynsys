@@ -23,6 +23,7 @@ bool         Preferences::ARCADE_MODE_ON         = false;
 float        Preferences::START_POINT_SIZE       = 0.0f;
 float        Preferences::FINAL_POINT_SIZE       = 0.0f;
 int          Preferences::PRIMITIVE              = 0;
+bool         Preferences::TAIL_COLORING_MODE     = false;
 float        Preferences::EPS                    = 0.0f;
 float        Preferences::VERTICAL_ANGLE         = 0.0f;
 float        Preferences::NEAR_PLANE             = 0.0f;
@@ -38,6 +39,8 @@ float        Preferences::INIT_YAW               = 0.0f;
 int          Preferences::VIDEO_WIDTH            = 1920;
 int          Preferences::VIDEO_HEIGHT           = 1080;
 int          Preferences::VIDEO_QUALITY          = 1;
+
+QVector<QVector4D> Preferences::COLORS           = {};
 
 
 void Preferences::setDefaultValues() {
@@ -67,6 +70,9 @@ void Preferences::setDefaultValues() {
     START_POINT_SIZE = 0.0;
     FINAL_POINT_SIZE = 15.0;
     PRIMITIVE = GL_LINE_STRIP;
+
+    TAIL_COLORING_MODE = true;
+    COLORS = {{0, 1, 1, 1}, {0, 0, 1, 1}, {1, 0, 0, 1}};
 
     EPS = 0.001;
 
