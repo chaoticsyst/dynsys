@@ -67,6 +67,14 @@ QMatrix4x4 Camera::getMatrix() const {
     return perspectiveMatrix * matrix;
 }
 
+QVector3D Camera::getPosition() const {
+    return cameraPosition;
+}
+
+QVector3D Camera::getTarget() const {
+    return cameraTarget;
+}
+
 void Camera::applyDeltaPosition (const QVector3D &delta) {
     cameraPosition += delta;
     recalculateVectors();
@@ -74,6 +82,11 @@ void Camera::applyDeltaPosition (const QVector3D &delta) {
 
 void Camera::setPosition(const QVector3D &position) {
     cameraPosition = position;
+    recalculateVectors();
+}
+
+void Camera::setTarget(const QVector3D &target) {
+    cameraTarget = target;
     recalculateVectors();
 }
 
@@ -116,6 +129,14 @@ KeyboardAndMouseController::KeyboardAndMouseController() {
 
 QMatrix4x4 KeyboardAndMouseController::getMatrix() const {
     return camera.getMatrix();
+}
+
+QVector3D KeyboardAndMouseController::getPosition() const {
+    return camera.getPosition();
+}
+
+QVector3D KeyboardAndMouseController::getTarget() const {
+    return camera.getTarget();
 }
 
 void KeyboardAndMouseController::recalculatePerspective(int width, int height) {

@@ -1,6 +1,9 @@
 #pragma
 
+#include <functional>
 #include <QImage>
+#include <QVector3D>
+#include <QVector>
 
 extern "C" {
     #include <libavformat/avformat.h>
@@ -12,6 +15,12 @@ extern "C" {
 
 namespace VideoEncoder {
 
+struct FrameState {
+    QVector3D position;
+    QVector3D target;
+    size_t time;
+};
+
 class VideoEncoder final {
 public:
     VideoEncoder();
@@ -22,10 +31,11 @@ public:
     VideoEncoder &operator=(const VideoEncoder &other) = delete;
     VideoEncoder &operator=(VideoEncoder &&other)      = delete;
 
-    void write(const QImage &image);
-
-    void startEncoding(int width, int height, const char *filename);
+    void startEncoding(int videoWidth, int videoHeight, const char *filename);
+    void endEncoding(std::function<void(const QMatrix4x4 &projMatrix, size_t time)> drawFunc);
     void endEncoding();
+
+    void writeState(const FrameState &state);
 
     bool isWorking() const;
 
@@ -38,11 +48,16 @@ private:
     SwsContext *convertFramesContext;
 
     size_t frameNumber;
+    int width;
+    int height;
 
     bool working;
     bool built;
 
-    bool write(AVFrame *frame);
+    QVector<FrameState> allStates;
+
+    bool writeFrame(AVFrame *frame);
+    void writeFrame(const QImage &image);
 };
 
 } //namespace VideoEncoder

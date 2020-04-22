@@ -17,12 +17,13 @@ public:
     Camera &operator=(const Camera &) = delete;
     Camera &operator=(Camera &&)      = delete;
 
-    QMatrix4x4 getMatrix() const;
 
     void applyDeltaPosition(const QVector3D &delta);
-    void setPosition(const QVector3D &position);
     void recalculatePerspective(int width, int height);
     void recalculateTarget(const QPoint &newMousePosition);
+
+    void setPosition(const QVector3D &position);
+    void setTarget(const QVector3D &target);
 
     void moveForward(float force);
     void moveRight(float force);
@@ -31,6 +32,10 @@ public:
     void resetMousePosition(const QPoint &point);
 
     void setDefault();
+
+    QMatrix4x4 getMatrix() const;
+    QVector3D getPosition() const;
+    QVector3D getTarget() const;
 
 private:
     constexpr static QVector3D worldUp = QVector3D(0, 1, 0);
@@ -70,8 +75,11 @@ public:
     void applyMousePressEvent(QMouseEvent *event);
     void applyMouseMoveEvent(QMouseEvent *event);
 
-    QMatrix4x4 getMatrix() const;
     void recalculatePerspective(int width, int height);
+
+    QMatrix4x4 getMatrix() const;
+    QVector3D getPosition() const;
+    QVector3D getTarget() const;
 
 private slots:
     void updateKeys();

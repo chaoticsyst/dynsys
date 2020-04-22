@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QGLWidget>
-#include <QGLShaderProgram>
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QKeyEvent>
@@ -25,8 +24,6 @@ public:
 
     void addNewLocus(QVector<QVector3D> &&points);
 
-    void fixSizes();
-
 protected:
     void initializeGL() override;
     void resizeGL(int width, int height) override;
@@ -42,13 +39,11 @@ protected:
 private:
     Q_OBJECT
 
-    QGLShaderProgram shaderProgram;
-
     Locus::LocusController locusController;
 
     Camera::KeyboardAndMouseController cameraController;
 
     VideoEncoder::VideoEncoder videoEncoder;
 
-    int currentTime;
+    size_t currentTime;
 };

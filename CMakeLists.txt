@@ -44,6 +44,7 @@ add_executable(DynamicSystems
     src/Locus.cpp
     src/Preferences.cpp
     src/VideoEncoder.cpp
+    src/ShaderController.cpp
     src/Parser.cpp
     include/Parser.hpp
     include/ParserImpl.hpp
@@ -58,6 +59,7 @@ add_executable(DynamicSystems
     include/PointsViewQGLWidget.h
     include/Locus.h
     include/VideoEncoder.h
+    include/ShaderController.h
     src/form.ui
     src/formPreferences.ui
     materials/Resources.qrc

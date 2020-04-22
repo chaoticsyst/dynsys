@@ -1,5 +1,11 @@
+#include <GL/gl.h>
 #include <stdexcept>
+#include <QOpenGLFramebufferObject>
+
+#include "Camera.h"
 #include "VideoEncoder.h"
+#include "Preferences.h"
+
 
 namespace VideoEncoder {
 
@@ -14,11 +20,14 @@ bool VideoEncoder::isWorking() const {
     return working;
 }
 
-void VideoEncoder::startEncoding(int width, int height, const char *filename) {
+void VideoEncoder::startEncoding(int videoWidth, int videoHeight, const char *filename) {
     if (working) {
         endEncoding();
     }
     working = true;
+
+    width = videoWidth;
+    height = videoHeight;
 
     formatContext        = nullptr;
     stream               = nullptr;
@@ -33,7 +42,7 @@ void VideoEncoder::startEncoding(int width, int height, const char *filename) {
 
     av_register_all();
 
-    av_log_set_level(AV_LOG_QUIET);
+//    av_log_set_level(AV_LOG_QUIET);
 
     formatContext = avformat_alloc_context();
     if (formatContext == nullptr) {
@@ -46,9 +55,6 @@ void VideoEncoder::startEncoding(int width, int height, const char *filename) {
     }
 
     formatContext->oformat = outputFormat;
-    if (av_dict_set(&formatOptions, "movflags", "faststart", 0) < 0) {
-        throw std::logic_error("Could not set the video options.");
-    }
     if (av_dict_set(&formatOptions, "brand", "mp42", 0) < 0) {
         throw std::logic_error("Could not set the video options.");
     }
@@ -62,9 +68,10 @@ void VideoEncoder::startEncoding(int width, int height, const char *filename) {
     if (stream == nullptr) {
         throw std::logic_error("Could not create a new video stream.");
     }
-    stream->time_base = (AVRational){1, 30};
+    stream->time_base = (AVRational){1, 35};
 
     codecContext = stream->codec;
+
     if (codec->sample_fmts == nullptr) {
         codecContext->sample_fmt = AV_SAMPLE_FMT_S16;
     } else {
@@ -78,11 +85,10 @@ void VideoEncoder::startEncoding(int width, int height, const char *filename) {
     codecContext->level = 31;
 
     //set up extra options
-    av_opt_set(codecContext->priv_data, "crf", "35", 0);
+    av_opt_set(codecContext->priv_data, "crf", "1", 0);
     av_opt_set(codecContext->priv_data, "profile", "main", 0);
-    av_opt_set(codecContext->priv_data, "preset", "ultrafast", 0);
+    av_opt_set(codecContext->priv_data, "preset", "medium", 0);
     av_opt_set(codecContext->priv_data, "b-pyramid", "0", 0);
-
     if (avcodec_open2(codecContext, codec, nullptr) < 0) {
         throw std::logic_error("Could not initialize a codec context.");
     }
@@ -130,7 +136,9 @@ void VideoEncoder::endEncoding() {
     if (working == false) {
         return;
     }
-    while (built && write(nullptr) == true);
+    allStates.clear();
+
+    while (built && writeFrame(nullptr) == true);
     if (formatContext != nullptr) {
         if (built) {
             av_write_trailer(formatContext);
@@ -158,7 +166,7 @@ VideoEncoder::~VideoEncoder() {
     endEncoding();
 }
 
-bool VideoEncoder::write(AVFrame *frame) {
+bool VideoEncoder::writeFrame(AVFrame *frame) {
     AVPacket packet;
     av_init_packet(&packet);
     if (frame != nullptr) {
@@ -178,7 +186,7 @@ bool VideoEncoder::write(AVFrame *frame) {
     return true;
 }
 
-void VideoEncoder::write(const QImage &image) {
+void VideoEncoder::writeFrame(const QImage &image) {
     if (working == false) {
         return;
     }
@@ -195,7 +203,40 @@ void VideoEncoder::write(const QImage &image) {
     sws_scale(convertFramesContext, data, rgbFrame->linesize, 0, image.height(),
                                     yuvFrame->data, yuvFrame->linesize);
 
-    while(write(yuvFrame) == false);
+    while(writeFrame(yuvFrame) == false);
+}
+
+void VideoEncoder::writeState(const FrameState &state) {
+    if (working == false) {
+        return;
+    }
+    allStates << state;
+}
+
+void VideoEncoder::endEncoding(std::function<void (const QMatrix4x4 &, size_t)> drawFunc) {
+    if (working == false) {
+        endEncoding();
+    }
+    GLint prevViewport[4];
+    glGetIntegerv(GL_VIEWPORT, prevViewport);
+    glViewport(0, 0, width, height);
+
+    QOpenGLFramebufferObject buffer(width, height);
+    buffer.bind();
+
+    Camera::Camera camera;
+    camera.recalculatePerspective(width, height);
+
+    for (const auto &[position, target, time] : allStates) {
+        camera.setPosition(position);
+        camera.setTarget(target);
+        drawFunc(camera.getMatrix(), time);
+
+        writeFrame(buffer.toImage());
+    }
+
+    buffer.release();
+    glViewport(prevViewport[0], prevViewport[1], prevViewport[2], prevViewport[3]);
 }
 
 } //namespace VideoEncoder

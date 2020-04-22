@@ -2,6 +2,7 @@
 
 #include <QSize>
 #include <QVector3D>
+#include <QVector4D>
 #include <cmath>
 
 #include "Model.hpp"
@@ -54,6 +55,9 @@ struct Preferences {
     static float FINAL_POINT_SIZE;
     static int   PRIMITIVE;
 
+    static bool  TAIL_COLORING_MODE;
+    static QVector<QVector4D> COLORS;
+
 
 /* Camera constants */
 
@@ -74,4 +78,10 @@ struct Preferences {
     static QVector3D INIT_CAMERA_TARGET;
     static float     INIT_PITCH;
     static float     INIT_YAW;
+
+/* Video recording constants */
+    static int VIDEO_WIDTH;
+    static int VIDEO_HEIGHT;
+
+    static int VIDEO_QUALITY;
 };

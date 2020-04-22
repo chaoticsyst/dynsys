@@ -1,20 +1,18 @@
 #pragma once
 
-#include <QGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QVector3D>
 #include <QVector>
 #include <QColor>
+#include "ShaderController.h"
 
 namespace Locus {
 
 class Locus final {
 public:
-    Locus(QVector<QVector3D> &&points_, const QColor &color_);
+    Locus(QVector<QVector3D> &&points_);
     Locus() = default;
     ~Locus() = default;
-
-    const QColor &colorData() const;
 
     size_t size() const;
     size_t initialSize() const;
@@ -24,7 +22,6 @@ public:
     void endWork();
 private:
     QOpenGLBuffer pointsBuffer;
-    QColor color;
     QVector<size_t> startIndexes;
 
     QVector3D getInterpolatedPoint(float offset, const QMatrix4x4 &matrix) const;
@@ -35,7 +32,7 @@ private:
 
 class LocusController final {
 public:
-    LocusController(QGLShaderProgram &shaderProgram_);
+    LocusController()  = default;
     ~LocusController() = default;
 
     LocusController(const LocusController &)            = delete;
@@ -43,16 +40,18 @@ public:
     LocusController &operator=(const LocusController &) = delete;
     LocusController &operator=(LocusController &&)      = delete;
 
+    void initialize();
+
     size_t size() const;
 
-    void addLocus(QVector<QVector3D> &&points_, const QColor &color_);
+    void addLocus(QVector<QVector3D> &&points_);
 
     void clear();
 
-    void draw(size_t length);
+    void draw(const QMatrix4x4 &projMatrix, size_t length);
 private:
     QVector<Locus> data;
-    QGLShaderProgram &shaderProgram;
+    ShaderController::ShaderController shaderController;
 };
 
 } //namespace Locus
