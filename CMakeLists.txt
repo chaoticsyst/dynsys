@@ -18,6 +18,7 @@ include_directories("include/")
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(Threads REQUIRED)
 
 
 set(CMAKE_CXX_FLAGS "-D__STDC_CONSTANT_MACROS")
@@ -37,7 +38,6 @@ find_library(AVSWS_LIBRARY swscale)
 add_executable(DynamicSystems
     src/main.cpp
     src/WindowPreferences.cpp
-    src/Model.cpp
     src/Camera.cpp
     src/PointsViewQGLWidget.cpp
     src/Window.cpp
@@ -45,11 +45,16 @@ add_executable(DynamicSystems
     src/Preferences.cpp
     src/VideoEncoder.cpp
     src/ShaderController.cpp
+    src/Parser.cpp
+    include/Parser.hpp
+    include/ParserImpl.hpp
     include/AttractorsParams.h
     include/Preferences.h
     include/Camera.h
     include/WindowPreferences.h
-    include/Model.h
+    include/Model.hpp
+    include/ModelImpl.hpp
+    include/DynamicSystemsDefault.hpp
     include/Window.h
     include/PointsViewQGLWidget.h
     include/Locus.h
@@ -66,4 +71,4 @@ qt5_use_modules(DynamicSystems Widgets OpenGL)
 
 add_subdirectory(test/)
 
-target_link_libraries(DynamicSystems ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${AVCODEC_LIBRARY} ${AVFORMAT_LIBRARY} ${AVUTIL_LIBRARY} ${AVSWS_LIBRARY})
+target_link_libraries(DynamicSystems ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${AVCODEC_LIBRARY} ${AVFORMAT_LIBRARY} ${AVUTIL_LIBRARY} ${AVSWS_LIBRARY} Threads::Threads)
