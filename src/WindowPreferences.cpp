@@ -46,7 +46,7 @@ void WindowPreferences::setStateFromUI() {
 
 /* View settings */
     Preferences::AMOUNT_TAIL_POINTS = ui->tailSize->value();
-    Preferences::DELTA_TIME_TIMER   = ui->speedSlider->value();
+    Preferences::DELTA_TIME_TIMER   = ui->timerSpeed->value();
     Preferences::DISTANCE_DELTA     = 0.21 - ui->interDegree->value() * 0.002;
 
     Preferences::NEW_PREFERENCES = true;
