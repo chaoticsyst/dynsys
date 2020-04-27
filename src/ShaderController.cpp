@@ -4,6 +4,7 @@ namespace ShaderController {
 
 void ShaderController::initialize() {
     shaderProgram.addShaderFromSourceFile(QGLShader::Vertex, QString(":/VertexShader.vsh"));
+    shaderProgram.addShaderFromSourceFile(QGLShader::Geometry, QString(":/GeometryShader.gsh"));
     shaderProgram.addShaderFromSourceFile(QGLShader::Fragment, QString(":/FragmentShader.fsh"));
     shaderProgram.link();
 }
@@ -61,6 +62,10 @@ void ShaderController::setTrajectoriesNumber(size_t number) {
 void ShaderController::setColors(const QVector<QVector4D> &colors) {
     shaderProgram.setUniformValue("colorsNumber", colors.size());
     shaderProgram.setUniformValueArray("colors", colors.constData(), colors.size());
+}
+
+void ShaderController::setInterpolationDistance(float distance) {
+    shaderProgram.setUniformValue("interpolationDist", distance);
 }
 
 } //namespace ShaderController

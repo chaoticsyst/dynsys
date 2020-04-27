@@ -2,5 +2,6 @@
 <qresource>
 	<file>FragmentShader.fsh</file>
 	<file>VertexShader.vsh</file>
+	<file>GeometryShader.gsh</file>
 </qresource>
 </RCC>

@@ -15,19 +15,13 @@ public:
     ~Locus() = default;
 
     size_t size() const;
-    size_t initialSize() const;
-    size_t getStartIndex(size_t initialIndex) const;
 
     void startWork();
     void endWork();
+
 private:
     QOpenGLBuffer pointsBuffer;
     QVector<size_t> startIndexes;
-
-    QVector3D getInterpolatedPoint(float offset, const QMatrix4x4 &matrix) const;
-
-    //it has to be called in constructor
-    QVector<QVector3D> interpolate(const QVector<QVector3D> &points);
 };
 
 class LocusController final {
@@ -48,7 +42,8 @@ public:
 
     void clear();
 
-    void draw(const QMatrix4x4 &projMatrix, size_t length);
+    void draw(const QMatrix4x4 &projMatrix, size_t time);
+
 private:
     QVector<Locus> data;
     ShaderController::ShaderController shaderController;
