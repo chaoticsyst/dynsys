@@ -22,7 +22,6 @@ float        Preferences::DISTANCE_DELTA         = 0;
 bool         Preferences::ARCADE_MODE_ON         = false;
 float        Preferences::START_POINT_SIZE       = 0.0f;
 float        Preferences::FINAL_POINT_SIZE       = 0.0f;
-int          Preferences::PRIMITIVE              = 0;
 bool         Preferences::TAIL_COLORING_MODE     = false;
 float        Preferences::EPS                    = 0.0f;
 float        Preferences::VERTICAL_ANGLE         = 0.0f;
@@ -45,14 +44,14 @@ QVector<QVector4D> Preferences::COLORS           = {};
 
 void Preferences::setDefaultValues() {
     SLIDER_TIMER_INTERVAL = 1;
-    DELTA_TIME_TIMER = 3;
+    DELTA_TIME_TIMER = 1;
     START_POINT      = {1, 1, 1};
     COUNT_POINTS     = 20'000;
     STEPS_PER_COUNT  = 1;
     TAU              = 0.01;
     DIV_NORMALIZE    = 8;
 
-    AMOUNT_LOCUS = 500;
+    AMOUNT_LOCUS = 200;
 
     NEW_PREFERENCES = false;
 
@@ -64,12 +63,11 @@ void Preferences::setDefaultValues() {
     COORDINATE_VALUE_LIMIT = 1000;
 
     AMOUNT_TAIL_POINTS = 100;
-    START_POINT_DELTA = 0.01;
-    DISTANCE_DELTA = 0.15;
+    START_POINT_DELTA = 0.05;
+    DISTANCE_DELTA = 0.001;
 
     START_POINT_SIZE = 0.0;
-    FINAL_POINT_SIZE = 15.0;
-    PRIMITIVE = GL_LINE_STRIP;
+    FINAL_POINT_SIZE = 10.0;
 
     TAIL_COLORING_MODE = true;
     COLORS = {{0, 1, 1, 1}, {0, 0, 1, 1}, {1, 0, 0, 1}};
@@ -101,14 +99,4 @@ void Preferences::setValuesBeautifulLorenz() {
     AMOUNT_LOCUS = 500;
 
     AMOUNT_TAIL_POINTS = 150;
-}
-
-void Preferences::enableArcadeMode() {
-    ARCADE_MODE_ON = true;
-    PRIMITIVE = GL_POINTS;
-}
-
-void Preferences::disableArcadeMode() {
-    ARCADE_MODE_ON = false;
-    PRIMITIVE = GL_LINE_STRIP;
 }

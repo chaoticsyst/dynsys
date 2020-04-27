@@ -60,7 +60,7 @@ add_executable(DynamicSystems
     materials/Resources.qrc
 )
 
-qt5_use_modules(DynamicSystems Widgets OpenGL WebEngineWidgets WebEngine)
+qt5_use_modules(DynamicSystems Widgets OpenGL)
 
 add_subdirectory(test/)
 
