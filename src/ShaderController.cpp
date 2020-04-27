@@ -4,6 +4,7 @@ namespace ShaderController {
 
 void ShaderController::initialize() {
     shaderProgram.addShaderFromSourceFile(QGLShader::Vertex, QString(":/VertexShader.vsh"));
+    shaderProgram.addShaderFromSourceFile(QGLShader::Geometry, QString(":/GeometryShader.gsh"));
     shaderProgram.addShaderFromSourceFile(QGLShader::Fragment, QString(":/FragmentShader.fsh"));
     shaderProgram.link();
 }

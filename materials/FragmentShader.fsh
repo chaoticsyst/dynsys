@@ -1,4 +1,4 @@
-#version 300 es
+#version 330 core
 #undef highp
 
 uniform bool tailColoringMode;
@@ -11,7 +11,7 @@ uniform highp int trajectoriesNumber;
 uniform highp int colorsNumber;
 uniform highp vec4 colors[20];
 
-flat in highp int vertexID;
+//flat in highp int vertexID_ForFSH;
 
 out highp vec4 fragColor;
 
@@ -23,8 +23,8 @@ void main(void) {
     highp int index;
     highp int bunchSize;
     if (tailColoringMode == true) {
-        index = vertexID - startIndex;
-        bunchSize = (tailLength + colorsNumber - 2) / (colorsNumber - 1);
+//        index = vertexID_ForFSH - startIndex;
+//        bunchSize = (tailLength + colorsNumber - 2) / (colorsNumber - 1);
     } else {
         index = trajectoryIndex;
         bunchSize = (trajectoriesNumber + colorsNumber - 2) / (colorsNumber - 1);

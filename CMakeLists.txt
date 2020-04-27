@@ -58,11 +58,9 @@ add_executable(DynamicSystems
     src/form.ui
     src/formPreferences.ui
     materials/Resources.qrc
-    materials/FragmentShader.fsh
-    materials/VertexShader.vsh
 )
 
-qt5_use_modules(DynamicSystems Widgets OpenGL)
+qt5_use_modules(DynamicSystems Widgets OpenGL WebEngineWidgets WebEngine)
 
 add_subdirectory(test/)
 
