@@ -14,9 +14,6 @@ struct Preferences {
 
     static void setValuesBeautifulLorenz();
 
-    static void enableArcadeMode();
-    static void disableArcadeMode();
-
 /* Controller constants */
 
     // Timer constants
@@ -58,7 +55,6 @@ struct Preferences {
     static bool  ARCADE_MODE_ON;
     static float START_POINT_SIZE;
     static float FINAL_POINT_SIZE;
-    static int   PRIMITIVE;
 
     static bool  TAIL_COLORING_MODE;
     static QVector<QVector4D> COLORS;

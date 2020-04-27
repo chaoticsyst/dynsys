@@ -6,7 +6,13 @@
 #include "Preferences.h"
 
 PointsViewQGLWidget::PointsViewQGLWidget(QWidget *parent) :
-    QGLWidget{QGLFormat(), parent} {}
+    QGLWidget{QGLFormat(), parent} {
+
+    QGLFormat format;
+    format.setProfile(QGLFormat::CoreProfile);
+    format.setVersion(3, 3);
+    setFormat(format);
+}
 
 QSize PointsViewQGLWidget::minimumSizeHint() const {
     return Preferences::MIN_WINDOW_SIZE;

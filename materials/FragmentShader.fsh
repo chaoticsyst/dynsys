@@ -11,7 +11,8 @@ uniform highp int trajectoriesNumber;
 uniform highp int colorsNumber;
 uniform highp vec4 colors[20];
 
-//flat in highp int vertexID_ForFSH;
+flat in highp int vertexID_FSH;
+flat in highp float vertexOffset;
 
 out highp vec4 fragColor;
 
@@ -23,13 +24,13 @@ void main(void) {
     highp int index;
     highp int bunchSize;
     if (tailColoringMode == true) {
-//        index = vertexID_ForFSH - startIndex;
-//        bunchSize = (tailLength + colorsNumber - 2) / (colorsNumber - 1);
+        index = vertexID_FSH - startIndex;
+        bunchSize = (tailLength + colorsNumber - 2) / (colorsNumber - 1);
     } else {
         index = trajectoryIndex;
         bunchSize = (trajectoriesNumber + colorsNumber - 2) / (colorsNumber - 1);
     }
     highp int colorIndex = index / bunchSize;
-    highp float colorPart = float(index % bunchSize) / float(bunchSize);
+    highp float colorPart = (float(index % bunchSize) + vertexOffset) / float(bunchSize);
     fragColor = colors[colorIndex] + colorPart * (colors[colorIndex + 1] - colors[colorIndex]);
 }

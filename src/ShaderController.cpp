@@ -64,4 +64,8 @@ void ShaderController::setColors(const QVector<QVector4D> &colors) {
     shaderProgram.setUniformValueArray("colors", colors.constData(), colors.size());
 }
 
+void ShaderController::setInterpolationDistance(float distance) {
+    shaderProgram.setUniformValue("interpolationDist", distance);
+}
+
 } //namespace ShaderController
