@@ -30,6 +30,7 @@ public:
     void setTrajectoryIndex(size_t index);
     void setTrajectoriesNumber(size_t number);
     void setColors(const QVector<QVector4D> &colors);
+    void setInterpolationDistance(float distance);
 private:
     QGLShaderProgram shaderProgram;
 };
