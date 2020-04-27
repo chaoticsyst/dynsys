@@ -1,7 +1,8 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-	<file>FragmentShader.fsh</file>
-	<file>VertexShader.vsh</file>
-	<file>GeometryShader.gsh</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>FragmentShader.fsh</file>
+        <file>VertexShader.vsh</file>
+        <file>GeometryShaderPoints.gsh</file>
+        <file>GeometryShaderLines.gsh</file>
+    </qresource>
 </RCC>

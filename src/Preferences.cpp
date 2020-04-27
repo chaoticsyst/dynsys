@@ -21,6 +21,7 @@ float        Preferences::DISTANCE_DELTA         = 0;
 bool         Preferences::ARCADE_MODE_ON         = false;
 float        Preferences::START_POINT_SIZE       = 0.0f;
 float        Preferences::FINAL_POINT_SIZE       = 0.0f;
+GLenum       Preferences::PRIMITIVE              = 0;
 bool         Preferences::TAIL_COLORING_MODE     = false;
 float        Preferences::EPS                    = 0.0f;
 float        Preferences::VERTICAL_ANGLE         = 0.0f;
@@ -66,6 +67,8 @@ void Preferences::setDefaultValues() {
     START_POINT_SIZE = 0.0;
     FINAL_POINT_SIZE = 10.0;
 
+    PRIMITIVE = GL_LINE_STRIP;
+
     TAIL_COLORING_MODE = true;
     COLORS = {{0, 1, 1, 1}, {0, 0, 1, 1}, {1, 0, 0, 1}};
 
@@ -96,4 +99,14 @@ void Preferences::setValuesBeautifulLorenz() {
     AMOUNT_LOCUS = 500;
 
     AMOUNT_TAIL_POINTS = 150;
+}
+
+void Preferences::enableArcadeMode() {
+    PRIMITIVE = GL_POINTS;
+    ARCADE_MODE_ON = true;
+}
+
+void Preferences::disableArcadeMode() {
+    PRIMITIVE = GL_LINE_STRIP;
+    ARCADE_MODE_ON = false;
 }

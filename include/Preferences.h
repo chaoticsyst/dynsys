@@ -3,6 +3,7 @@
 #include <QSize>
 #include <QVector3D>
 #include <QVector4D>
+#include <qgl.h>
 #include <cmath>
 
 #include "Model.hpp"
@@ -13,6 +14,9 @@ struct Preferences {
     static void setDefaultValues();
 
     static void setValuesBeautifulLorenz();
+
+    static void enableArcadeMode();
+    static void disableArcadeMode();
 
 /* Controller constants */
 
@@ -50,6 +54,8 @@ struct Preferences {
     static bool  ARCADE_MODE_ON;
     static float START_POINT_SIZE;
     static float FINAL_POINT_SIZE;
+
+    static GLenum PRIMITIVE;
 
     static bool  TAIL_COLORING_MODE;
     static QVector<QVector4D> COLORS;
