@@ -164,23 +164,30 @@ void KeyboardAndMouseController::applyMouseMoveEvent(QMouseEvent *event) {
 }
 
 void KeyboardAndMouseController::updateKeys() {
+    float force = 1;
+    if (keys.contains(Qt::Key_Shift)) {
+        force *= 2;
+    }
+    if (keys.contains(Qt::Key_Control)) {
+        force /= 2;
+    }
     if (keys.contains(Qt::Key_W)) {
-        camera.moveForward(1);
+        camera.moveForward(force);
     }
     if (keys.contains(Qt::Key_S)) {
-        camera.moveForward(-1);
+        camera.moveForward(-force);
     }
     if (keys.contains(Qt::Key_D)) {
-        camera.moveRight(1);
+        camera.moveRight(force);
     }
     if (keys.contains(Qt::Key_A)) {
-        camera.moveRight(-1);
+        camera.moveRight(-force);
     }
     if (keys.contains(Qt::Key_Q)) {
-        camera.moveUp(1);
+        camera.moveUp(force);
     }
     if (keys.contains(Qt::Key_E)) {
-        camera.moveUp(-1);
+        camera.moveUp(-force);
     }
     if (keys.contains(Qt::Key_F)) {
         camera.setDefault();

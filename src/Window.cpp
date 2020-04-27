@@ -1,6 +1,9 @@
 #include <QtWidgets>
+#include <thread>
+#include <future>
 
-#include "Model.h"
+#include "Model.hpp"
+#include "DynamicSystemsDefault.hpp"
 #include "AttractorsParams.h"
 #include "Window.h"
 #include "ui_form.h"
@@ -18,15 +21,14 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
 
     sliderTimer = new QTimer(this);
     sliderTimer->setInterval(Preferences::SLIDER_TIMER_INTERVAL);
-
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
 
     insertConstants(AttractorsParams::goodParamsRossler);
 }
 
-void Window::insertConstants(QVector<std::pair<QString, QVector<double>>>& goodParams) {
+void Window::insertConstants(QVector<std::pair<QString, QVector<double>>> &goodParams) {
     ui->constantsBox->clear();
-    for (auto& [name, params] : goodParams) {
+    for (auto&[name, params] : goodParams) {
         ui->constantsBox->addItem(name);
     }
 }
@@ -38,29 +40,35 @@ QVector3D getQPoint(const Model::Point &point) {
 }
 
 void Window::slot_restart_button() {
-    Model::ModelName modelName = Model::ModelName::ROSSLER;
     if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
-        modelName = Model::ModelName::LORENZ;
+        auto derivatives_function = Model::get_derivatives_function_lorenz(
+                ui->doubleSpinBox->value(),
+                ui->doubleSpinBox_2->value(),
+                ui->doubleSpinBox_3->value());
+        count_points(derivatives_function);
     } else if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
-        modelName = Model::ModelName::ROSSLER;
+        auto derivatives_function = Model::get_derivatives_function_rossler(
+                ui->doubleSpinBox->value(),
+                ui->doubleSpinBox_2->value(),
+                ui->doubleSpinBox_3->value());
+        count_points(derivatives_function);
     }
+}
 
-    std::vector<long double> constants = {
-        ui->doubleSpinBox->value(),
-        ui->doubleSpinBox_2->value(),
-        ui->doubleSpinBox_3->value()
-    };
+template<typename Lambda>
+void Window::count_points(Lambda derivatives_function) {
     ui->pointsViewQGLWidget->clearAll();
     for (size_t i = 0; i < Preferences::AMOUNT_LOCUS; i++) {
         QVector<QVector3D> buffer;
         auto pushBackVector = [&buffer](const Model::Point &point) {
             buffer.push_back(
-                QVector3D(point.x / Preferences::DIV_NORMALIZE,
-                          point.y / Preferences::DIV_NORMALIZE,
-                          point.z / Preferences::DIV_NORMALIZE)
+                    QVector3D(point.x / Preferences::DIV_NORMALIZE,
+                              point.y / Preferences::DIV_NORMALIZE,
+                              point.z / Preferences::DIV_NORMALIZE)
             );
         };
         double offset = Preferences::START_POINT_DELTA * i;
+
         Model::generate_points(pushBackVector,
                                Model::Point{Preferences::START_POINT.x + offset,
                                             Preferences::START_POINT.y + offset,
@@ -68,8 +76,8 @@ void Window::slot_restart_button() {
                                Preferences::COUNT_POINTS,
                                Preferences::STEPS_PER_COUNT,
                                Preferences::TAU,
-                               modelName,
-                               constants);
+                               derivatives_function);
+
         ui->pointsViewQGLWidget->addNewLocus(std::move(buffer));
     }
 
@@ -95,7 +103,7 @@ void Window::slot_constants_selection(QString currentConstants) {
     } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
         goodParams = AttractorsParams::goodParamsLorenz;
     }
-    for (auto& [name, params] : goodParams) {
+    for (auto&[name, params] : goodParams) {
         if (name == currentConstants) {
             ui->doubleSpinBox->setValue(params[0]);
             ui->doubleSpinBox_2->setValue(params[1]);
@@ -150,4 +158,3 @@ void Window::keyPressEvent(QKeyEvent *event) {
 void Window::keyReleaseEvent(QKeyEvent *event) {
     ui->pointsViewQGLWidget->keyReleaseEvent(event);
 }
-
