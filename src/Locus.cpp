@@ -56,6 +56,8 @@ void LocusController::draw(const QMatrix4x4 &projMatrix, size_t time) {
 
     shaderController.setInterpolationDistance(Preferences::DISTANCE_DELTA);
 
+    shaderController.setPrimitive(Preferences::PRIMITIVE);
+
     for (size_t i = 0; i < static_cast<size_t>(data.size()); i++) {
         auto &locus = data[i];
 

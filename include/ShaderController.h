@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QGLShader>
 #include <QGLShaderProgram>
 
 namespace ShaderController {
@@ -31,8 +32,12 @@ public:
     void setTrajectoriesNumber(size_t number);
     void setColors(const QVector<QVector4D> &colors);
     void setInterpolationDistance(float distance);
+    void setPrimitive(GLenum primitive);
 private:
     QGLShaderProgram shaderProgram;
+
+    QGLShader* gshPoints;
+    QGLShader* gshLines;
 };
 
 } //class ShaderController

@@ -3,9 +3,16 @@
 namespace ShaderController {
 
 void ShaderController::initialize() {
+    gshPoints = new QGLShader(QGLShader::Geometry, &shaderProgram);
+    gshLines = new QGLShader(QGLShader::Geometry, &shaderProgram);
+
+    gshPoints->compileSourceFile(QString(":/GeometryShaderPoints.gsh"));
+    gshLines->compileSourceFile(QString(":/GeometryShaderLines.gsh"));
+
     shaderProgram.addShaderFromSourceFile(QGLShader::Vertex, QString(":/VertexShader.vsh"));
-    shaderProgram.addShaderFromSourceFile(QGLShader::Geometry, QString(":/GeometryShader.gsh"));
     shaderProgram.addShaderFromSourceFile(QGLShader::Fragment, QString(":/FragmentShader.fsh"));
+    setPrimitive(GL_LINE_STRIP);
+
     shaderProgram.link();
 }
 
@@ -66,6 +73,22 @@ void ShaderController::setColors(const QVector<QVector4D> &colors) {
 
 void ShaderController::setInterpolationDistance(float distance) {
     shaderProgram.setUniformValue("interpolationDist", distance);
+}
+
+void ShaderController::setPrimitive(GLenum primitive) {
+    bool isLines = shaderProgram.shaders().contains(gshLines);
+    bool isPoints = shaderProgram.shaders().contains(gshPoints);
+    if (primitive == GL_POINTS && !isPoints) {
+        if (isLines) {
+            shaderProgram.removeShader(gshLines);
+        }
+        shaderProgram.addShader(gshPoints);
+    } else if (primitive == GL_LINE_STRIP && !isLines) {
+        if (isPoints) {
+            shaderProgram.removeShader(gshPoints);
+        }
+        shaderProgram.addShader(gshLines);
+    }
 }
 
 } //namespace ShaderController
