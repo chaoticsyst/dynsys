@@ -4,8 +4,6 @@
 
 #include "Camera.h"
 #include "VideoEncoder.h"
-#include "Preferences.h"
-
 
 namespace VideoEncoder {
 

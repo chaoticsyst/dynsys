@@ -8,19 +8,18 @@
 #include "Window.h"
 #include "ui_form.h"
 #include "PointsViewQGLWidget.h"
-#include "Preferences.h"
 #include "WindowPreferences.h"
 
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
-    Preferences::setDefaultValues();
-
     windowPreferences = nullptr;
 
     setFocusPolicy(Qt::StrongFocus);
     ui->setupUi(this);
 
+    ui->pointsViewQGLWidget->setPreferences(&prefs);
+
     sliderTimer = new QTimer(this);
-    sliderTimer->setInterval(Preferences::SLIDER_TIMER_INTERVAL);
+    sliderTimer->setInterval(prefs.controller.sliderTimeInterval);
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
 
     insertConstants(AttractorsParams::goodParamsRossler);
@@ -31,12 +30,6 @@ void Window::insertConstants(QVector<std::pair<QString, QVector<double>>> &goodP
     for (auto&[name, params] : goodParams) {
         ui->constantsBox->addItem(name);
     }
-}
-
-QVector3D getQPoint(const Model::Point &point) {
-    return QVector3D(point.x / Preferences::DIV_NORMALIZE,
-                     point.y / Preferences::DIV_NORMALIZE,
-                     point.z / Preferences::DIV_NORMALIZE); //TODO: implement normalization
 }
 
 void Window::slot_restart_button() {
@@ -58,24 +51,24 @@ void Window::slot_restart_button() {
 template<typename Lambda>
 void Window::count_points(Lambda derivatives_function) {
     ui->pointsViewQGLWidget->clearAll();
-    for (size_t i = 0; i < Preferences::AMOUNT_LOCUS; i++) {
+    for (size_t i = 0; i < prefs.visualization.locusNumber; i++) {
         QVector<QVector3D> buffer;
-        auto pushBackVector = [&buffer](const Model::Point &point) {
+        auto pushBackVector = [&buffer, &divNorm = prefs.model.divNormalization](const Model::Point &point) {
             buffer.push_back(
-                    QVector3D(point.x / Preferences::DIV_NORMALIZE,
-                              point.y / Preferences::DIV_NORMALIZE,
-                              point.z / Preferences::DIV_NORMALIZE)
+                    QVector3D(point.x / divNorm,
+                              point.y / divNorm,
+                              point.z / divNorm)
             );
         };
-        double offset = Preferences::START_POINT_DELTA * i;
+        double offset = prefs.model.startPointDelta * i;
 
         Model::generate_points(pushBackVector,
-                               Model::Point{Preferences::START_POINT.x + offset,
-                                            Preferences::START_POINT.y + offset,
-                                            Preferences::START_POINT.z + offset},
-                               Preferences::COUNT_POINTS,
-                               Preferences::STEPS_PER_COUNT,
-                               Preferences::TAU,
+                               Model::Point{prefs.model.startPoint.x + offset,
+                                            prefs.model.startPoint.y + offset,
+                                            prefs.model.startPoint.z + offset},
+                               prefs.model.pointsNumber,
+                               1,
+                               prefs.model.deltaTime,
                                derivatives_function);
 
         ui->pointsViewQGLWidget->addNewLocus(std::move(buffer));
@@ -115,7 +108,7 @@ void Window::slot_constants_selection(QString currentConstants) {
 
 void Window::slot_time_slider(int timeValue_) {
     timeValue = timeValue_;
-    ui->pointsViewQGLWidget->setCurrentTime((Preferences::COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
+    ui->pointsViewQGLWidget->setCurrentTime((prefs.model.pointsNumber / ui->horizontalSlider->maximum()) * timeValue);
 }
 
 void Window::slot_pause_button() {
@@ -128,14 +121,14 @@ void Window::slot_pause_button() {
 }
 
 void Window::slot_open_preferences() {
-    windowPreferences = new WindowPreferences();
+    windowPreferences = new WindowPreferences(this, &prefs);
     windowPreferences->show();
 }
 
 void Window::updateSlider() {
-    if (!pauseState && timeValue <= Preferences::COUNT_POINTS) {
-        ui->horizontalSlider->setValue(timeValue += Preferences::DELTA_TIME_TIMER);
-        ui->pointsViewQGLWidget->setCurrentTime((Preferences::COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
+    if (!pauseState && timeValue <= prefs.model.pointsNumber) {
+        ui->horizontalSlider->setValue(timeValue += prefs.controller.deltaTimePerStep);
+        ui->pointsViewQGLWidget->setCurrentTime((prefs.model.pointsNumber / ui->horizontalSlider->maximum()) * timeValue);
     }
     ui->pointsViewQGLWidget->repaint();
 }

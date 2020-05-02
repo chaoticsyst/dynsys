@@ -4,6 +4,7 @@
 #include <QSlider>
 #include <QVector>
 
+#include "Preferences.h"
 #include "WindowPreferences.h"
 
 namespace Ui {
@@ -39,6 +40,8 @@ private:
     int timeValue = 0;
 
     bool pauseState = 0;
+
+    Preferences::Preferences prefs;
 
     QTimer *sliderTimer;
 
