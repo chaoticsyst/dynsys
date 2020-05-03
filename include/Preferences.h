@@ -1,89 +1,66 @@
 #pragma once
 
-#include <QSize>
-#include <QVector3D>
 #include <QVector4D>
 #include <qgl.h>
-#include <cmath>
 
 #include "Model.hpp"
 
-struct Preferences {
-    Preferences() = delete;
+namespace Preferences {
 
-    static void setDefaultValues();
+class Preferences final {
+private:
+    struct CameraPreferences final {
+        float speed = 0.08;
+        float sensitivity = 0.01;
+    };
 
-    static void setValuesBeautifulLorenz();
+    struct VisualizationPreferences final {
+        size_t tailPointsNumber = 100;
+        size_t locusNumber = 200;
 
-    static void enableArcadeMode();
-    static void disableArcadeMode();
+        float interpolationDistance = 0.001;
+        float startPointSize = 0;
+        float finalPointSize = 10;
 
-/* Controller constants */
+        GLenum primitive = GL_LINE_STRIP;
 
-    // Timer constants
-    static int SLIDER_TIMER_INTERVAL;
-    static int DELTA_TIME_TIMER;
+        bool arcadeMode = false;
+        bool tailColoringMode = true;
 
-    // Model constants
-    static Model::Point START_POINT;
-    static int COUNT_POINTS;
-    static int STEPS_PER_COUNT;
-    static double TAU;
-    static int DIV_NORMALIZE;
+        QVector<QVector4D> colors = { { 0, 1, 1, 1 }, { 0, 0, 1, 1 }, { 1, 0, 0, 1 } };
+    };
 
-    // View constants
-    static size_t AMOUNT_LOCUS;
+    struct VideoPreferences final {
+        size_t width = 1920;
+        size_t height = 1080;
+    };
 
-    static bool NEW_PREFERENCES;
+    struct ControllerPreferences final {
+        int sliderTimeInterval = 1;
+        int deltaTimePerStep = 1;
 
-/* PointsViewQGLWidget constants */
+        bool preferencesChanged = false;
+    };
 
-    // Window size constants
-    static QSize MIN_WINDOW_SIZE;
-    static QSize INIT_WINDOW_SIZE;
+    struct ModelPreferences final {
+        Model::Point startPoint = { 1, 1, 1 };
+        int pointsNumber = 20000;
+        double deltaTime = 0.01;
+        float divNormalization = 8;
+        float startPointDelta = 0.05;
+    };
 
-    static bool TAILS_VIEW;
+public:
+    VideoPreferences video;
+    ModelPreferences model;
+    CameraPreferences camera;
+    ControllerPreferences controller;
+    VisualizationPreferences visualization;
 
-
-/* Locus constants */
-
-    static size_t AMOUNT_TAIL_POINTS;
-    static float  START_POINT_DELTA;
-    static float  DISTANCE_DELTA;
-
-    static bool  ARCADE_MODE_ON;
-    static float START_POINT_SIZE;
-    static float FINAL_POINT_SIZE;
-
-    static GLenum PRIMITIVE;
-
-    static bool  TAIL_COLORING_MODE;
-    static QVector<QVector4D> COLORS;
-
-
-/* Camera constants */
-
-    static float EPS;
-
-    static float VERTICAL_ANGLE;
-    static float NEAR_PLANE;
-    static float FAR_PLANE;
-
-    static float SPEED_MOVE;
-    static float SENSITIVITY;
-
-    static float MAX_PITCH;
-
-    static int   CAMERA_TIMER_DELTA;
-
-    static QVector3D INIT_CAMERA_POSITION;
-    static QVector3D INIT_CAMERA_TARGET;
-    static float     INIT_PITCH;
-    static float     INIT_YAW;
-
-/* Video recording constants */
-    static int VIDEO_WIDTH;
-    static int VIDEO_HEIGHT;
-
-    static int VIDEO_QUALITY;
+    void enableArcadeMode();
+    void disableArcadeMode();
 };
+
+inline const Preferences defaultPreferences;
+
+} //namespace Preferences

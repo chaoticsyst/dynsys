@@ -1,5 +1,4 @@
 #include "Locus.h"
-#include "Preferences.h"
 
 namespace Locus {
 
@@ -22,6 +21,14 @@ void Locus::endWork() {
 
 size_t Locus::size() const {
     return static_cast<size_t>(pointsBuffer.size() / 3 / sizeof(float));
+}
+
+
+LocusController::LocusController() :
+    prefs{&Preferences::defaultPreferences} {}
+
+void LocusController::setPreferences(const Preferences::Preferences *prefs_) {
+    prefs = prefs_;
 }
 
 void LocusController::initialize() {
@@ -48,15 +55,15 @@ void LocusController::draw(const QMatrix4x4 &projMatrix, size_t time) {
     shaderController.startWork();
     shaderController.setMatrix(projMatrix);
 
-    shaderController.setArcadeMode(Preferences::ARCADE_MODE_ON);
+    shaderController.setArcadeMode(prefs->visualization.arcadeMode);
 
-    shaderController.setTailColoringMode(Preferences::TAIL_COLORING_MODE);
+    shaderController.setTailColoringMode(prefs->visualization.tailColoringMode);
     shaderController.setTrajectoriesNumber(static_cast<size_t>(data.size()));
-    shaderController.setColors(Preferences::COLORS);
+    shaderController.setColors(prefs->visualization.colors);
 
-    shaderController.setInterpolationDistance(Preferences::DISTANCE_DELTA);
+    shaderController.setInterpolationDistance(prefs->visualization.interpolationDistance);
 
-    shaderController.setPrimitive(Preferences::PRIMITIVE);
+    shaderController.setPrimitive(prefs->visualization.primitive);
 
     for (size_t i = 0; i < static_cast<size_t>(data.size()); i++) {
         auto &locus = data[i];
@@ -67,13 +74,13 @@ void LocusController::draw(const QMatrix4x4 &projMatrix, size_t time) {
         }
 
         int curAmount = std::min(locus.size(), time);
-        size_t start = std::max(0, curAmount - static_cast<int>(Preferences::AMOUNT_TAIL_POINTS));
+        size_t start = std::max(0, curAmount - static_cast<int>(prefs->visualization.tailPointsNumber));
         size_t actualLength = curAmount - start;
 
         shaderController.setVertex();
 
-        shaderController.setStartTailSize(Preferences::START_POINT_SIZE);
-        shaderController.setFinalTailSize(Preferences::FINAL_POINT_SIZE);
+        shaderController.setStartTailSize(prefs->visualization.startPointSize);
+        shaderController.setFinalTailSize(prefs->visualization.finalPointSize);
         shaderController.setTailLength(actualLength);
         shaderController.setStartVertexIndex(start);
         shaderController.setTrajectoryIndex(i);

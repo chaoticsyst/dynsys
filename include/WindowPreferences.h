@@ -3,6 +3,8 @@
 #include <QObject>
 #include <QWidget>
 
+#include "Preferences.h"
+
 namespace Ui {
 class WindowPreferences;
 }
@@ -10,7 +12,7 @@ class WindowPreferences;
 class WindowPreferences : public QWidget {
     Q_OBJECT
 public:
-    explicit WindowPreferences(QWidget *parent = nullptr);
+    explicit WindowPreferences(QWidget *parent, Preferences::Preferences *prefs);
     ~WindowPreferences();
 
 public slots:
@@ -23,4 +25,6 @@ private:
     void setStateFromUI();
 
     Ui::WindowPreferences *ui;
+
+    Preferences::Preferences *prefs;
 };

@@ -1,19 +1,27 @@
 #include <cmath>
-#include <QMouseEvent>
-#include <QKeyEvent>
-#include <QTime>
-#include <QTimer>
 
 #include "Camera.h"
-#include "Preferences.h"
 
 namespace Camera {
 
+constexpr QVector3D INIT_CAMERA_POSITION = { 0, 0, 5 };
+constexpr QVector3D INIT_CAMERA_TARGET   = -INIT_CAMERA_POSITION;
+
+constexpr float INIT_YAW   = -M_PI / 2;
+constexpr float INIT_PITCH = 0;
+
+constexpr float VERTICAL_ANGLE = 60;
+constexpr float NEAR_PLANE     = 0.001;
+constexpr float FAR_PLANE      = 1000;
+
+constexpr float EPS       = 0.001;
+constexpr float MAX_PITCH = M_PI / 2 - EPS;
+
 Camera::Camera() :
-    cameraPosition{Preferences::INIT_CAMERA_POSITION},
-    cameraTarget{Preferences::INIT_CAMERA_TARGET},
-    pitch{Preferences::INIT_PITCH},
-    yaw{Preferences::INIT_YAW},
+    cameraPosition{INIT_CAMERA_POSITION},
+    cameraTarget{INIT_CAMERA_TARGET},
+    pitch{INIT_PITCH},
+    yaw{INIT_YAW},
     invalidState{false} {
 
     recalculateVectors();
@@ -27,18 +35,18 @@ void Camera::recalculateVectors() {
 
 void Camera::recalculatePerspective(int width, int height) {
     perspectiveMatrix.setToIdentity();
-    perspectiveMatrix.perspective(Preferences::VERTICAL_ANGLE, static_cast<float>(width) / height, Preferences::NEAR_PLANE, Preferences::FAR_PLANE);
+    perspectiveMatrix.perspective(VERTICAL_ANGLE, static_cast<float>(width) / height, NEAR_PLANE, FAR_PLANE);
     glViewport(0, 0, width, height);
 }
 
-void Camera::recalculateTarget(const QPoint &newMousePosition) {
+void Camera::recalculateTarget(const QPoint &newMousePosition, float mouseSensitivity) {
     if (invalidState) {
         lastMousePosition = newMousePosition;
         invalidState = false;
         return;
     }
-    float deltaX = (newMousePosition.x() - lastMousePosition.x()) * Preferences::SENSITIVITY;
-    float deltaY = (lastMousePosition.y() - newMousePosition.y()) * Preferences::SENSITIVITY;
+    float deltaX = (newMousePosition.x() - lastMousePosition.x()) * mouseSensitivity;
+    float deltaY = (lastMousePosition.y() - newMousePosition.y()) * mouseSensitivity;
     yaw += deltaX;
     pitch += deltaY;
     normalizeAngles();
@@ -53,11 +61,11 @@ void Camera::recalculateTarget(const QPoint &newMousePosition) {
 }
 
 void Camera::normalizeAngles() {
-    if (pitch > Preferences::MAX_PITCH) {
-        pitch = Preferences::MAX_PITCH;
+    if (pitch > MAX_PITCH) {
+        pitch = MAX_PITCH;
     }
-    if (pitch < -Preferences::MAX_PITCH) {
-        pitch = -Preferences::MAX_PITCH;
+    if (pitch < -MAX_PITCH) {
+        pitch = -MAX_PITCH;
     }
 }
 
@@ -91,17 +99,17 @@ void Camera::setTarget(const QVector3D &target) {
 }
 
 void Camera::moveForward(float force) {
-    cameraPosition += cameraForward * (-force) * Preferences::SPEED_MOVE;
+    cameraPosition += cameraForward * (-force);
     recalculateVectors();
 }
 
 void Camera::moveRight(float force) {
-    cameraPosition += cameraRight * force * Preferences::SPEED_MOVE;
+    cameraPosition += cameraRight * force;
     recalculateVectors();
 }
 
 void Camera::moveUp(float force) {
-    cameraPosition += cameraUp * force * Preferences::SPEED_MOVE;
+    cameraPosition += cameraUp * force;
     recalculateVectors();
 }
 
@@ -110,21 +118,27 @@ void Camera::resetMousePosition(const QPoint &newMousePosition) {
 }
 
 void Camera::setDefault() {
-    cameraPosition = Preferences::INIT_CAMERA_POSITION;
-    cameraTarget   = Preferences::INIT_CAMERA_TARGET;
-    pitch          = Preferences::INIT_PITCH;
-    yaw            = Preferences::INIT_YAW;
+    cameraPosition = INIT_CAMERA_POSITION;
+    cameraTarget   = INIT_CAMERA_TARGET;
+    pitch          = INIT_PITCH;
+    yaw            = INIT_YAW;
     invalidState = true;
 
     recalculateVectors();
 }
 
 
-KeyboardAndMouseController::KeyboardAndMouseController() {
+KeyboardAndMouseController::KeyboardAndMouseController() :
+    prefs{&Preferences::defaultPreferences} {
+
     timer = new QTimer(this);
-    timer->setInterval(Preferences::CAMERA_TIMER_DELTA);
+    timer->setInterval(1);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateKeys()));
     timer->start();
+}
+
+void KeyboardAndMouseController::setPreferences(const Preferences::Preferences *prefs_) {
+    prefs = prefs_;
 }
 
 QMatrix4x4 KeyboardAndMouseController::getMatrix() const {
@@ -159,7 +173,7 @@ void KeyboardAndMouseController::applyMousePressEvent(QMouseEvent *event) {
 }
 
 void KeyboardAndMouseController::applyMouseMoveEvent(QMouseEvent *event) {
-    camera.recalculateTarget(event->pos());
+    camera.recalculateTarget(event->pos(), prefs->camera.sensitivity);
     event->accept();
 }
 
@@ -171,6 +185,8 @@ void KeyboardAndMouseController::updateKeys() {
     if (keys.contains(Qt::Key_Control)) {
         force /= 2;
     }
+    force *= prefs->camera.speed;
+
     if (keys.contains(Qt::Key_W)) {
         camera.moveForward(force);
     }
