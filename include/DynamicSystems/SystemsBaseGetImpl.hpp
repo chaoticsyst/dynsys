@@ -9,44 +9,44 @@
 namespace DynamicSystems {
 
 
-template<typename T>
-std::vector<DynamicSystem<T>> getDefaultSystems() {
-    std::vector<DynamicSystem<T>> systemsVector;
-    systemsVector.push_back(getSystemLorenz<T>());
-    systemsVector.push_back(getSystemRossler<T>());
-    systemsVector.push_back(getSystemChua<T>());
-    systemsVector.push_back(getSystemHR3<T>());
-    systemsVector.push_back(getSystemAizawa<T>());
-    systemsVector.push_back(getSystemChenLee<T>());
-    systemsVector.push_back(getSystemAnishenkoAstakhov<T>());
-    systemsVector.push_back(getSystemBouali2<T>());
-    systemsVector.push_back(getSystemBurkeShaw<T>());
-    systemsVector.push_back(getSystemChenCelikovsky<T>());
-    systemsVector.push_back(getSystemCoullet<T>());
-    systemsVector.push_back(getSystemDadras<T>());
-    systemsVector.push_back(getSystemDequanLi<T>());
-    systemsVector.push_back(getSystemFinance<T>());
-    systemsVector.push_back(getSystemFourWing<T>());
-    systemsVector.push_back(getSystemGenesioTesi<T>());
-    systemsVector.push_back(getSystemHadley<T>());
-    systemsVector.push_back(getSystemHalvorsen<T>());
-    systemsVector.push_back(getSystemLiuChen<T>());
-    systemsVector.push_back(getSystemLorenzMod1<T>());
-    systemsVector.push_back(getSystemLorenzMod2<T>());
-    systemsVector.push_back(getSystemLuChen<T>());
-    systemsVector.push_back(getSystemNewtonLeipnik<T>());
-    systemsVector.push_back(getSystemNoseHoover<T>());
-    systemsVector.push_back(getSystemQiChen<T>());
-    systemsVector.push_back(getSystemRayleighBenard<T>());
-    systemsVector.push_back(getSystemRucklige<T>());
-    systemsVector.push_back(getSystemSakaraya<T>());
-    systemsVector.push_back(getSystemShimizuMorioka<T>());
-    systemsVector.push_back(getSystemThomas<T>());
-    systemsVector.push_back(getSystemTSUCS1<T>());
-    systemsVector.push_back(getSystemTSUCS2<T>());
-    systemsVector.push_back(getSystemWangSun<T>());
-    systemsVector.push_back(getSystemWimolBanlue<T>());
-    systemsVector.push_back(getSystemYuWang<T>());
+template<typename LambdaNewPointAction>
+std::vector<DynamicSystem<LambdaNewPointAction>> getDefaultSystems() {
+    std::vector<DynamicSystem<LambdaNewPointAction>> systemsVector;
+    systemsVector.push_back(getSystemLorenz<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemRossler<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemChua<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemHR3<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemAizawa<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemChenLee<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemAnishenkoAstakhov<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemBouali2<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemBurkeShaw<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemChenCelikovsky<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemCoullet<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemDadras<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemDequanLi<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemFinance<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemFourWing<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemGenesioTesi<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemHadley<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemHalvorsen<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemLiuChen<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemLorenzMod1<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemLorenzMod2<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemLuChen<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemNewtonLeipnik<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemNoseHoover<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemQiChen<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemRayleighBenard<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemRucklige<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemSakaraya<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemShimizuMorioka<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemThomas<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemTSUCS1<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemTSUCS2<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemWangSun<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemWimolBanlue<LambdaNewPointAction>());
+    systemsVector.push_back(getSystemYuWang<LambdaNewPointAction>());
     return systemsVector;
 }
 

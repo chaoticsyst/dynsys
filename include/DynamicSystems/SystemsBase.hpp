@@ -11,8 +11,8 @@
 namespace DynamicSystems {
 
 
-template<typename T>
-DynamicSystem<T> getSystemLorenz() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemLorenz() {
     std::string attractorName = "The Lorenz attractor";
     std::array<std::string, 3> formulae = {"a*(y - x)",
                                            "x*(r - z) - y",
@@ -32,13 +32,13 @@ DynamicSystem<T> getSystemLorenz() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemRossler() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemRossler() {
     std::string attractorName = "The Rossler attractor";
     std::array<std::string, 3> formulae = {"-z - x",
                                            "x + a*y",
@@ -59,13 +59,13 @@ DynamicSystem<T> getSystemRossler() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemChua() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemChua() {
     std::string attractorName = "The Chua attractor";
     std::array<std::string, 3> formulae = {
             "s*(y - x - (c*x + 0.5*(b - c)(|x + d| - |x - d|) + 0.5*(a - b)(|x + 1| - |x - 1|)))",
@@ -91,13 +91,13 @@ DynamicSystem<T> getSystemChua() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemHR3() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemHR3() {
     std::string attractorName = "The Hindmarsh-Rose system";
     std::array<std::string, 3> formulae = {"y - a*x^3 + b*x^2 - z + I",
                                            "c - d*x^2 - y",
@@ -117,13 +117,13 @@ DynamicSystem<T> getSystemHR3() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemAizawa() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemAizawa() {
     std::string attractorName = "The Aizawa attractor";
     std::array<std::string, 3> formulae = {"(z - b)*x - d*y",
                                            "d*x + (z - b)*y",
@@ -145,13 +145,13 @@ DynamicSystem<T> getSystemAizawa() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemChenLee() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemChenLee() {
     std::string attractorName = "The Chen-Lee attractor";
     std::array<std::string, 3> formulae = {"a*x - y*z",
                                            "b*y + x*z",
@@ -171,13 +171,13 @@ DynamicSystem<T> getSystemChenLee() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemAnishenkoAstakhov() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemAnishenkoAstakhov() {
     std::string attractorName = "The Anishenko-Astakhov attractor";
     std::array<std::string, 3> formulae = {"x*(a - z) + y",
                                            "-x",
@@ -196,13 +196,13 @@ DynamicSystem<T> getSystemAnishenkoAstakhov() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemBouali2() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemBouali2() {
     std::string attractorName = "The second Bouali attractor";
     std::array<std::string, 3> formulae = {"x*(4 - y) + a*z",
                                            "-y*(1 - x^2)",
@@ -221,13 +221,13 @@ DynamicSystem<T> getSystemBouali2() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemBurkeShaw() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemBurkeShaw() {
     std::string attractorName = "The Burke-Shaw attractor";
     std::array<std::string, 3> formulae = {"-a*(x + y)",
                                            "-y - a*x*z",
@@ -246,13 +246,13 @@ DynamicSystem<T> getSystemBurkeShaw() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemChenCelikovsky() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemChenCelikovsky() {
     std::string attractorName = "The Chen-Celikovsky attractor";
     std::array<std::string, 3> formulae = {"a*(y - x)",
                                            "-x*z + c*y",
@@ -272,14 +272,14 @@ DynamicSystem<T> getSystemChenCelikovsky() {
     };
     return {
             attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}
     };
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemCoullet() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemCoullet() {
     std::string attractorName = "The Collet attractor";
     std::array<std::string, 3> formulae = {"y",
                                            "z",
@@ -299,13 +299,13 @@ DynamicSystem<T> getSystemCoullet() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemDadras() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemDadras() {
     std::string attractorName = "The Dadras attractor";
     std::array<std::string, 3> formulae = {"y - a*x + b*y*z",
                                            "c*y - x*z + z",
@@ -325,13 +325,13 @@ DynamicSystem<T> getSystemDadras() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemDequanLi() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemDequanLi() {
     std::string attractorName = "The Dequan Li attractor";
     std::array<std::string, 3> formulae = {"a*(y - z) + c*x*z",
                                            "e*x + f*y - x*z",
@@ -351,13 +351,13 @@ DynamicSystem<T> getSystemDequanLi() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemFinance() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemFinance() {
     std::string attractorName = "The Finance attractor";
     std::array<std::string, 3> formulae = {"(1/b - a)*x + z + x*y",
                                            "-b*y - x^2",
@@ -378,13 +378,13 @@ DynamicSystem<T> getSystemFinance() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemFourWing() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemFourWing() {
     std::string attractorName = "The Four-Wing attractor";
     std::array<std::string, 3> formulae = {"a*x - b*y*z",
                                            "c*y + x*z",
@@ -404,13 +404,13 @@ DynamicSystem<T> getSystemFourWing() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemGenesioTesi() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemGenesioTesi() {
     std::string attractorName = "The Genesio-Tesi attractor";
     std::array<std::string, 3> formulae = {"y",
                                            "z",
@@ -429,13 +429,13 @@ DynamicSystem<T> getSystemGenesioTesi() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemHadley() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemHadley() {
     std::string attractorName = "The Hadley attractor";
     std::array<std::string, 3> formulae = {"-y^2 - z^2 - a*x + a*c",
                                            "x*y - b*x*y - y + d",
@@ -455,13 +455,13 @@ DynamicSystem<T> getSystemHadley() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemHalvorsen() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemHalvorsen() {
     std::string attractorName = "The Halvorsen attractor";
     std::array<std::string, 3> formulae = {"-a*x - 4*(y + z) - y^2",
                                            "-a*y - 4*(x + x) - z^2",
@@ -480,13 +480,13 @@ DynamicSystem<T> getSystemHalvorsen() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemLiuChen() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemLiuChen() {
     std::string attractorName = "The Liu-Chen attractor";
     std::array<std::string, 3> formulae = {"a*y + b*x + c*y*z",
                                            "d*y - z + e*x*z",
@@ -506,13 +506,13 @@ DynamicSystem<T> getSystemLiuChen() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemLorenzMod1() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemLorenzMod1() {
     std::string attractorName = "The Lorenz Mod 1 attractor";
     std::array<std::string, 3> formulae = {"-a*x + y^2 - z^2  + a*c",
                                            "x*(y - b*z) + d",
@@ -532,13 +532,13 @@ DynamicSystem<T> getSystemLorenzMod1() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemLorenzMod2() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemLorenzMod2() {
     std::string attractorName = "The Lorenz Mod 2 attractor";
     std::array<std::string, 3> formulae = {"-a*x + y^2 - z^2 + a*c",
                                            "x*(y - b*z) + d",
@@ -558,13 +558,13 @@ DynamicSystem<T> getSystemLorenzMod2() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemLuChen() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemLuChen() {
     std::string attractorName = "The Lu-Chen attractor";
     std::array<std::string, 3> formulae = {"(-a*b*x)/(a+b) - y*z + c",
                                            "a*y + x*z",
@@ -584,13 +584,13 @@ DynamicSystem<T> getSystemLuChen() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemNewtonLeipnik() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemNewtonLeipnik() {
     std::string attractorName = "The Newton-Leipnik attractor";
     std::array<std::string, 3> formulae = {"-a*x + y + 10*y*z",
                                            "-x - 0.4*y + 5*x*z",
@@ -609,13 +609,13 @@ DynamicSystem<T> getSystemNewtonLeipnik() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemNoseHoover() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemNoseHoover() {
     std::string attractorName = "The Nose-Hoover attractor";
     std::array<std::string, 3> formulae = {"y",
                                            "y*z - x",
@@ -634,13 +634,13 @@ DynamicSystem<T> getSystemNoseHoover() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemQiChen() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemQiChen() {
     std::string attractorName = "The Qi-Chen attractor";
     std::array<std::string, 3> formulae = {"a*(y - x) + x*z",
                                            "x*(c - z) + y",
@@ -659,13 +659,13 @@ DynamicSystem<T> getSystemQiChen() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemRayleighBenard() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemRayleighBenard() {
     std::string attractorName = "The Rayleigh-Benard attractor";
     std::array<std::string, 3> formulae = {"a*(y - x)",
                                            "b*x - y - x*z",
@@ -684,13 +684,13 @@ DynamicSystem<T> getSystemRayleighBenard() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemRucklige() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemRucklige() {
     std::string attractorName = "The Rucklige attractor";
     std::array<std::string, 3> formulae = {"-a*x + b*y - y*z",
                                            "x",
@@ -709,13 +709,13 @@ DynamicSystem<T> getSystemRucklige() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemSakaraya() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemSakaraya() {
     std::string attractorName = "The Sakaraya attractor";
     std::array<std::string, 3> formulae = {"y - x + y*z",
                                            "-x - y + a*x*z",
@@ -734,13 +734,13 @@ DynamicSystem<T> getSystemSakaraya() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemShimizuMorioka() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemShimizuMorioka() {
     std::string attractorName = "The Shimizu-Morioka attractor";
     std::array<std::string, 3> formulae = {"y",
                                            "x*(1 - z) - a*y",
@@ -759,13 +759,13 @@ DynamicSystem<T> getSystemShimizuMorioka() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemThomas() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemThomas() {
     std::string attractorName = "The Thomas attractor";
     std::array<std::string, 3> formulae = {"a*x + sin(y)",
                                            "-a*y + sin(z)",
@@ -784,13 +784,13 @@ DynamicSystem<T> getSystemThomas() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemTSUCS1() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemTSUCS1() {
     std::string attractorName = "The TSUCS1 attractor";
     std::array<std::string, 3> formulae = {"a*(y - z) + c*x*z",
                                            "e*y - x*z",
@@ -810,13 +810,13 @@ DynamicSystem<T> getSystemTSUCS1() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemTSUCS2() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemTSUCS2() {
     std::string attractorName = "The TSUCS2 attractor";
     std::array<std::string, 3> formulae = {"a*(y - z) + d*x*z",
                                            "f*y + b*x - x*z",
@@ -836,13 +836,13 @@ DynamicSystem<T> getSystemTSUCS2() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemWangSun() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemWangSun() {
     std::string attractorName = "The Wang-Sun attractor";
     std::array<std::string, 3> formulae = {"a*x + c*y*z",
                                            "b*x + d*y - x*z",
@@ -862,13 +862,13 @@ DynamicSystem<T> getSystemWangSun() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemWimolBanlue() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemWimolBanlue() {
     std::string attractorName = "The Wimol-Banlue attractor";
     std::array<std::string, 3> formulae = {"y - x",
                                            "-z*tanh(x)",
@@ -887,13 +887,13 @@ DynamicSystem<T> getSystemWimolBanlue() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 
 
-template<typename T>
-DynamicSystem<T> getSystemYuWang() {
+template<typename LambdaNewPointAction>
+DynamicSystem<LambdaNewPointAction> getSystemYuWang() {
     std::string attractorName = "The Yu-Wang attractor";
     std::array<std::string, 3> formulae = {"a*(y - x)",
                                            "b*x - c*x*z",
@@ -913,7 +913,7 @@ DynamicSystem<T> getSystemYuWang() {
         };
     };
     return {attractorName, formulae, constantsNames, interestingConstants,
-            DynamicSystemInternal<T, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
+            DynamicSystemInternal<LambdaNewPointAction, decltype(derivativesFunctionGetter(std::declval<std::vector<long double>>()))>
                     {derivativesFunctionGetter}};
 }
 

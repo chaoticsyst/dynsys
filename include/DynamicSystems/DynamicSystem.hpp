@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <string>
-#include <tuple>
+#include <array>
 #include <functional>
 
 #include "Model.hpp"
@@ -21,36 +21,36 @@ std::vector<DynamicSystem<LambdaNewPointAction>> getDefaultSystems();
 
 
 template<typename LambdaNewPointAction>
-class DynamicSystem {
+class DynamicSystem final {
 public:
     template<typename LambdaDerivatives>
-    DynamicSystem(std::string attractor_name,
+    DynamicSystem(std::string attractorName,
                   std::array<std::string, 3> formulae,
-                  std::vector<std::string> variables_names,
-                  std::vector<std::pair<std::string, std::vector<long double>>> interesting_constants,
-                  DynamicSystemInternal<LambdaNewPointAction, LambdaDerivatives> time_delta);
+                  std::vector<std::string> variablesNames,
+                  std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants,
+                  DynamicSystemInternal<LambdaNewPointAction, LambdaDerivatives> systemInteranal);
 
 
-    std::string_view get_attractor_name() const;
+    std::string_view getAttractorName() const;
 
-    std::array<std::string_view, 3> get_formulae() const;
+    std::array<std::string_view, 3> getFormulae() const;
 
-    std::vector<std::string_view> get_variables_names() const;
+    std::vector<std::string_view> getVariablesNames() const;
 
-    std::size_t variables_count() const;
+    std::size_t variablesCount() const;
 
-    const std::vector<std::pair<std::string, std::vector<long double>>> &get_interesting_constants() const;
+    const std::vector<std::pair<std::string, std::vector<long double>>> &getInterestingConstants() const;
 
 private:
-    const std::string attractor_name_;
+    const std::string attractorName_;
     const std::array<std::string, 3> formulae_;
-    const std::vector<std::string> variables_names_;
-    const std::vector<std::pair<std::string, std::vector<long double>>> interesting_constants_;
+    const std::vector<std::string> variablesNames_;
+    const std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants_;
     const std::function<void(LambdaNewPointAction np,
                              Model::Point point,
-                             int points_count,
-                             int steps_per_point,
-                             long double time_delta,
+                             int pointsCount,
+                             int stepsPerPoint,
+                             long double timeDelta,
                              std::vector<long double> &con)> compute_;
 };
 

@@ -10,24 +10,24 @@ namespace DynamicSystems {
 
 
 template<typename LambdaNewPointAction, typename LambdaDerivatives>
-class DynamicSystemInternal {
+class DynamicSystemInternal final {
 public:
     explicit DynamicSystemInternal(
-            std::function<LambdaDerivatives(std::vector<long double> &)> derivatives_function_getter) :
-            get_derivatives_function{derivatives_function_getter} {}
+            std::function<LambdaDerivatives(std::vector<long double> &)> derivativesFunctionGetter) :
+            getDerivativesFunction{derivativesFunctionGetter} {}
 
-    void compute(LambdaNewPointAction new_point_action,
+    void compute(LambdaNewPointAction newPointAction,
                  Model::Point point,
-                 int points_count,
-                 int steps_per_point,
-                 long double time_delta,
-                 std::vector<long double> &variable_value) const {
-        LambdaDerivatives derivatives_function = get_derivatives_function(variable_value);
-        Model::generate_points(new_point_action, point, points_count, steps_per_point, time_delta, derivatives_function);
+                 int pointsCount,
+                 int stepsPerPoint,
+                 long double timeDelta,
+                 std::vector<long double> &variableValue) const {
+        LambdaDerivatives derivativesFunction = getDerivativesFunction(variableValue);
+        Model::generate_points(newPointAction, point, pointsCount, stepsPerPoint, timeDelta, derivativesFunction);
     }
 
 private:
-    const std::function<LambdaDerivatives(std::vector<long double> &)> get_derivatives_function;
+    const std::function<LambdaDerivatives(std::vector<long double> &)> getDerivativesFunction;
 };
 
 
