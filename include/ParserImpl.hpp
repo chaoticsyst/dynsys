@@ -2,6 +2,7 @@
 
 #include <string>
 #include <array>
+#include <map>
 #include <memory>
 
 #include "Model.hpp"
@@ -15,28 +16,32 @@ struct Node {
 };
 
 /// Order of variable addresses: [x,y,z]
-std::shared_ptr<Node> parse_expression(const std::string &expr, const std::array<long double *, 3> &var_address);
+std::shared_ptr<Node>parse_expression(const std::string &expression,
+                                      const std::array<long double *, 3> &variableAddresses,
+                                      const std::map<std::string, long double> &customConstVariables = {});
 
 
-inline auto parse_expressions(const std::string &x_expr, const std::string &y_expr, const std::string &z_expr) {
+inline auto parse_expressions(const std::string &x_expr, const std::string &y_expr, const std::string &z_expr,
+                              const std::map<std::string, long double> &customConstVariables) {
+
     auto variables_array = std::make_shared<std::array<long double, 3>>();
     std::array<long double *, 3> variables_addresses = {&(*variables_array)[0], &(*variables_array)[1], &(*variables_array)[2]};
     std::shared_ptr<const Node> x_func, y_func, z_func;
 
     try {
-        x_func = parse_expression(x_expr, variables_addresses);
+        x_func = parse_expression(x_expr, variables_addresses, customConstVariables);
     } catch (const std::exception &exception) {
         throw ParserException(std::string{"In first expression: "} + std::string{exception.what()});
     }
 
     try {
-        y_func = parse_expression(y_expr, variables_addresses);
+        y_func = parse_expression(y_expr, variables_addresses, customConstVariables);
     } catch (const std::exception &exception) {
         throw ParserException(std::string{"In second expression: "} + std::string{exception.what()});
     }
 
     try {
-        z_func = parse_expression(z_expr, variables_addresses);
+        z_func = parse_expression(z_expr, variables_addresses, customConstVariables);
     } catch (const std::exception &exception) {
         throw ParserException(std::string{"In third expression: "} + std::string{exception.what()});
     }

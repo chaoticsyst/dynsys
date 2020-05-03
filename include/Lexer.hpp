@@ -7,7 +7,7 @@
 namespace Lexer {
 
 enum class Lexema {
-    X, Y, Z,
+    Identifier,
     Constant,
     Add,
     Subtract,
@@ -24,6 +24,7 @@ public:
 
     Lexema getCurrentLexema() const noexcept;
     long double getCurrentConstant() const noexcept;
+    const std::string &getCurrentIdentifier() const noexcept;
 
     void goNextLexema();
 
@@ -34,6 +35,7 @@ private:
     Lexema currentLexema;
     char currentChar;
     long double currentConstant;
+    std::string currentIdentifier;
 
     void goNextChar();
 };

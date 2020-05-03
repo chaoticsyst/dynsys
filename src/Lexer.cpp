@@ -52,18 +52,6 @@ void Lexer::goNextLexema() {
         goNextChar();
         currentLexema = Lexema::CloseParens;
         return;
-    case 'x':
-        goNextChar();
-        currentLexema = Lexema::X;
-        return;
-    case 'y':
-        goNextChar();
-        currentLexema = Lexema::Y;
-        return;
-    case 'z':
-        goNextChar();
-        currentLexema = Lexema::Z;
-        return;
     }
 
     if (isdigit(currentChar) || currentChar == '.' || currentChar == ',') {
@@ -71,7 +59,7 @@ void Lexer::goNextLexema() {
         bool wasDecimalPoint = false;
         while (isdigit(currentChar) || currentChar == '.' || currentChar == ',') {
             if ((currentChar == '.' || currentChar == ',') && wasDecimalPoint) {
-                throw Parser::ParserException("Invalid format of a number: too many decimal points.");
+                throw Parser::ParserException("Unexpected two or more decimal points.");
             }
             if (currentChar == '.' || currentChar == ',') {
                 constant += '.';
@@ -88,7 +76,19 @@ void Lexer::goNextLexema() {
         return;
     }
 
-    throw Parser::ParserException("Unexpected character was found.");
+    if (isalpha(currentChar)) {
+        currentIdentifier.clear();
+        while (isalpha(currentChar)) {
+            currentIdentifier += currentChar;
+            goNextChar();
+        }
+
+        currentLexema = Lexema::Identifier;
+
+        return;
+    }
+
+    throw Parser::ParserException("Unexpected character.");
 }
 
 Lexema Lexer::getCurrentLexema() const noexcept {
@@ -97,6 +97,10 @@ Lexema Lexer::getCurrentLexema() const noexcept {
 
 long double Lexer::getCurrentConstant() const noexcept {
     return currentConstant;
+}
+
+const std::string &Lexer::getCurrentIdentifier() const noexcept {
+    return currentIdentifier;
 }
 
 } //namespace Lexer

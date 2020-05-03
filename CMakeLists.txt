@@ -63,6 +63,7 @@ add_executable(DynamicSystems
     include/ShaderController.h
     include/Lexer.hpp
     include/ParserException.h
+    include/ParserNodes.hpp
     src/form.ui
     src/formPreferences.ui
     materials/Resources.qrc
