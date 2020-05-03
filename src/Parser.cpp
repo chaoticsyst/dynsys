@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 
-#include "Lexer.h"
+#include "Lexer.hpp"
 #include "Parser.hpp"
 
 namespace Parser {

@@ -1,4 +1,4 @@
-#include "Lexer.h"
+#include "Lexer.hpp"
 #include "ParserException.h"
 
 namespace Lexer {
@@ -80,10 +80,6 @@ void Lexer::goNextLexema() {
                 constant += currentChar;
             }
             goNextChar();
-        }
-
-        if (constant.size() >= 20) {
-            throw Parser::ParserException("Too many digits in a number.");
         }
 
         currentConstant = std::stold(constant);
