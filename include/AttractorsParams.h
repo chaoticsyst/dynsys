@@ -12,8 +12,12 @@ QVector<std::pair<QString, QVector<double>>> goodParamsRossler = {
 };
 
 QVector<std::pair<QString, QVector<double>>> goodParamsLorenz = {
-    {"Классические значения", {10, 28, 8.0 / 3.0,}},
+    {"Классические значения", {10, 28, 8.0 / 3.0}},
     {"Схождение в цикл", {10, 100, 8.0 / 3.0}}
+};
+
+QVector<std::pair<QString, QVector<double>>> customParams = {
+    {"Свои параметры", {0.0, 0.0, 0.0}}
 };
 
 }

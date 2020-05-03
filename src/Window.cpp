@@ -3,6 +3,7 @@
 #include <future>
 
 #include "Model.hpp"
+#include "Parser.hpp"
 #include "DynamicSystemsDefault.hpp"
 #include "AttractorsParams.h"
 #include "Window.h"
@@ -22,7 +23,9 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     sliderTimer->setInterval(prefs.controller.sliderTimeInterval);
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
 
-    insertConstants(AttractorsParams::goodParamsRossler);
+    ui->comboBox->addItem("Свои уравнения");
+    ui->comboBox->addItem("Аттрактор Рёсслера");
+    ui->comboBox->addItem("Аттрактор Лоренца");
 }
 
 void Window::insertConstants(QVector<std::pair<QString, QVector<double>>> &goodParams) {
@@ -33,7 +36,13 @@ void Window::insertConstants(QVector<std::pair<QString, QVector<double>>> &goodP
 }
 
 void Window::slot_restart_button() {
-    if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
+    if (ui->comboBox->currentText() == "Свои уравнения") {
+        const std::string exprX = ui->firstExpr->text().toStdString();
+        const std::string exprY = ui->secondExpr->text().toStdString();
+        const std::string exprZ = ui->thirdExpr->text().toStdString();
+        auto derivatives_function = Parser::parse_expressions(exprX, exprY, exprZ);
+        count_points(derivatives_function);
+    } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
         auto derivatives_function = Model::get_derivatives_function_lorenz(
                 ui->doubleSpinBox->value(),
                 ui->doubleSpinBox_2->value(),
@@ -82,7 +91,9 @@ void Window::count_points(Lambda derivatives_function) {
 }
 
 void Window::slot_model_selection(QString currentModel) {
-    if (currentModel == "Аттрактор Рёсслера") {
+    if (currentModel == "Свои уравнения") {
+        insertConstants(AttractorsParams::customParams);
+    } else if (currentModel == "Аттрактор Рёсслера") {
         insertConstants(AttractorsParams::goodParamsRossler);
     } else if (currentModel == "Аттрактор Лоренца") {
         insertConstants(AttractorsParams::goodParamsLorenz);
@@ -91,7 +102,9 @@ void Window::slot_model_selection(QString currentModel) {
 
 void Window::slot_constants_selection(QString currentConstants) {
     QVector<std::pair<QString, QVector<double>>> goodParams;
-    if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
+    if (ui->comboBox->currentText() == "Свои уравнения") {
+        goodParams = AttractorsParams::customParams;
+    } else if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
         goodParams = AttractorsParams::goodParamsRossler;
     } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
         goodParams = AttractorsParams::goodParamsLorenz;
