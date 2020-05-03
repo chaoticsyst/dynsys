@@ -1,4 +1,5 @@
 #include "Lexer.h"
+#include "ParserException.h"
 
 namespace Lexer {
 
@@ -45,11 +46,11 @@ void Lexer::goNextLexema() {
         return;
     case '(':
         goNextChar();
-        currentLexema = Lexema::OpenParenthesis;
+        currentLexema = Lexema::OpenParens;
         return;
     case ')':
         goNextChar();
-        currentLexema = Lexema::CloseParenthesis;
+        currentLexema = Lexema::CloseParens;
         return;
     case 'x':
         goNextChar();
@@ -65,16 +66,24 @@ void Lexer::goNextLexema() {
         return;
     }
 
-    if (isdigit(currentChar) || currentChar == '.') {
+    if (isdigit(currentChar) || currentChar == '.' || currentChar == ',') {
         std::string constant;
         bool wasDecimalPoint = false;
-        while (isdigit(currentChar) || currentChar == '.') {
-            if (currentChar == '.' && wasDecimalPoint) {
-                throw LexerException("Invalid format of a number: too many decimal points.");
+        while (isdigit(currentChar) || currentChar == '.' || currentChar == ',') {
+            if ((currentChar == '.' || currentChar == ',') && wasDecimalPoint) {
+                throw Parser::ParserException("Invalid format of a number: too many decimal points.");
             }
-            constant += currentChar;
-            wasDecimalPoint |= (currentChar == '.');
+            if (currentChar == '.' || currentChar == ',') {
+                constant += '.';
+                wasDecimalPoint = true;
+            } else {
+                constant += currentChar;
+            }
             goNextChar();
+        }
+
+        if (constant.size() >= 20) {
+            throw Parser::ParserException("Too many digits in a number.");
         }
 
         currentConstant = std::stold(constant);
@@ -83,7 +92,7 @@ void Lexer::goNextLexema() {
         return;
     }
 
-    throw LexerException("Invalid character.");
+    throw Parser::ParserException("Unexpected character was found.");
 }
 
 Lexema Lexer::getCurrentLexema() const noexcept {

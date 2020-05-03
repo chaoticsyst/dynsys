@@ -1,7 +1,9 @@
 #pragma once
 
 #include <string>
-#include <exception>
+#include <stdexcept>
+
+#include "ParserException.h"
 
 namespace Parser {
 

@@ -25,20 +25,20 @@ inline auto parse_expressions(const std::string &x_expr, const std::string &y_ex
 
     try {
         x_func = parse_expression(x_expr, variables_addresses);
-    } catch (const parse_error &exception) {
-        throw parse_error(std::string{"In first expression: "} + std::string{exception.what()});
+    } catch (const std::exception &exception) {
+        throw ParserException(std::string{"In first expression: "} + std::string{exception.what()});
     }
 
     try {
         y_func = parse_expression(y_expr, variables_addresses);
-    } catch (const parse_error &exception) {
-        throw parse_error(std::string{"In second expression: "} + std::string{exception.what()});
+    } catch (const std::exception &exception) {
+        throw ParserException(std::string{"In second expression: "} + std::string{exception.what()});
     }
 
     try {
         z_func = parse_expression(z_expr, variables_addresses);
-    } catch (const parse_error &exception) {
-        throw parse_error(std::string{"In third expression: "} + std::string{exception.what()});
+    } catch (const std::exception &exception) {
+        throw ParserException(std::string{"In third expression: "} + std::string{exception.what()});
     }
 
     return [x_func, y_func, z_func, variables_array](const Model::Point &point) {

@@ -62,6 +62,7 @@ add_executable(DynamicSystems
     include/VideoEncoder.h
     include/ShaderController.h
     include/Lexer.h
+    include/ParserException.h
     src/form.ui
     src/formPreferences.ui
     materials/Resources.qrc

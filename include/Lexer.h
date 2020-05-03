@@ -13,14 +13,14 @@ enum class Lexema {
     Subtract,
     Multiply,
     Divide,
-    OpenParenthesis,
-    CloseParenthesis,
+    OpenParens,
+    CloseParens,
     End
 };
 
 class Lexer final {
 public:
-    Lexer(const std::string &expression);
+    explicit Lexer(const std::string &expression);
 
     Lexema getCurrentLexema() const noexcept;
     long double getCurrentConstant() const noexcept;
@@ -36,10 +36,6 @@ private:
     long double currentConstant;
 
     void goNextChar();
-};
-
-class LexerException final : public std::logic_error {
-    using std::logic_error::logic_error;
 };
 
 } //namespace Lexer
