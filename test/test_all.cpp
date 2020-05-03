@@ -163,3 +163,27 @@ TEST(parser, strange_format) {
     func = Parser::parseExpression("   2   *    12    ", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 24);
 }
+
+TEST(parser, use_variables) {
+    auto func = Parser::parseExpression("2 + a * bedy - c", {nullptr, nullptr, nullptr},
+                                        {{"a", 0.8}, {"bedy", 10.5}, {"c", -1}});
+    EXPECT_NEAR(func->calc(), 11.4, 1e-10);
+    func = Parser::parseExpression("(2 * abcd - 3) + (2 * abcd * abcd * (abc - 2)) / 3 - 1",
+                                    {nullptr, nullptr, nullptr},
+                                    {{"abcd", 11.7}, {"abc", -3.15}});
+    EXPECT_NEAR(func->calc(), -450.589, 1e-10);
+    func = Parser::parseExpression("3 * pi - e * 2 - (3 + e + pi) / (pi * pi - 2)", {nullptr, nullptr, nullptr});
+    EXPECT_NEAR(func->calc(), 2.862, 1e-3);
+}
+
+TEST(parser, function_calls) {
+    auto func = Parser::parseExpression("sin(pi) + cos(2 * tan(pi)) - 3 * sin(2) / cos(sin(3))",
+                                        {nullptr, nullptr, nullptr});
+    EXPECT_NEAR(func->calc(), -1.755, 1e-3);
+    func = Parser::parseExpression("ln(100) * log(13) / 2 * (atan(3 + sin(hello)) - atanh(0.3)) * acos(0.5) - hello * sqrt(abs(hello))",
+                                    {nullptr, nullptr, nullptr},
+                                    {{"hello", -123}});
+    EXPECT_NEAR(func->calc(), 1366.768, 1e-3);
+    EXPECT_NEAR(Parser::parseExpression("exp(2)", {nullptr, nullptr, nullptr})->calc(),
+                Parser::parseExpression("e * e - sin(pi) * cos(112.2)", {nullptr, nullptr, nullptr})->calc(), 1e-10);
+}
