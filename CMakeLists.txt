@@ -46,6 +46,7 @@ add_executable(DynamicSystems
     src/VideoEncoder.cpp
     src/ShaderController.cpp
     src/Parser.cpp
+    src/Lexer.cpp
     include/Parser.hpp
     include/ParserImpl.hpp
     include/AttractorsParams.h
@@ -60,6 +61,7 @@ add_executable(DynamicSystems
     include/Locus.h
     include/VideoEncoder.h
     include/ShaderController.h
+    include/Lexer.h
     src/form.ui
     src/formPreferences.ui
     materials/Resources.qrc
