@@ -16,41 +16,41 @@ struct Node {
 };
 
 /// Order of variable addresses: [x,y,z]
-std::shared_ptr<Node>parse_expression(const std::string &expression,
+std::shared_ptr<Node>parseExpression(const std::string &expression,
                                       const std::array<long double *, 3> &variableAddresses,
                                       const std::map<std::string, long double> &customConstVariables = {});
 
 
-inline auto parse_expressions(const std::string &x_expr, const std::string &y_expr, const std::string &z_expr,
+inline auto parseExpressions(const std::string &xExpr, const std::string &yExpr, const std::string &zExpr,
                               const std::map<std::string, long double> &customConstVariables) {
 
-    auto variables_array = std::make_shared<std::array<long double, 3>>();
-    std::array<long double *, 3> variables_addresses = {&(*variables_array)[0], &(*variables_array)[1], &(*variables_array)[2]};
-    std::shared_ptr<const Node> x_func, y_func, z_func;
+    auto variableArray = std::make_shared<std::array<long double, 3>>();
+    std::array<long double *, 3> variableAddreses = {&(*variableArray)[0], &(*variableArray)[1], &(*variableArray)[2]};
+    std::shared_ptr<const Node> xFunc, yFunc, zFunc;
 
     try {
-        x_func = parse_expression(x_expr, variables_addresses, customConstVariables);
+        xFunc = parseExpression(xExpr, variableAddreses, customConstVariables);
     } catch (const std::exception &exception) {
         throw ParserException(std::string{"In first expression: "} + std::string{exception.what()});
     }
 
     try {
-        y_func = parse_expression(y_expr, variables_addresses, customConstVariables);
+        yFunc = parseExpression(yExpr, variableAddreses, customConstVariables);
     } catch (const std::exception &exception) {
         throw ParserException(std::string{"In second expression: "} + std::string{exception.what()});
     }
 
     try {
-        z_func = parse_expression(z_expr, variables_addresses, customConstVariables);
+        zFunc = parseExpression(zExpr, variableAddreses, customConstVariables);
     } catch (const std::exception &exception) {
         throw ParserException(std::string{"In third expression: "} + std::string{exception.what()});
     }
 
-    return [x_func, y_func, z_func, variables_array](const Model::Point &point) {
-        (*variables_array)[0] = point.x;
-        (*variables_array)[1] = point.y;
-        (*variables_array)[2] = point.z;
-        return Model::Point{x_func->calc(), y_func->calc(), z_func->calc()};
+    return [xFunc, yFunc, zFunc, variableArray](const Model::Point &point) {
+        (*variableArray)[0] = point.x;
+        (*variableArray)[1] = point.y;
+        (*variableArray)[2] = point.z;
+        return Model::Point{xFunc->calc(), yFunc->calc(), zFunc->calc()};
     };
 }
 
