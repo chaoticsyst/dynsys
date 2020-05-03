@@ -17,7 +17,7 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
 find_package(OpenGL REQUIRED)
 
-add_executable(TestDynSys test_all.cpp ../src/Parser.cpp)
+add_executable(TestDynSys test_all.cpp ../src/Parser.cpp ../src/Lexer.cpp)
 
 qt5_use_modules(TestDynSys Widgets OpenGL)
 

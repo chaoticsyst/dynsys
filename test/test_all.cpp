@@ -47,51 +47,51 @@ TEST(model, lorenz_constants) {
 }
 
 TEST(parser, simple_integer_arithmetic) {
-    auto func = Parser::parse_expression("2+1", {nullptr, nullptr, nullptr});
+    auto func = Parser::parseExpression("2+1", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 3);
-    func = Parser::parse_expression("6 - 1", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("6 - 1", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 5);
-    func = Parser::parse_expression("1 + 2 - 6 - 1", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("1 + 2 - 6 - 1", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), -4);
-    func = Parser::parse_expression("2 * 12", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("2 * 12", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 24);
-    func = Parser::parse_expression("16/8", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("16/8", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 2);
-    func = Parser::parse_expression("2+2*3", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("2+2*3", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 8);
-    func = Parser::parse_expression("2/2*3", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("2/2*3", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 3);
-    func = Parser::parse_expression("2*(1+2)/3", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("2*(1+2)/3", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 2);
-    func = Parser::parse_expression("1 + 2 * ((3) + (2 * 3)) / 3", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("1 + 2 * ((3) + (2 * 3)) / 3", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 7);
 }
 
 TEST(parser, simple_float_arithmetic) {
-    auto func = Parser::parse_expression("1 / 2", {nullptr, nullptr, nullptr});
+    auto func = Parser::parseExpression("1 / 2", {nullptr, nullptr, nullptr});
     EXPECT_NEAR(func->calc(), 0.5, 0.0000001);
-    func = Parser::parse_expression("1.12 + 2.34", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("1.12 + 2.34", {nullptr, nullptr, nullptr});
     EXPECT_NEAR(func->calc(), 3.46, 0.0000001);
-    func = Parser::parse_expression("1.567", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("1.567", {nullptr, nullptr, nullptr});
     EXPECT_NEAR(func->calc(), 1.567, 0.0000001);
-    func = Parser::parse_expression("1,567 + 1,1", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("1,567 + 1,1", {nullptr, nullptr, nullptr});
     EXPECT_NEAR(func->calc(), 2.667, 0.0000001);
-    func = Parser::parse_expression("1.12 + 2.3*1.1 - 1.2", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("1.12 + 2.3*1.1 - 1.2", {nullptr, nullptr, nullptr});
     EXPECT_NEAR(func->calc(), (1.12 + 2.3 * 1.1 - 1.2), 0.0000001);
-    func = Parser::parse_expression("1.12*(2 + 3.7) - 8.456", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("1.12*(2 + 3.7) - 8.456", {nullptr, nullptr, nullptr});
     EXPECT_NEAR(func->calc(), (1.12 * (2 + 3.7) - 8.456), 0.0000001);
-    func = Parser::parse_expression("3.72*(2.1345 + 3.7)/1.32 - 1.2453*8.456", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("3.72*(2.1345 + 3.7)/1.32 - 1.2453*8.456", {nullptr, nullptr, nullptr});
     EXPECT_NEAR(func->calc(), (3.72 * (2.1345 + 3.7) / 1.32 - 1.2453 * 8.456), 0.0000001);
 }
 
 TEST(parser, simple_variables_arithmetic) {
     long double x = 1, y = 1, z = 1;
-    auto func = Parser::parse_expression("(1 + x) / 2", {&x, &y, &z});
+    auto func = Parser::parseExpression("(1 + x) / 2", {&x, &y, &z});
     EXPECT_NEAR(func->calc(), 1, 0.0000001);
     x = -4;
     z = y = 20;
     EXPECT_NEAR(func->calc(), -1.5, 0.0000001);
-    func = Parser::parse_expression("(y + x) / z", {&x, &y, &z});
+    func = Parser::parseExpression("(y + x) / z", {&x, &y, &z});
     EXPECT_NEAR(func->calc(), (y + x) / z, 0.0000001);
     x = 12.34;
     y = -765.1;
@@ -102,49 +102,49 @@ TEST(parser, simple_variables_arithmetic) {
 
 TEST(parser, parse_errors) {
     long double x = 1, y = 1, z = 1;
-    auto func = Parser::parse_expression("(1)", {&x, &y, &z});
-    func = Parser::parse_expression("1 / 0", {&x, &y, &z});
+    auto func = Parser::parseExpression("(1)", {&x, &y, &z});
+    func = Parser::parseExpression("1 / 0", {&x, &y, &z});
     long double val = func->calc();
     EXPECT_EQ(val, INFINITY);
     bool caught = false;
     try {
-        func = Parser::parse_expression("(1++1)", {&x, &y, &z});
-    } catch (const Parser::parse_error &) {
+        func = Parser::parseExpression("(1++1)", {&x, &y, &z});
+    } catch (const Parser::ParserException &) {
         caught = true;
     }
     EXPECT_TRUE(caught);
     caught = false;
     try {
-        func = Parser::parse_expression("()((1+)1)", {&x, &y, &z});
-    } catch (const Parser::parse_error &) {
+        func = Parser::parseExpression("()((1+)1)", {&x, &y, &z});
+    } catch (const Parser::ParserException &) {
         caught = true;
     }
     EXPECT_TRUE(caught);
     caught = false;
     try {
-        func = Parser::parse_expression("2*(21 - 1?1)", {&x, &y, &z});
-    } catch (const Parser::parse_error &) {
+        func = Parser::parseExpression("2*(21 - 1?1)", {&x, &y, &z});
+    } catch (const Parser::ParserException &) {
         caught = true;
     }
     EXPECT_TRUE(caught);
     caught = false;
     try {
-        func = Parser::parse_expression("2(21 - 1)", {&x, &y, &z});
-    } catch (const Parser::parse_error &) {
+        func = Parser::parseExpression("2(21 - 1)", {&x, &y, &z});
+    } catch (const Parser::ParserException &) {
         caught = true;
     }
     EXPECT_TRUE(caught);
     caught = false;
     try {
-        func = Parser::parse_expression("2z - x", {&x, &y, &z});
-    } catch (const Parser::parse_error &) {
+        func = Parser::parseExpression("2z - x", {&x, &y, &z});
+    } catch (const Parser::ParserException &) {
         caught = true;
     }
     EXPECT_TRUE(caught);
 }
 
 TEST(parser, lambda_test) {
-    auto lambda = Parser::parse_expressions("x+y", "y - 1.1*z", "z - 1");
+    auto lambda = Parser::parseExpressions("x+y", "y - 1.1*z", "z - 1", {});
     EXPECT_NEAR(lambda({1, 1, 1}).x, (Model::Point{2, -0.1, 0}).x, 1e-10);
     EXPECT_NEAR(lambda({1, 1, 1}).y, (Model::Point{2, -0.1, 0}).y, 1e-10);
     EXPECT_NEAR(lambda({1, 1, 1}).z, (Model::Point{2, -0.1, 0}).z, 1e-10);
@@ -154,12 +154,12 @@ TEST(parser, lambda_test) {
 }
 
 TEST(parser, strange_format) {
-    auto func = Parser::parse_expression("2\n +\n 1\n", {nullptr, nullptr, nullptr});
+    auto func = Parser::parseExpression("2\n +\n 1\n", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 3);
-    func = Parser::parse_expression("6 - 1\n", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("6 - 1\n", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 5);
-    func = Parser::parse_expression("   1 + 2 - 6 - 1", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("   1 + 2 - 6 - 1", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), -4);
-    func = Parser::parse_expression("   2   *    12    ", {nullptr, nullptr, nullptr});
+    func = Parser::parseExpression("   2   *    12    ", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 24);
 }
