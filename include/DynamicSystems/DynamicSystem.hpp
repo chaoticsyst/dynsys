@@ -17,7 +17,7 @@ class DynamicSystem;
 
 
 template<typename LambdaNewPointAction>
-std::vector<DynamicSystem<LambdaNewPointAction>> get_default_systems();
+std::vector<DynamicSystem<LambdaNewPointAction>> getDefaultSystems();
 
 
 template<typename LambdaNewPointAction>
@@ -58,3 +58,4 @@ private:
 } // namespace DynamicSystem
 
 #include "DynamicSystemImpl.hpp"
+#include "SystemsBaseGetImpl.hpp"
