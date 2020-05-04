@@ -1,4 +1,4 @@
-#include "ShaderController.h"
+#include "ShaderController.hpp"
 
 namespace ShaderController {
 

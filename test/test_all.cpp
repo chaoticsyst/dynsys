@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "Model.hpp"
-#include "AttractorsParams.h"
+#include "AttractorsParams.hpp"
 #include "Parser.hpp"
 #include "DynamicSystemsDefault.hpp"
 

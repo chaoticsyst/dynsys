@@ -47,21 +47,21 @@ add_executable(DynamicSystems
     src/ShaderController.cpp
     src/Parser/Parser.cpp
     src/Parser/Lexer.cpp
-    include/AttractorsParams.h
-    include/Preferences.h
-    include/Camera.h
-    include/WindowPreferences.h
+    include/AttractorsParams.hpp
+    include/Preferences.hpp
+    include/Camera.hpp
+    include/WindowPreferences.hpp
     include/Model.hpp
     include/ModelImpl.hpp
     include/DynamicSystemsDefault.hpp
-    include/Window.h
-    include/PointsViewQGLWidget.h
-    include/Locus.h
-    include/VideoEncoder.h
-    include/ShaderController.h
+    include/Window.hpp
+    include/PointsViewQGLWidget.hpp
+    include/Locus.hpp
+    include/VideoEncoder.hpp
+    include/ShaderController.hpp
     include/Parser/Parser.hpp
     include/Parser/ParserImpl.hpp
-    include/Parser/ParserException.h
+    include/Parser/ParserException.hpp
     include/Parser/ParserNodes.hpp
     include/Parser/Lexer.hpp
 

@@ -7,11 +7,11 @@
 #include <QTime>
 #include <QTimer>
 
-#include "Camera.h"
-#include "Locus.h"
-#include "Preferences.h"
-#include "VideoEncoder.h"
-#include "Window.h"
+#include "Camera.hpp"
+#include "Locus.hpp"
+#include "Preferences.hpp"
+#include "VideoEncoder.hpp"
+#include "Window.hpp"
 
 class PointsViewQGLWidget : public QGLWidget {
 public:

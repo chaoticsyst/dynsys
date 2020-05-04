@@ -5,8 +5,8 @@
 #include <QVector>
 #include <QColor>
 
-#include "Preferences.h"
-#include "ShaderController.h"
+#include "Preferences.hpp"
+#include "ShaderController.hpp"
 
 namespace Locus {
 

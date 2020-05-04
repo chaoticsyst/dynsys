@@ -2,8 +2,8 @@
 #include <stdexcept>
 #include <QOpenGLFramebufferObject>
 
-#include "Camera.h"
-#include "VideoEncoder.h"
+#include "Camera.hpp"
+#include "VideoEncoder.hpp"
 
 namespace VideoEncoder {
 

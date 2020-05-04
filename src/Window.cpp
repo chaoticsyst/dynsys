@@ -5,11 +5,11 @@
 #include "Model.hpp"
 #include "Parser.hpp"
 #include "DynamicSystemsDefault.hpp"
-#include "AttractorsParams.h"
-#include "Window.h"
+#include "AttractorsParams.hpp"
+#include "Window.hpp"
 #include "ui_form.h"
-#include "PointsViewQGLWidget.h"
-#include "WindowPreferences.h"
+#include "PointsViewQGLWidget.hpp"
+#include "WindowPreferences.hpp"
 
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     windowPreferences = nullptr;

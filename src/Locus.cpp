@@ -1,4 +1,4 @@
-#include "Locus.h"
+#include "Locus.hpp"
 
 namespace Locus {
 

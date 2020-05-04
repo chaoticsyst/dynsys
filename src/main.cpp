@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QGLWidget>
 
-#include "Window.h"
+#include "Window.hpp"
 
 int main(int argc, char *argv[]) {
     QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);

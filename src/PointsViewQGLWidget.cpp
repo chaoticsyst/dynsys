@@ -2,7 +2,7 @@
 #include <cmath>
 #include <algorithm>
 
-#include "PointsViewQGLWidget.h"
+#include "PointsViewQGLWidget.hpp"
 
 PointsViewQGLWidget::PointsViewQGLWidget(QWidget *parent) :
     QGLWidget{QGLFormat(), parent},
