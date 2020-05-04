@@ -40,7 +40,7 @@ void VideoEncoder::startEncoding(int videoWidth, int videoHeight, const char *fi
 
     av_register_all();
 
-//    av_log_set_level(AV_LOG_QUIET);
+    av_log_set_level(AV_LOG_QUIET);
 
     formatContext = avformat_alloc_context();
     if (formatContext == nullptr) {
@@ -201,7 +201,7 @@ void VideoEncoder::writeFrame(const QImage &image) {
     sws_scale(convertFramesContext, data, rgbFrame->linesize, 0, image.height(),
                                     yuvFrame->data, yuvFrame->linesize);
 
-    while(writeFrame(yuvFrame) == false);
+    writeFrame(yuvFrame);
 }
 
 void VideoEncoder::writeState(const FrameState &state) {
@@ -211,7 +211,8 @@ void VideoEncoder::writeState(const FrameState &state) {
     allStates << state;
 }
 
-void VideoEncoder::endEncoding(std::function<void (const QMatrix4x4 &, size_t)> drawFunc) {
+void VideoEncoder::endEncoding(std::function<void (const QMatrix4x4 &, size_t)> drawFunc,
+                               std::function<void (int)> callback) {
     if (working == false) {
         endEncoding();
     }
@@ -225,12 +226,16 @@ void VideoEncoder::endEncoding(std::function<void (const QMatrix4x4 &, size_t)> 
     Camera::Camera camera;
     camera.recalculatePerspective(width, height);
 
-    for (const auto &[position, target, time] : allStates) {
+    for (size_t i = 0; i < static_cast<size_t>(allStates.size()); i++) {
+        const auto &[position, target, time] = allStates[i];
+
         camera.setPosition(position);
         camera.setTarget(target);
         drawFunc(camera.getMatrix(), time);
 
         writeFrame(buffer.toImage());
+
+        callback((i + 1) * 100 / allStates.size());
     }
 
     buffer.release();

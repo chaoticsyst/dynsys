@@ -29,6 +29,10 @@ public:
 
     void setPreferences(const Preferences::Preferences *prefs);
 
+    bool startVideoRecording(const QString &filename);
+
+    void endVideoRecording(std::function<void(int)> callback);
+
 protected:
     void initializeGL() override;
     void resizeGL(int width, int height) override;
