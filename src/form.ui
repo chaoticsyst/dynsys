@@ -14,35 +14,6 @@
    <string>Динамические системы</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="3" column="1">
-    <widget class="QPushButton" name="pushButton_2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>120</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Настройки</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="3">
-    <widget class="PointsViewQGLWidget" name="pointsViewQGLWidget" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>370</width>
-       <height>370</height>
-      </size>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="0">
     <widget class="QPushButton" name="pauseButton">
      <property name="sizePolicy">
@@ -68,6 +39,23 @@
      </property>
     </widget>
    </item>
+   <item row="3" column="2">
+    <widget class="QComboBox" name="comboBox"/>
+   </item>
+   <item row="5" column="2">
+    <layout class="QHBoxLayout" name="firstParserLayout">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>x'=</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="firstExpr"/>
+     </item>
+    </layout>
+   </item>
    <item row="1" column="0" colspan="3">
     <widget class="QSlider" name="horizontalSlider">
      <property name="maximum">
@@ -83,39 +71,6 @@
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
-   </item>
-   <item row="3" column="2">
-    <widget class="QComboBox" name="comboBox"/>
-   </item>
-   <item row="6" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="secondParamLayout">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Второй параметр</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
-       <property name="decimals">
-        <number>5</number>
-       </property>
-       <property name="minimum">
-        <double>-1000.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1000.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="4" column="0" colspan="3">
-    <widget class="QComboBox" name="constantsBox"/>
    </item>
    <item row="5" column="0" colspan="2">
     <layout class="QHBoxLayout" name="firstParamLayout">
@@ -144,6 +99,20 @@
      </item>
     </layout>
    </item>
+   <item row="7" column="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>z'=</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="thirdExpr"/>
+     </item>
+    </layout>
+   </item>
    <item row="8" column="0" colspan="3">
     <widget class="QPushButton" name="pushButton">
      <property name="text">
@@ -151,17 +120,30 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="2">
-    <layout class="QHBoxLayout" name="firstParserLayout">
+   <item row="6" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="secondParamLayout">
      <item>
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>x'=</string>
+        <string>Второй параметр</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="firstExpr"/>
+      <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+       <property name="decimals">
+        <number>5</number>
+       </property>
+       <property name="minimum">
+        <double>-1000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>1000.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -206,19 +188,37 @@
      </item>
     </layout>
    </item>
-   <item row="7" column="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>z'=</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="thirdExpr"/>
-     </item>
-    </layout>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>120</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Настройки</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="3">
+    <widget class="QComboBox" name="constantsBox"/>
+   </item>
+   <item row="0" column="0" colspan="3">
+    <widget class="PointsViewQGLWidget" name="pointsViewQGLWidget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>370</width>
+       <height>370</height>
+      </size>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -226,7 +226,7 @@
   <customwidget>
    <class>PointsViewQGLWidget</class>
    <extends>QWidget</extends>
-   <header>PointsViewQGLWidget.h</header>
+   <header>PointsViewQGLWidget.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
