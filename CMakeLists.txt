@@ -48,13 +48,16 @@ add_executable(DynamicSystems
     src/Parser.cpp
     include/Parser.hpp
     include/ParserImpl.hpp
-    include/AttractorsParams.h
     include/Preferences.h
     include/Camera.h
     include/WindowPreferences.h
     include/Model.hpp
     include/ModelImpl.hpp
-    include/DynamicSystemsDefault.hpp
+    include/DynamicSystems/SystemsBase.hpp
+    include/DynamicSystems/SystemsBaseGetImpl.hpp
+    include/DynamicSystems/DynamicSystem.hpp
+    include/DynamicSystems/DynamicSystemImpl.hpp
+    include/DynamicSystems/DynamicSystemInternal.hpp
     include/Window.h
     include/PointsViewQGLWidget.h
     include/Locus.h
@@ -69,4 +72,12 @@ qt5_use_modules(DynamicSystems Widgets OpenGL)
 
 add_subdirectory(test/)
 
-target_link_libraries(DynamicSystems ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${AVCODEC_LIBRARY} ${AVFORMAT_LIBRARY} ${AVUTIL_LIBRARY} ${AVSWS_LIBRARY} Threads::Threads)
+target_link_libraries(DynamicSystems
+        ${QT_LIBRARIES}
+        ${OPENGL_LIBRARIES}
+        ${AVCODEC_LIBRARY}
+        ${AVFORMAT_LIBRARY}
+        ${AVUTIL_LIBRARY}
+        ${AVSWS_LIBRARY}
+        Threads::Threads
+)
