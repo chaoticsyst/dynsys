@@ -23,9 +23,9 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     sliderTimer->setInterval(prefs.controller.sliderTimeInterval);
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
 
-    ui->comboBox->addItem("Свои уравнения");
     ui->comboBox->addItem("Аттрактор Рёсслера");
     ui->comboBox->addItem("Аттрактор Лоренца");
+    ui->comboBox->addItem("Свои уравнения");
 }
 
 void Window::insertConstants(QVector<std::pair<QString, QVector<double>>> &goodParams) {
