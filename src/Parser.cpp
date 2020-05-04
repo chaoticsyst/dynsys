@@ -36,16 +36,16 @@ private:
         std::unique_ptr<Node> leftPart = parseMultiplyDivide();
 
         while (true) {
-            if (lexer.getCurrentLexema() == Lexer::Lexema::Add) {
+            if (lexer.getCurrentLexema() == Lexer::Lexema::add) {
                 lexer.goNextLexema();
                 std::unique_ptr<Node> rightPart = parseMultiplyDivide();
-                leftPart = std::make_unique<NodeBinaryOperation<BinaryOperation::Add>>(std::move(leftPart), std::move(rightPart));
-            } else if (lexer.getCurrentLexema() == Lexer::Lexema::Subtract) {
+                leftPart = std::make_unique<NodeBinaryOperation<BinaryOperation::add>>(std::move(leftPart), std::move(rightPart));
+            } else if (lexer.getCurrentLexema() == Lexer::Lexema::subtract) {
                 lexer.goNextLexema();
                 std::unique_ptr<Node> rightPart = parseMultiplyDivide();
-                leftPart = std::make_unique<NodeBinaryOperation<BinaryOperation::Subtract>>(std::move(leftPart), std::move(rightPart));
-            } else if (lexer.getCurrentLexema() != Lexer::Lexema::OpenParens &&
-                       lexer.getCurrentLexema() != Lexer::Lexema::Identifier) {
+                leftPart = std::make_unique<NodeBinaryOperation<BinaryOperation::subtract>>(std::move(leftPart), std::move(rightPart));
+            } else if (lexer.getCurrentLexema() != Lexer::Lexema::openParens &&
+                       lexer.getCurrentLexema() != Lexer::Lexema::identifier) {
 
                 break;
             } else {
@@ -60,16 +60,16 @@ private:
         std::unique_ptr<Node> leftPart = parsePower();
 
         while (true) {
-            if (lexer.getCurrentLexema() == Lexer::Lexema::Multiply) {
+            if (lexer.getCurrentLexema() == Lexer::Lexema::multiply) {
                 lexer.goNextLexema();
                 std::unique_ptr<Node> rightPart = parsePower();
-                leftPart = std::make_unique<NodeBinaryOperation<BinaryOperation::Multiply>>(std::move(leftPart), std::move(rightPart));
-            } else if (lexer.getCurrentLexema() == Lexer::Lexema::Divide) {
+                leftPart = std::make_unique<NodeBinaryOperation<BinaryOperation::multiply>>(std::move(leftPart), std::move(rightPart));
+            } else if (lexer.getCurrentLexema() == Lexer::Lexema::divide) {
                 lexer.goNextLexema();
                 std::unique_ptr<Node> rightPart = parsePower();
-                leftPart = std::make_unique<NodeBinaryOperation<BinaryOperation::Divide>>(std::move(leftPart), std::move(rightPart));
-            } else if (lexer.getCurrentLexema() != Lexer::Lexema::OpenParens &&
-                       lexer.getCurrentLexema() != Lexer::Lexema::Identifier) {
+                leftPart = std::make_unique<NodeBinaryOperation<BinaryOperation::divide>>(std::move(leftPart), std::move(rightPart));
+            } else if (lexer.getCurrentLexema() != Lexer::Lexema::openParens &&
+                       lexer.getCurrentLexema() != Lexer::Lexema::identifier) {
 
                 break;
             } else {
@@ -84,11 +84,11 @@ private:
         std::vector<std::unique_ptr<Node>> parts;
         parts.push_back(parseUnary());
         while (true) {
-            if (lexer.getCurrentLexema() == Lexer::Lexema::Power) {
+            if (lexer.getCurrentLexema() == Lexer::Lexema::power) {
                 lexer.goNextLexema();
                 parts.push_back(parseUnary());
-            } else if (lexer.getCurrentLexema() != Lexer::Lexema::OpenParens &&
-                       lexer.getCurrentLexema() != Lexer::Lexema::Identifier) {
+            } else if (lexer.getCurrentLexema() != Lexer::Lexema::openParens &&
+                       lexer.getCurrentLexema() != Lexer::Lexema::identifier) {
 
                 break;
             } else {
@@ -98,14 +98,14 @@ private:
 
         std::unique_ptr<Node> operation = std::move(parts.back());
         for (int i = static_cast<int>(parts.size()) - 2; i >= 0; i--) {
-            operation = std::make_unique<NodeBinaryOperation<BinaryOperation::Power>>(std::move(parts[i]), std::move(operation));
+            operation = std::make_unique<NodeBinaryOperation<BinaryOperation::power>>(std::move(parts[i]), std::move(operation));
         }
 
         return operation;
     }
 
     std::unique_ptr<Node> parseUnary() {
-        if (lexer.getCurrentLexema() == Lexer::Lexema::Subtract) {
+        if (lexer.getCurrentLexema() == Lexer::Lexema::subtract) {
             lexer.goNextLexema();
 
             return std::make_unique<NodeFunction<Function::negative>>(parseUnary());
@@ -115,16 +115,16 @@ private:
     }
 
     std::unique_ptr<Node> parseLeaf() {
-        if (lexer.getCurrentLexema() == Lexer::Lexema::Constant) {
+        if (lexer.getCurrentLexema() == Lexer::Lexema::constant) {
             std::unique_ptr<Node> leaf = std::make_unique<NodeConstant>(lexer.getCurrentConstant());
             lexer.goNextLexema();
 
             return leaf;
         }
-        if (lexer.getCurrentLexema() == Lexer::Lexema::Identifier) {
+        if (lexer.getCurrentLexema() == Lexer::Lexema::identifier) {
             std::string identifier = lexer.getCurrentIdentifier();
             lexer.goNextLexema();
-            if (lexer.getCurrentLexema() == Lexer::Lexema::OpenParens) { //it is a function
+            if (lexer.getCurrentLexema() == Lexer::Lexema::openParens) { //it is a function
                 lexer.goNextLexema();
 
                 std::unique_ptr<Node> func;
@@ -167,7 +167,7 @@ private:
                     throw ParserException("Unexpected function \'" + identifier + "\'.");
                 }
 
-                if (lexer.getCurrentLexema() != Lexer::Lexema::CloseParens) {
+                if (lexer.getCurrentLexema() != Lexer::Lexema::closeParens) {
                     throw ParserException("Expected a close parenthesis after a function call \'" + identifier + "\'.");
                 }
                 lexer.goNextLexema();
@@ -191,11 +191,11 @@ private:
                 }
             }
         }
-        if (lexer.getCurrentLexema() == Lexer::Lexema::OpenParens) {
+        if (lexer.getCurrentLexema() == Lexer::Lexema::openParens) {
             lexer.goNextLexema();
             std::unique_ptr<Node> leaf = parseAddSubtract();
 
-            if (lexer.getCurrentLexema() != Lexer::Lexema::CloseParens) {
+            if (lexer.getCurrentLexema() != Lexer::Lexema::closeParens) {
                 throw ParserException("Expected a close parenthesis.");
             }
             lexer.goNextLexema();
@@ -208,8 +208,8 @@ private:
 };
 
 std::shared_ptr<Node> parseExpression(const std::string &expression,
-                                       const std::array<long double *, 3> &variableAddresses,
-                                       const std::map<std::string, long double> &customConstVariables) {
+                                      const std::array<long double *, 3> &variableAddresses,
+                                      const std::map<std::string, long double> &customConstVariables) {
 
     Parser parser(expression, variableAddresses, customConstVariables);
 

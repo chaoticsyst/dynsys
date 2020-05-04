@@ -21,7 +21,7 @@ struct NodeConstant final : Node {
     explicit NodeConstant(long double constantValue) :
         value{constantValue} {}
 
-    long double value;
+    const long double value;
 
     long double calc() const noexcept override {
         return value;
@@ -29,7 +29,7 @@ struct NodeConstant final : Node {
 };
 
 enum class BinaryOperation {
-    Add, Subtract, Multiply, Divide, Power
+    add, subtract, multiply, divide, power
 };
 
 template<BinaryOperation>
@@ -44,27 +44,27 @@ struct NodeBinaryOperation : Node {
 };
 
 template<>
-long double NodeBinaryOperation<BinaryOperation::Subtract>::calc() const noexcept {
+long double NodeBinaryOperation<BinaryOperation::subtract>::calc() const noexcept {
     return left->calc() - right->calc();
 }
 
 template<>
-long double NodeBinaryOperation<BinaryOperation::Add>::calc() const noexcept {
+long double NodeBinaryOperation<BinaryOperation::add>::calc() const noexcept {
     return left->calc() + right->calc();
 }
 
 template<>
-long double NodeBinaryOperation<BinaryOperation::Multiply>::calc() const noexcept {
+long double NodeBinaryOperation<BinaryOperation::multiply>::calc() const noexcept {
     return left->calc() * right->calc();
 }
 
 template<>
-long double NodeBinaryOperation<BinaryOperation::Divide>::calc() const noexcept {
+long double NodeBinaryOperation<BinaryOperation::divide>::calc() const noexcept {
     return left->calc() / right->calc();
 }
 
 template<>
-long double NodeBinaryOperation<BinaryOperation::Power>::calc() const noexcept {
+long double NodeBinaryOperation<BinaryOperation::power>::calc() const noexcept {
     return std::pow(left->calc(), right->calc());
 }
 

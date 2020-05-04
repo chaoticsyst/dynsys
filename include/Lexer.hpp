@@ -7,16 +7,10 @@
 namespace Lexer {
 
 enum class Lexema {
-    Identifier,
-    Constant,
-    Add,
-    Subtract,
-    Multiply,
-    Divide,
-    Power,
-    OpenParens,
-    CloseParens,
-    End
+    identifier, constant,
+    add, subtract, multiply, divide,
+    power, openParens, closeParens,
+    end
 };
 
 class Lexer final {

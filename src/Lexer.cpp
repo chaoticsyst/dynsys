@@ -26,35 +26,35 @@ void Lexer::goNextLexema() {
 
     switch (currentChar) {
     case '\0':
-        currentLexema = Lexema::End;
+        currentLexema = Lexema::end;
         return;
     case '+':
         goNextChar();
-        currentLexema = Lexema::Add;
+        currentLexema = Lexema::add;
         return;
     case '-':
         goNextChar();
-        currentLexema = Lexema::Subtract;
+        currentLexema = Lexema::subtract;
         return;
     case '*':
         goNextChar();
-        currentLexema = Lexema::Multiply;
+        currentLexema = Lexema::multiply;
         return;
     case '/':
         goNextChar();
-        currentLexema = Lexema::Divide;
+        currentLexema = Lexema::divide;
         return;
     case '^':
         goNextChar();
-        currentLexema = Lexema::Power;
+        currentLexema = Lexema::power;
         return;
     case '(':
         goNextChar();
-        currentLexema = Lexema::OpenParens;
+        currentLexema = Lexema::openParens;
         return;
     case ')':
         goNextChar();
-        currentLexema = Lexema::CloseParens;
+        currentLexema = Lexema::closeParens;
         return;
     }
 
@@ -75,7 +75,7 @@ void Lexer::goNextLexema() {
         }
 
         currentConstant = std::stold(constant);
-        currentLexema = Lexema::Constant;
+        currentLexema = Lexema::constant;
 
         return;
     }
@@ -87,7 +87,7 @@ void Lexer::goNextLexema() {
             goNextChar();
         }
 
-        currentLexema = Lexema::Identifier;
+        currentLexema = Lexema::identifier;
 
         return;
     }
