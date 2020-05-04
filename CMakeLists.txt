@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Ofast -pipe -Wall -Wextra")
 
-include_directories("include/")
+include_directories(include/ include/Parser/)
 
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
@@ -45,10 +45,8 @@ add_executable(DynamicSystems
     src/Preferences.cpp
     src/VideoEncoder.cpp
     src/ShaderController.cpp
-    src/Parser.cpp
-    src/Lexer.cpp
-    include/Parser.hpp
-    include/ParserImpl.hpp
+    src/Parser/Parser.cpp
+    src/Parser/Lexer.cpp
     include/AttractorsParams.h
     include/Preferences.h
     include/Camera.h
@@ -61,9 +59,12 @@ add_executable(DynamicSystems
     include/Locus.h
     include/VideoEncoder.h
     include/ShaderController.h
-    include/Lexer.hpp
-    include/ParserException.h
-    include/ParserNodes.hpp
+    include/Parser/Parser.hpp
+    include/Parser/ParserImpl.hpp
+    include/Parser/ParserException.h
+    include/Parser/ParserNodes.hpp
+    include/Parser/Lexer.hpp
+
     src/form.ui
     src/formPreferences.ui
     materials/Resources.qrc
