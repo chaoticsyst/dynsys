@@ -32,7 +32,9 @@ public:
     VideoEncoder &operator=(VideoEncoder &&other)      = delete;
 
     void startEncoding(int videoWidth, int videoHeight, const char *filename);
-    void endEncoding(std::function<void(const QMatrix4x4 &projMatrix, size_t time)> drawFunc);
+    void endEncoding(std::function<void (const QMatrix4x4 &projMatrix, size_t time)> drawFunc,
+                     std::function<void (int)> callback);
+
     void endEncoding();
 
     void writeState(const FrameState &state);

@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Ofast -pipe -Wall -Wextra")
 
-include_directories("include/")
+include_directories(include/ include/Parser/)
 
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
@@ -45,12 +45,11 @@ add_executable(DynamicSystems
     src/Preferences.cpp
     src/VideoEncoder.cpp
     src/ShaderController.cpp
-    src/Parser.cpp
-    include/Parser.hpp
-    include/ParserImpl.hpp
-    include/Preferences.h
-    include/Camera.h
-    include/WindowPreferences.h
+    src/Parser/Parser.cpp
+    src/Parser/Lexer.cpp
+    include/Preferences.hpp
+    include/Camera.hpp
+    include/WindowPreferences.hpp
     include/Model.hpp
     include/ModelImpl.hpp
     include/DynamicSystems/SystemsBase.hpp
@@ -58,11 +57,16 @@ add_executable(DynamicSystems
     include/DynamicSystems/DynamicSystem.hpp
     include/DynamicSystems/DynamicSystemImpl.hpp
     include/DynamicSystems/DynamicSystemInternal.hpp
-    include/Window.h
-    include/PointsViewQGLWidget.h
-    include/Locus.h
-    include/VideoEncoder.h
-    include/ShaderController.h
+    include/Window.hpp
+    include/PointsViewQGLWidget.hpp
+    include/Locus.hpp
+    include/VideoEncoder.hpp
+    include/ShaderController.hpp
+    include/Parser/Parser.hpp
+    include/Parser/ParserImpl.hpp
+    include/Parser/ParserException.hpp
+    include/Parser/ParserNodes.hpp
+    include/Parser/Lexer.hpp
     src/form.ui
     src/formPreferences.ui
     materials/Resources.qrc

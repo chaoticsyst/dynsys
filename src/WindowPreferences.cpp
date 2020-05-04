@@ -1,4 +1,4 @@
-#include "WindowPreferences.h"
+#include "WindowPreferences.hpp"
 #include "ui_formPreferences.h"
 
 WindowPreferences::WindowPreferences(QWidget *parent, Preferences::Preferences *prefs_) :

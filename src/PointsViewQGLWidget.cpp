@@ -2,7 +2,7 @@
 #include <cmath>
 #include <algorithm>
 
-#include "PointsViewQGLWidget.h"
+#include "PointsViewQGLWidget.hpp"
 
 PointsViewQGLWidget::PointsViewQGLWidget(QWidget *parent) :
     QGLWidget{QGLFormat(), parent},
@@ -28,6 +28,25 @@ void PointsViewQGLWidget::addNewLocus(QVector<QVector3D> &&points) {
 
 void PointsViewQGLWidget::setCurrentTime(const int currentTime_) {
     currentTime = currentTime_;
+}
+
+bool PointsViewQGLWidget::startVideoRecording(const QString &filename) {
+    try {
+        videoEncoder.startEncoding(prefs->video.width, prefs->video.height, filename.toStdString().c_str());
+
+        return true;
+    } catch (const std::exception &e) {
+        videoEncoder.endEncoding();
+
+        return false;
+    }
+}
+
+void PointsViewQGLWidget::endVideoRecording(std::function<void (int)> callback) {
+    auto drawFunc = [&lc = locusController](const QMatrix4x4 &projMatrix, size_t time) {
+        lc.draw(projMatrix, time);
+    };
+    videoEncoder.endEncoding(drawFunc, callback);
 }
 
 void PointsViewQGLWidget::clearAll() {
@@ -69,24 +88,6 @@ void PointsViewQGLWidget::mousePressEvent(QMouseEvent *event) {
 
 void PointsViewQGLWidget::keyPressEvent(QKeyEvent *event) {
     cameraController.applyKeyPressEvent(event);
-
-    if (event->key() == Qt::Key_Z && !videoEncoder.isWorking()) {
-        static size_t videoCounter = 0;
-
-        try {
-            const char *filename = ("video" + std::to_string(videoCounter++) + ".avi").c_str();
-            videoEncoder.startEncoding(prefs->video.width, prefs->video.height, filename);
-        } catch(const std::exception &e) {
-            videoEncoder.endEncoding();
-            //TODO an alert
-        }
-    }
-    if (event->key() == Qt::Key_X) {
-        auto drawFunc = [&lc = locusController](const QMatrix4x4 &projMatrix, size_t time) {
-            lc.draw(projMatrix, time);
-        };
-        videoEncoder.endEncoding(drawFunc);
-    }
 }
 
 void PointsViewQGLWidget::keyReleaseEvent(QKeyEvent *event) {

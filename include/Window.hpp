@@ -5,8 +5,8 @@
 #include <QVector>
 
 #include "DynamicSystems/DynamicSystem.hpp"
-#include "Preferences.h"
-#include "WindowPreferences.h"
+#include "Preferences.hpp"
+#include "WindowPreferences.hpp"
 
 namespace Ui::Utils {
 /// Lambda-getter for typedef (you can find another way to define lambda type)

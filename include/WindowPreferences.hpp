@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QWidget>
 
-#include "Preferences.h"
+#include "Preferences.hpp"
 
 namespace Ui {
 class WindowPreferences;
