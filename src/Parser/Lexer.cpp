@@ -1,5 +1,5 @@
 #include "Lexer.hpp"
-#include "ParserException.h"
+#include "ParserException.hpp"
 
 namespace Lexer {
 

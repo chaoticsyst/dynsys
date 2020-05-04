@@ -5,11 +5,11 @@
 #include "Model.hpp"
 #include "Parser.hpp"
 #include "DynamicSystemsDefault.hpp"
-#include "AttractorsParams.h"
-#include "Window.h"
+#include "AttractorsParams.hpp"
+#include "Window.hpp"
 #include "ui_form.h"
-#include "PointsViewQGLWidget.h"
-#include "WindowPreferences.h"
+#include "PointsViewQGLWidget.hpp"
+#include "WindowPreferences.hpp"
 
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     windowPreferences = nullptr;
@@ -23,9 +23,9 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     sliderTimer->setInterval(prefs.controller.sliderTimeInterval);
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
 
-    ui->comboBox->addItem("Свои уравнения");
     ui->comboBox->addItem("Аттрактор Рёсслера");
     ui->comboBox->addItem("Аттрактор Лоренца");
+    ui->comboBox->addItem("Свои уравнения");
 }
 
 void Window::insertConstants(QVector<std::pair<QString, QVector<double>>> &goodParams) {
@@ -40,7 +40,7 @@ void Window::slot_restart_button() {
         const std::string exprX = ui->firstExpr->text().toStdString();
         const std::string exprY = ui->secondExpr->text().toStdString();
         const std::string exprZ = ui->thirdExpr->text().toStdString();
-        auto derivatives_function = Parser::parse_expressions(exprX, exprY, exprZ);
+        auto derivatives_function = Parser::parseExpressions(exprX, exprY, exprZ);
         count_points(derivatives_function);
     } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
         auto derivatives_function = Model::get_derivatives_function_lorenz(

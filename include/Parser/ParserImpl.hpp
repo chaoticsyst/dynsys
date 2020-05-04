@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "Model.hpp"
+#include "ParserException.hpp"
 
 namespace Parser {
 

@@ -9,7 +9,7 @@
 #include <QVector3D>
 #include <QSet>
 
-#include "Preferences.h"
+#include "Preferences.hpp"
 
 namespace Camera {
 

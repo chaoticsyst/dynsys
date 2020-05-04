@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "Camera.h"
+#include "Camera.hpp"
 
 namespace Camera {
 

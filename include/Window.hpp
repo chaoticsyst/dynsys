@@ -4,8 +4,8 @@
 #include <QSlider>
 #include <QVector>
 
-#include "Preferences.h"
-#include "WindowPreferences.h"
+#include "Preferences.hpp"
+#include "WindowPreferences.hpp"
 
 namespace Ui {
 class Window;
