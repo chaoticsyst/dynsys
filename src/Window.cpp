@@ -40,7 +40,7 @@ void Window::slot_restart_button() {
         const std::string exprX = ui->firstExpr->text().toStdString();
         const std::string exprY = ui->secondExpr->text().toStdString();
         const std::string exprZ = ui->thirdExpr->text().toStdString();
-        auto derivatives_function = Parser::parse_expressions(exprX, exprY, exprZ);
+        auto derivatives_function = Parser::parseExpressions(exprX, exprY, exprZ);
         count_points(derivatives_function);
     } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
         auto derivatives_function = Model::get_derivatives_function_lorenz(
