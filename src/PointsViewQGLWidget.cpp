@@ -3,17 +3,23 @@
 #include <algorithm>
 
 #include "PointsViewQGLWidget.h"
-#include "Preferences.h"
 
 PointsViewQGLWidget::PointsViewQGLWidget(QWidget *parent) :
-    QGLWidget{QGLFormat(), parent} {}
+    QGLWidget{QGLFormat(), parent},
+    prefs{&Preferences::defaultPreferences} {}
+
+void PointsViewQGLWidget::setPreferences(const Preferences::Preferences *prefs_) {
+    prefs = prefs_;
+    locusController.setPreferences(prefs);
+    cameraController.setPreferences(prefs);
+}
 
 QSize PointsViewQGLWidget::minimumSizeHint() const {
-    return Preferences::MIN_WINDOW_SIZE;
+    return { 640, 480 };
 }
 
 QSize PointsViewQGLWidget::sizeHint() const {
-    return Preferences::INIT_WINDOW_SIZE;
+    return { 1080, 720 };
 }
 
 void PointsViewQGLWidget::addNewLocus(QVector<QVector3D> &&points) {
@@ -69,9 +75,7 @@ void PointsViewQGLWidget::keyPressEvent(QKeyEvent *event) {
 
         try {
             const char *filename = ("video" + std::to_string(videoCounter++) + ".avi").c_str();
-            videoEncoder.startEncoding(Preferences::VIDEO_WIDTH,
-                                       Preferences::VIDEO_HEIGHT,
-                                       filename);
+            videoEncoder.startEncoding(prefs->video.width, prefs->video.height, filename);
         } catch(const std::exception &e) {
             videoEncoder.endEncoding();
             //TODO an alert

@@ -4,6 +4,8 @@
 #include <QVector3D>
 #include <QVector>
 #include <QColor>
+
+#include "Preferences.h"
 #include "ShaderController.h"
 
 namespace Locus {
@@ -26,7 +28,7 @@ private:
 
 class LocusController final {
 public:
-    LocusController()  = default;
+    LocusController();
     ~LocusController() = default;
 
     LocusController(const LocusController &)            = delete;
@@ -44,9 +46,13 @@ public:
 
     void draw(const QMatrix4x4 &projMatrix, size_t time);
 
+    void setPreferences(const Preferences::Preferences *prefs);
+
 private:
     QVector<Locus> data;
     ShaderController::ShaderController shaderController;
+
+    const Preferences::Preferences *prefs;
 };
 
 } //namespace Locus

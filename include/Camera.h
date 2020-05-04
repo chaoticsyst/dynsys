@@ -1,9 +1,15 @@
 #pragma once
 
 #include <QGLWidget>
-#include <QVector3D>
 #include <QMatrix4x4>
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QTime>
+#include <QTimer>
+#include <QVector3D>
 #include <QSet>
+
+#include "Preferences.h"
 
 namespace Camera {
 
@@ -20,7 +26,7 @@ public:
 
     void applyDeltaPosition(const QVector3D &delta);
     void recalculatePerspective(int width, int height);
-    void recalculateTarget(const QPoint &newMousePosition);
+    void recalculateTarget(const QPoint &newMousePosition, float mouseSensitivity);
 
     void setPosition(const QVector3D &position);
     void setTarget(const QVector3D &target);
@@ -81,6 +87,8 @@ public:
     QVector3D getPosition() const;
     QVector3D getTarget() const;
 
+    void setPreferences(const Preferences::Preferences *prefs);
+
 private slots:
     void updateKeys();
 
@@ -90,6 +98,8 @@ private:
     Camera camera;
     QSet<qint32> keys;
     QTimer *timer;
+
+    const Preferences::Preferences *prefs;
 };
 
 } //namespace Camera

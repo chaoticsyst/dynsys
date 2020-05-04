@@ -6,9 +6,12 @@
 #include <QKeyEvent>
 #include <QTime>
 #include <QTimer>
+
 #include "Camera.h"
 #include "Locus.h"
+#include "Preferences.h"
 #include "VideoEncoder.h"
+#include "Window.h"
 
 class PointsViewQGLWidget : public QGLWidget {
 public:
@@ -24,6 +27,8 @@ public:
 
     void addNewLocus(QVector<QVector3D> &&points);
 
+    void setPreferences(const Preferences::Preferences *prefs);
+
 protected:
     void initializeGL() override;
     void resizeGL(int width, int height) override;
@@ -38,6 +43,8 @@ protected:
 
 private:
     Q_OBJECT
+
+    const Preferences::Preferences *prefs;
 
     Locus::LocusController locusController;
 
