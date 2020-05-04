@@ -59,7 +59,7 @@ long double NodeUnaryOperation<UnaryOperation::Minus>::calc() const noexcept {
 }
 
 enum class BinaryOperation {
-    Add, Subtract, Multiply, Divide
+    Add, Subtract, Multiply, Divide, Power
 };
 
 template<BinaryOperation>
@@ -91,6 +91,11 @@ long double NodeBinaryOperation<BinaryOperation::Multiply>::calc() const noexcep
 template<>
 long double NodeBinaryOperation<BinaryOperation::Divide>::calc() const noexcept {
     return left->calc() / right->calc();
+}
+
+template<>
+long double NodeBinaryOperation<BinaryOperation::Power>::calc() const noexcept {
+    return std::pow(left->calc(), right->calc());
 }
 
 enum class Function {

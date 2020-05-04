@@ -57,16 +57,16 @@ private:
     }
 
     std::unique_ptr<Node> parseMultiplyDivide() {
-        std::unique_ptr<Node> leftPart = parseUnary();
+        std::unique_ptr<Node> leftPart = parsePower();
 
         while (true) {
             if (lexer.getCurrentLexema() == Lexer::Lexema::Multiply) {
                 lexer.goNextLexema();
-                std::unique_ptr<Node> rightPart = parseUnary();
+                std::unique_ptr<Node> rightPart = parsePower();
                 leftPart = std::make_unique<NodeBinaryOperation<BinaryOperation::Multiply>>(std::move(leftPart), std::move(rightPart));
             } else if (lexer.getCurrentLexema() == Lexer::Lexema::Divide) {
                 lexer.goNextLexema();
-                std::unique_ptr<Node> rightPart = parseUnary();
+                std::unique_ptr<Node> rightPart = parsePower();
                 leftPart = std::make_unique<NodeBinaryOperation<BinaryOperation::Divide>>(std::move(leftPart), std::move(rightPart));
             } else if (lexer.getCurrentLexema() != Lexer::Lexema::OpenParens &&
                        lexer.getCurrentLexema() != Lexer::Lexema::Identifier) {
@@ -78,6 +78,30 @@ private:
         }
 
         return leftPart;
+    }
+
+    std::unique_ptr<Node> parsePower() {
+        std::vector<std::unique_ptr<Node>> parts;
+        parts.push_back(parseUnary());
+        while (true) {
+            if (lexer.getCurrentLexema() == Lexer::Lexema::Power) {
+                lexer.goNextLexema();
+                parts.push_back(parseUnary());
+            } else if (lexer.getCurrentLexema() != Lexer::Lexema::OpenParens &&
+                       lexer.getCurrentLexema() != Lexer::Lexema::Identifier) {
+
+                break;
+            } else {
+                throw ParserException("Unexpected character.");
+            }
+        }
+
+        std::unique_ptr<Node> operation = std::move(parts.back());
+        for (int i = static_cast<int>(parts.size()) - 2; i >= 0; i--) {
+            operation = std::make_unique<NodeBinaryOperation<BinaryOperation::Power>>(std::move(parts[i]), std::move(operation));
+        }
+
+        return operation;
     }
 
     std::unique_ptr<Node> parseUnary() {

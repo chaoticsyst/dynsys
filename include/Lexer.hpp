@@ -13,6 +13,7 @@ enum class Lexema {
     Subtract,
     Multiply,
     Divide,
+    Power,
     OpenParens,
     CloseParens,
     End

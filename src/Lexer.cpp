@@ -44,6 +44,10 @@ void Lexer::goNextLexema() {
         goNextChar();
         currentLexema = Lexema::Divide;
         return;
+    case '^':
+        goNextChar();
+        currentLexema = Lexema::Power;
+        return;
     case '(':
         goNextChar();
         currentLexema = Lexema::OpenParens;
