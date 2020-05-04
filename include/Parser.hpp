@@ -6,7 +6,7 @@
 
 namespace Parser {
 
-auto parseExpressions(const std::string &x_expr, const std::string &y_expr, const std::string &z_expr);
+auto parseExpressions(const std::string &xExpr, const std::string &yExpr, const std::string &zExpr);
 
 } // namespace Parser
 

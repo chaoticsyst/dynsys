@@ -17,17 +17,6 @@ struct NodeVariable final : Node {
     const long double *value;
 };
 
-struct NodeConstVariable final : Node {
-    explicit NodeConstVariable(long double variableValue) :
-        value{variableValue} {}
-
-    long double calc() const noexcept override {
-        return value;
-    }
-
-    long double value;
-};
-
 struct NodeConstant final : Node {
     explicit NodeConstant(long double constantValue) :
         value{constantValue} {}
@@ -38,25 +27,6 @@ struct NodeConstant final : Node {
         return value;
     }
 };
-
-enum class UnaryOperation {
-    Minus
-};
-
-template<UnaryOperation>
-struct NodeUnaryOperation final : Node {
-    explicit NodeUnaryOperation(std::unique_ptr<Node> childNode) :
-        child{std::move(childNode)} {}
-
-    long double calc() const noexcept override;
-
-    std::unique_ptr<Node> child;
-};
-
-template<>
-long double NodeUnaryOperation<UnaryOperation::Minus>::calc() const noexcept {
-    return -(child->calc());
-}
 
 enum class BinaryOperation {
     Add, Subtract, Multiply, Divide, Power
@@ -104,7 +74,7 @@ enum class Function {
     cosh, sinh, tanh,
     acosh, asinh, atanh,
     exp, sqrt, abs,
-    ln, log
+    ln, log, negative
 };
 
 template<Function>
@@ -200,6 +170,11 @@ long double NodeFunction<Function::ln>::calc() const noexcept {
 template<>
 long double NodeFunction<Function::log>::calc() const noexcept {
     return std::log10(argument->calc());
+}
+
+template<>
+long double NodeFunction<Function::negative>::calc() const noexcept {
+    return -(argument->calc());
 }
 
 } //namespace Parser

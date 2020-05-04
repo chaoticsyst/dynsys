@@ -108,7 +108,7 @@ private:
         if (lexer.getCurrentLexema() == Lexer::Lexema::Subtract) {
             lexer.goNextLexema();
 
-            return std::make_unique<NodeUnaryOperation<UnaryOperation::Minus>>(parseUnary());
+            return std::make_unique<NodeFunction<Function::negative>>(parseUnary());
         }
 
         return parseLeaf();
@@ -181,11 +181,11 @@ private:
                 } else if (identifier == "z") {
                     return std::make_unique<NodeVariable>(variables[Z_VAR_POS]);
                 } else if (identifier == "pi") {
-                    return std::make_unique<NodeConstVariable>(std::atan(1) * 4);
+                    return std::make_unique<NodeConstant>(std::atan(1) * 4);
                 } else if (identifier == "e") {
-                    return std::make_unique<NodeConstVariable>(std::exp(1));
+                    return std::make_unique<NodeConstant>(std::exp(1));
                 } else if (constVariables.count(identifier) != 0) {
-                    return std::make_unique<NodeConstVariable>(constVariables[identifier]);
+                    return std::make_unique<NodeConstant>(constVariables[identifier]);
                 } else {
                     throw ParserException("Unexpected variable \'" + identifier + "\'.");
                 }
