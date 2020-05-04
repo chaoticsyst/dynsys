@@ -23,7 +23,7 @@ DynamicSystem<LambdaNewPointAction>::DynamicSystem(
         formulae_{std::move(formulae)},
         variablesNames_{std::move(variablesNames)},
         interestingConstants_{std::move(interestingConstants)},
-        compute_{
+        compute{
                 [system = std::move(systemInteranal)](LambdaNewPointAction newPointAction,
                                                       Model::Point point,
                                                       int pointsCount,

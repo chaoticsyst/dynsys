@@ -41,17 +41,18 @@ public:
 
     const std::vector<std::pair<std::string, std::vector<long double>>> &getInterestingConstants() const;
 
+    const std::function<void(LambdaNewPointAction newPointAction,
+                             Model::Point point,
+                             int pointsCount,
+                             int stepsPerPoint,
+                             long double timeDelta,
+                             std::vector<long double> &constantValues)> compute;
+
 private:
     const std::string attractorName_;
     const std::array<std::string, 3> formulae_;
     const std::vector<std::string> variablesNames_;
     const std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants_;
-    const std::function<void(LambdaNewPointAction np,
-                             Model::Point point,
-                             int pointsCount,
-                             int stepsPerPoint,
-                             long double timeDelta,
-                             std::vector<long double> &con)> compute_;
 };
 
 

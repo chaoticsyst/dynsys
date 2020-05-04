@@ -21,8 +21,8 @@ public:
                  int pointsCount,
                  int stepsPerPoint,
                  long double timeDelta,
-                 std::vector<long double> &variableValue) const {
-        LambdaDerivatives derivativesFunction = getDerivativesFunction(variableValue);
+                 std::vector<long double> &constantValues) const {
+        LambdaDerivatives derivativesFunction = getDerivativesFunction(constantValues);
         Model::generate_points(newPointAction, point, pointsCount, stepsPerPoint, timeDelta, derivativesFunction);
     }
 
