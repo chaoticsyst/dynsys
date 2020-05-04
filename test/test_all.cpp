@@ -65,6 +65,10 @@ TEST(parser, simple_integer_arithmetic) {
     EXPECT_EQ(func->calc(), 2);
     func = Parser::parseExpression("1 + 2 * ((3) + (2 * 3)) / 3", {nullptr, nullptr, nullptr});
     EXPECT_EQ(func->calc(), 7);
+    func = Parser::parseExpression("2^3", {nullptr, nullptr, nullptr});
+    EXPECT_EQ(func->calc(), 8);
+    func = Parser::parseExpression("2^3^2 - (2^3)^2", {nullptr, nullptr, nullptr});
+    EXPECT_EQ(func->calc(), 448);
 }
 
 TEST(parser, simple_float_arithmetic) {
@@ -82,6 +86,8 @@ TEST(parser, simple_float_arithmetic) {
     EXPECT_NEAR(func->calc(), (1.12 * (2 + 3.7) - 8.456), 0.0000001);
     func = Parser::parseExpression("3.72*(2.1345 + 3.7)/1.32 - 1.2453*8.456", {nullptr, nullptr, nullptr});
     EXPECT_NEAR(func->calc(), (3.72 * (2.1345 + 3.7) / 1.32 - 1.2453 * 8.456), 0.0000001);
+    func = Parser::parseExpression("1.12^4 - 2.5^3.6", {nullptr, nullptr, nullptr});
+    EXPECT_NEAR(func->calc(), -25.502, 1e-3);
 }
 
 TEST(parser, simple_variables_arithmetic) {
@@ -141,6 +147,20 @@ TEST(parser, parse_errors) {
         caught = true;
     }
     EXPECT_TRUE(caught);
+    caught = false;
+    try {
+        func = Parser::parseExpression("sin(5", {&x, &y, &z});
+    } catch (const Parser::ParserException &) {
+        caught = true;
+    }
+    EXPECT_TRUE(caught);
+    caught = false;
+    try {
+        func = Parser::parseExpression("a + 3 - 2 * c", {&x, &y, &z}, {{"a", 3}});
+    } catch (const Parser::ParserException &) {
+        caught = true;
+    }
+    EXPECT_TRUE(caught);
 }
 
 TEST(parser, lambda_test) {
@@ -185,5 +205,5 @@ TEST(parser, function_calls) {
                                     {{"hello", -123}});
     EXPECT_NEAR(func->calc(), 1366.768, 1e-3);
     EXPECT_NEAR(Parser::parseExpression("exp(2)", {nullptr, nullptr, nullptr})->calc(),
-                Parser::parseExpression("e * e - sin(pi) * cos(112.2)", {nullptr, nullptr, nullptr})->calc(), 1e-10);
+                Parser::parseExpression("e ^ 2 - sin(pi) * cos(112.2)", {nullptr, nullptr, nullptr})->calc(), 1e-10);
 }
