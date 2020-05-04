@@ -4,8 +4,7 @@
 
 #include "Model.hpp"
 #include "Parser.hpp"
-#include "DynamicSystemsDefault.hpp"
-#include "AttractorsParams.h"
+#include "DynamicSystems/DynamicSystem.hpp"
 #include "Window.h"
 #include "ui_form.h"
 #include "PointsViewQGLWidget.h"
@@ -13,6 +12,9 @@
 
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     windowPreferences = nullptr;
+
+    /// Get systems vector
+    dynamicSystems = DynamicSystems::getDefaultSystems<LambdaNewPointAction>();
 
     setFocusPolicy(Qt::StrongFocus);
     ui->setupUi(this);
@@ -62,13 +64,7 @@ void Window::count_points(Lambda derivatives_function) {
     ui->pointsViewQGLWidget->clearAll();
     for (size_t i = 0; i < prefs.visualization.locusNumber; i++) {
         QVector<QVector3D> buffer;
-        auto pushBackVector = [&buffer, &divNorm = prefs.model.divNormalization](const Model::Point &point) {
-            buffer.push_back(
-                    QVector3D(point.x / divNorm,
-                              point.y / divNorm,
-                              point.z / divNorm)
-            );
-        };
+
         double offset = prefs.model.startPointDelta * i;
 
         Model::generate_points(pushBackVector,

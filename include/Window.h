@@ -4,8 +4,23 @@
 #include <QSlider>
 #include <QVector>
 
+#include "DynamicSystems/DynamicSystem.hpp"
 #include "Preferences.h"
 #include "WindowPreferences.h"
+
+namespace Ui::Utils {
+/// Lambda-getter for typedef (you can find another way to define lambda type)
+auto getPushBackAndNormalizeLambda(QVector<QVector3D> &vector, float normalizeConstant) {
+    return [&vector, normalizeConstant](const Model::Point &point) {
+        vector.push_back(
+                QVector3D(static_cast<float>(point.x) / normalizeConstant,
+                          static_cast<float>(point.y) / normalizeConstant,
+                          static_cast<float>(point.z) / normalizeConstant)
+        );
+    };
+}
+
+}
 
 namespace Ui {
 class Window;
@@ -36,6 +51,11 @@ private:
     void count_points(Lambda derivatives_function);
 
     void insertConstants(QVector<std::pair<QString, QVector<double>>>&);
+
+    /// Define type of LambdaNewPointAction
+    typedef decltype(Ui::Utils::getPushBackAndNormalizeLambda(std::declval<QVector<QVector3D> &>(), std::declval<float>())) LambdaNewPointAction;
+
+    std::vector<DynamicSystems::DynamicSystem<LambdaNewPointAction>> dynamicSystems;
 
     int timeValue = 0;
 
