@@ -10,13 +10,10 @@ template<typename LambdaNextPointGenerator, typename LambdaNewPointAction>
 void generatePointsMainloop(LambdaNewPointAction newPointAction,
                             Point point,
                             int pointsCount,
-                            int stepsPerPoint,
                             LambdaNextPointGenerator nextPoint) {
     Point previousPoint = point;
     for (int i = 0; i < pointsCount; ++i) {
-        for (int j = 0; j < stepsPerPoint; ++j) {
-            point = nextPoint(point);
-        }
+        point = nextPoint(point);
         if ((point.x == previousPoint.x && point.y == previousPoint.y && point.z == previousPoint.z) ||
             point.x > COORDINATE_VALUE_LIMIT || point.y > COORDINATE_VALUE_LIMIT || point.z > COORDINATE_VALUE_LIMIT) {
             break;
@@ -31,7 +28,6 @@ template<typename LambdaDerivatives, typename LambdaNewPointAction>
 void setNextPointGenerator(LambdaNewPointAction newPointAction,
                            Point point,
                            int pointsCount,
-                           int stepsPerPoint,
                            long double tau,
                            LambdaDerivatives countDerivatives) {
     auto nextPoint = [tau, countDerivatives](const Point &point) {
@@ -56,7 +52,7 @@ void setNextPointGenerator(LambdaNewPointAction newPointAction,
                 point.z + (tau / 6) * (k1.z + k4.z + 2 * (k2.z + k3.z))
         };
     };
-    generatePointsMainloop(newPointAction, point, pointsCount, stepsPerPoint, nextPoint);
+    generatePointsMainloop(newPointAction, point, pointsCount, nextPoint);
 }
 
 
@@ -64,13 +60,11 @@ template<typename LambdaDerivatives, typename LambdaNewPointAction>
 void generatePoints(LambdaNewPointAction newPointAction,
                     Point point,
                     int pointsCount,
-                    int stepsPerPoint,
                     long double tau,
                     LambdaDerivatives countDerivatives) {
     setNextPointGenerator(newPointAction,
                           point,
                           pointsCount,
-                          stepsPerPoint,
                           tau,
                           countDerivatives);
 }

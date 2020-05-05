@@ -19,11 +19,10 @@ public:
     void compute(LambdaNewPointAction newPointAction,
                  Model::Point point,
                  int pointsCount,
-                 int stepsPerPoint,
                  long double timeDelta,
                  std::vector<long double> &constantValues) const {
         LambdaDerivatives derivativesFunction = getDerivativesFunction(constantValues);
-        Model::generatePoints(newPointAction, point, pointsCount, stepsPerPoint, timeDelta, derivativesFunction);
+        Model::generatePoints(newPointAction, point, pointsCount, timeDelta, derivativesFunction);
     }
 
 private:

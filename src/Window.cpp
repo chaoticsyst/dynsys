@@ -74,7 +74,6 @@ void Window::count_points(Lambda derivatives_function) {
                                            prefs.model.startPoint.y + offset,
                                            prefs.model.startPoint.z + offset},
                               prefs.model.pointsNumber,
-                              1,
                               prefs.model.deltaTime,
                               derivatives_function);
 

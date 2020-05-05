@@ -16,7 +16,7 @@ int countConvergesSystems(const Model::Point &startPoint, int requiredCount, lon
         auto constantValues = system.getInterestingConstants();
         for (auto&[name, params] : constantValues) {
             count = 0;
-            system.compute(counter, startPoint, requiredCount, 1, tau, params);
+            system.compute(counter, startPoint, requiredCount, tau, params);
             if (count == requiredCount) convergesCount++;
         }
     }

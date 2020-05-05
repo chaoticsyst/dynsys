@@ -44,7 +44,6 @@ public:
     const std::function<void(LambdaNewPointAction newPointAction,
                              Model::Point point,
                              int pointsCount,
-                             int stepsPerPoint,
                              long double timeDelta,
                              std::vector<long double> &constantValues)> compute;
 

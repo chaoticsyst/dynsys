@@ -10,7 +10,6 @@ template<typename LambdaDerivatives, typename LambdaNewPointAction>
 void generatePoints(LambdaNewPointAction newPointAction,
                     Point point,
                     int pointsCount,
-                    int stepsPerPoint,
                     long double tau,
                     LambdaDerivatives countDerivatives);
 

@@ -27,10 +27,9 @@ DynamicSystem<LambdaNewPointAction>::DynamicSystem(
                 [system = std::move(systemInteranal)](LambdaNewPointAction newPointAction,
                                                       Model::Point point,
                                                       int pointsCount,
-                                                      int stepsPerPoint,
                                                       long double timeDelta,
                                                       std::vector<long double> &variableValue) {
-                    system.compute(newPointAction, point, pointsCount, stepsPerPoint, timeDelta, variableValue);
+                    system.compute(newPointAction, point, pointsCount, timeDelta, variableValue);
                 }
         } {}
 
