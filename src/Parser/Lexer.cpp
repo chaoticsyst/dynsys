@@ -1,7 +1,18 @@
+#include <sstream>
+
 #include "Lexer.hpp"
 #include "ParserException.hpp"
 
 namespace Lexer {
+
+long double convertStringToLongDouble(const std::string &number) {
+    std::stringstream stream(number);
+
+    long double result = 0;
+    stream >> result;
+
+    return result;
+}
 
 Lexer::Lexer(const std::string &expression_) :
     curExprIterator{expression_.begin()}, endExprIterator{expression_.end()} {
@@ -74,7 +85,7 @@ void Lexer::goNextLexema() {
             goNextChar();
         }
 
-        currentConstant = std::stold(constant);
+        currentConstant = convertStringToLongDouble(constant);
         currentLexema = Lexema::constant;
 
         return;
