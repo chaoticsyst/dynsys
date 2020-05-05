@@ -1,7 +1,5 @@
 #pragma once
 
-#include <functional>
-
 namespace Model {
 
 struct Point {
@@ -9,12 +7,12 @@ struct Point {
 };
 
 template<typename LambdaDerivatives, typename LambdaNewPointAction>
-void generate_points(LambdaNewPointAction new_point_action,
-                     Point point,
-                     int points_count,
-                     int steps_per_point,
-                     long double tau,
-                     LambdaDerivatives count_derivatives);
+void generatePoints(LambdaNewPointAction newPointAction,
+                    Point point,
+                    int pointsCount,
+                    int stepsPerPoint,
+                    long double tau,
+                    LambdaDerivatives countDerivatives);
 
 } // namespace Model
 

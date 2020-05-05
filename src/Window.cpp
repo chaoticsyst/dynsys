@@ -69,14 +69,14 @@ void Window::count_points(Lambda derivatives_function) {
 
         auto pushBackVector = Ui::Utils::getPushBackAndNormalizeLambda(buffer, prefs.model.divNormalization);
 
-        Model::generate_points(pushBackVector,
-                               Model::Point{prefs.model.startPoint.x + offset,
-                                            prefs.model.startPoint.y + offset,
-                                            prefs.model.startPoint.z + offset},
-                               prefs.model.pointsNumber,
-                               1,
-                               prefs.model.deltaTime,
-                               derivatives_function);
+        Model::generatePoints(pushBackVector,
+                              Model::Point{prefs.model.startPoint.x + offset,
+                                           prefs.model.startPoint.y + offset,
+                                           prefs.model.startPoint.z + offset},
+                              prefs.model.pointsNumber,
+                              1,
+                              prefs.model.deltaTime,
+                              derivatives_function);
 
         ui->pointsViewQGLWidget->addNewLocus(std::move(buffer));
     }

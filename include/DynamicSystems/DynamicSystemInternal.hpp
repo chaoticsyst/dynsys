@@ -23,7 +23,7 @@ public:
                  long double timeDelta,
                  std::vector<long double> &constantValues) const {
         LambdaDerivatives derivativesFunction = getDerivativesFunction(constantValues);
-        Model::generate_points(newPointAction, point, pointsCount, stepsPerPoint, timeDelta, derivativesFunction);
+        Model::generatePoints(newPointAction, point, pointsCount, stepsPerPoint, timeDelta, derivativesFunction);
     }
 
 private:
