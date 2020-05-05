@@ -5,7 +5,7 @@
 #include <array>
 #include <functional>
 
-#include "Model.hpp"
+#include "Model/Model.hpp"
 #include "DynamicSystemInternal.hpp"
 
 

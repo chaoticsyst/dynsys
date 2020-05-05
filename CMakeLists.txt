@@ -50,8 +50,8 @@ add_executable(DynamicSystems
     include/Preferences.hpp
     include/Camera.hpp
     include/WindowPreferences.hpp
-    include/Model.hpp
-    include/ModelImpl.hpp
+        include/Model/Model.hpp
+        include/Model/ModelImpl.hpp
     include/DynamicSystems/SystemsBase.hpp
     include/DynamicSystems/SystemsBaseGetImpl.hpp
     include/DynamicSystems/DynamicSystem.hpp

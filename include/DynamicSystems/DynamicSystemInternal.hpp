@@ -3,7 +3,7 @@
 #include <functional>
 #include <vector>
 
-#include "Model.hpp"
+#include "Model/Model.hpp"
 
 
 namespace DynamicSystems {

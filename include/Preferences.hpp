@@ -3,7 +3,7 @@
 #include <QVector4D>
 #include <qgl.h>
 
-#include "Model.hpp"
+#include "include/Model/Model.hpp"
 
 namespace Preferences {
 

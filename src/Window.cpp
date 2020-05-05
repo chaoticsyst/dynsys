@@ -2,7 +2,7 @@
 #include <thread>
 #include <future>
 
-#include "Model.hpp"
+#include "include/Model/Model.hpp"
 #include "Parser.hpp"
 #include "DynamicSystems/DynamicSystem.hpp"
 #include "Window.hpp"

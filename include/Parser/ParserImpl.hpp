@@ -5,7 +5,7 @@
 #include <map>
 #include <memory>
 
-#include "Model.hpp"
+#include "Model/Model.hpp"
 #include "ParserException.hpp"
 
 namespace Parser {

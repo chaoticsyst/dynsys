@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "Model.hpp"
+#include "Model/Model.hpp"
 #include "DynamicSystems/DynamicSystem.hpp"
 
 int countConvergesSystems(const Model::Point &startPoint, int requiredCount, long double tau) {

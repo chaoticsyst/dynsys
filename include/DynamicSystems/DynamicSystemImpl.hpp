@@ -4,7 +4,7 @@
 #include <string>
 #include <array>
 
-#include "Model.hpp"
+#include "Model/Model.hpp"
 #include "DynamicSystem.hpp"
 
 
