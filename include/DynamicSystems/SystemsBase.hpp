@@ -127,8 +127,8 @@ DynamicSystem<LambdaNewPointAction> getSystemAizawa() {
     std::string attractorName = "The Aizawa attractor";
     std::array<std::string, 3> formulae = {"(z - b)*x - d*y",
                                            "d*x + (z - b)*y",
-                                           "c + a*z - (z^3 / 3) - (x^2 + y^2)*(1+e*z) + f*z*x^3"};
-    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "e", "f"};
+                                           "c + a*z - (z^3 / 3) - (x^2 + y^2)*(1+f*z) + g*z*x^3"};
+    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "f", "g"};
     std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants = {
             {"Classic values", {0.95, 0.7, 0.6, 3.5, 0.25, 0.1}}
     };
@@ -309,8 +309,8 @@ DynamicSystem<LambdaNewPointAction> getSystemDadras() {
     std::string attractorName = "The Dadras attractor";
     std::array<std::string, 3> formulae = {"y - a*x + b*y*z",
                                            "c*y - x*z + z",
-                                           "d*x*y - e*z"};
-    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "e"};
+                                           "d*x*y - f*z"};
+    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "f"};
     std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants = {
             {"Classic values", {3, 2.7, 1.7, 2, 9}}
     };
@@ -334,9 +334,9 @@ template<typename LambdaNewPointAction>
 DynamicSystem<LambdaNewPointAction> getSystemDequanLi() {
     std::string attractorName = "The Dequan Li attractor";
     std::array<std::string, 3> formulae = {"a*(y - z) + c*x*z",
-                                           "e*x + f*y - x*z",
+                                           "f*x + g*y - x*z",
                                            "b*z + x*y - d*x^2"};
-    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "e", "f"};
+    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "f", "g"};
     std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants = {
             {"Classic values", {40, 1.833, 0.16, 0.65, 55, 20}}
     };
@@ -388,8 +388,8 @@ DynamicSystem<LambdaNewPointAction> getSystemFourWing() {
     std::string attractorName = "The Four-Wing attractor";
     std::array<std::string, 3> formulae = {"a*x - b*y*z",
                                            "c*y + x*z",
-                                           "e*x - d*z + x*z"};
-    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "e"};
+                                           "f*x - d*z + x*z"};
+    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "f"};
     std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants = {
             {"Classic values", {4, 6, 10, 5, 1}}
     };
@@ -489,9 +489,9 @@ template<typename LambdaNewPointAction>
 DynamicSystem<LambdaNewPointAction> getSystemLiuChen() {
     std::string attractorName = "The Liu-Chen attractor";
     std::array<std::string, 3> formulae = {"a*y + b*x + c*y*z",
-                                           "d*y - z + e*x*z",
-                                           "f*z + g*x*y"};
-    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "e", "f", "g"};
+                                           "d*y - z + f*x*z",
+                                           "g*z + h*x*y"};
+    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "f", "g", "h"};
     std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants = {
             {"Classic values", {2.4, -3.78, 14, -11, 4, 5.58, 1}}
     };
@@ -793,9 +793,9 @@ template<typename LambdaNewPointAction>
 DynamicSystem<LambdaNewPointAction> getSystemTSUCS1() {
     std::string attractorName = "The TSUCS1 attractor";
     std::array<std::string, 3> formulae = {"a*(y - z) + c*x*z",
-                                           "e*y - x*z",
+                                           "f*y - x*z",
                                            "b*z + x*y - d*x^2"};
-    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "e"};
+    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "f"};
     std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants = {
             {"Classic values", {40, 0.833, 0.5, 0.65, 20}}
     };
@@ -819,9 +819,9 @@ template<typename LambdaNewPointAction>
 DynamicSystem<LambdaNewPointAction> getSystemTSUCS2() {
     std::string attractorName = "The TSUCS2 attractor";
     std::array<std::string, 3> formulae = {"a*(y - z) + d*x*z",
-                                           "f*y + b*x - x*z",
-                                           "c*z + x*y - e*x^2"};
-    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "e", "f"};
+                                           "g*y + b*x - x*z",
+                                           "c*z + x*y - f*x^2"};
+    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "f", "g"};
     std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants = {
             {"Classic values", {40, 55, 1.833, 0.16, 0.65, 20}}
     };
@@ -846,8 +846,8 @@ DynamicSystem<LambdaNewPointAction> getSystemWangSun() {
     std::string attractorName = "The Wang-Sun attractor";
     std::array<std::string, 3> formulae = {"a*x + c*y*z",
                                            "b*x + d*y - x*z",
-                                           "e*z + f*x*y"};
-    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "e", "f"};
+                                           "f*z + g*x*y"};
+    std::vector<std::string> constantsNames = {"a", "b", "c", "d", "f", "g"};
     std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants = {
             {"Classic values", {0.2, -0.01, 1, -0.4, -1, -1}}
     };
