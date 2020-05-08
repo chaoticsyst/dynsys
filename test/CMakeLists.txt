@@ -9,11 +9,25 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(
-    ../include
+    ../include/
+    ../include/Parser/
     ${GTEST_INCLUDE_DIRS}        
 )
 
-add_executable(TestDynSys test_all.cpp ../src)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5OpenGL REQUIRED)
+find_package(OpenGL REQUIRED)
+
+add_executable(TestDynSys
+        testAll.cpp
+        testParser.cpp
+        ../src/Parser/Parser.cpp
+        ../src/Parser/Lexer.cpp
+        testSystems.cpp)
+
+qt5_use_modules(TestDynSys Widgets OpenGL)
+
+target_link_libraries(TestDynSys ${QT_LIBRARIES} ${OPENGL_LIBRARIES})
 
 target_link_libraries(TestDynSys ${GTEST_LIBRARIES} Threads::Threads)
 

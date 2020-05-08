@@ -1,17 +1,13 @@
-#include "Locus.h"
-#include "Preferences.h"
+#include "Locus.hpp"
 
 namespace Locus {
 
-Locus::Locus(QVector<QVector3D> &&points_, const QColor &color_) :
-    color{color_} {
-
-    points_ = interpolate(std::move(points_));
+Locus::Locus(QVector<QVector3D> &&points) {
     pointsBuffer = QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
     pointsBuffer.create();
     pointsBuffer.bind();
     pointsBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    pointsBuffer.allocate(points_.begin(), points_.size() * 3 * sizeof(float));
+    pointsBuffer.allocate(points.begin(), points.size() * 3 * sizeof(float));
     pointsBuffer.release();
 }
 
@@ -23,80 +19,77 @@ void Locus::endWork() {
     pointsBuffer.release();
 }
 
-const QColor &Locus::colorData() const {
-    return color;
-}
-
 size_t Locus::size() const {
     return static_cast<size_t>(pointsBuffer.size() / 3 / sizeof(float));
 }
 
-QVector3D Locus::getInterpolatedPoint(float offset, const QVector<QVector3D> &points, size_t startIndex) {
-    if (startIndex + 3 >= static_cast<size_t>(points.size())) {
-        return points[startIndex];
-    }
-    const QVector3D &pivotPrev   = points[startIndex];
-    const QVector3D &pivotFirst  = points[startIndex + 1];
-    const QVector3D &pivotSecond = points[startIndex + 2];
-    const QVector3D &pivotNext   = points[startIndex + 3];
-    return 0.5f * ((2 * pivotFirst)
-                + offset * ((-pivotPrev + pivotSecond)
-                + offset * ((2 * pivotPrev - 5 * pivotFirst + 4 * pivotSecond - pivotNext)
-                + offset * (-pivotPrev + 3 * pivotFirst - 3 * pivotSecond + pivotNext))));
+
+LocusController::LocusController() :
+    prefs{&Preferences::defaultPreferences} {}
+
+void LocusController::setPreferences(const Preferences::Preferences *prefs_) {
+    prefs = prefs_;
 }
 
-QVector<QVector3D> Locus::interpolate(const QVector<QVector3D> &points) {
-    if (points.size() < 2) {
-        return points;
-    }
-
-    QVector<QVector3D> result;
-    result.reserve(2 * points.size());
-
-    result << points[0];
-    for (size_t i = 1; i < static_cast<size_t>(points.size() - 2); i++) {
-        result.push_back(points[i]);
-
-        float distance = points[i].distanceToPoint(points[i + 1]);
-        size_t cuts = distance / Preferences::DISTANCE_DELTA;
-        float dt = 1.0 / (cuts + 1);
-        for (size_t j = 0; j < cuts; j++) {
-            result.push_back(getInterpolatedPoint(dt * (j + 1), points, i - 1));
-        }
-    }
-    result << points[points.size() - 2] << points[points.size() - 1];
-
-    return result;
+void LocusController::initialize() {
+    shaderController.initialize();
 }
-
 
 size_t LocusController::size() const {
     return static_cast<size_t>(data.size());
 }
 
-void LocusController::addLocus(Locus &&locus) {
-    data.push_back(std::move(locus));
-}
-
-void LocusController::removeLocus(size_t index) {
-    data.removeAt(index);
+void LocusController::addLocus(QVector<QVector3D> &&points_) {
+    shaderController.startWork();
+    data.push_back(Locus(std::move(points_)));
+    shaderController.endWork();
 }
 
 void LocusController::clear() {
     data.clear();
 }
 
-void LocusController::draw(QGLShaderProgram &shaderProgram, size_t amount) {
-    for (auto &locus : data) {
+void LocusController::draw(const QMatrix4x4 &projMatrix, size_t time) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    shaderController.startWork();
+    shaderController.setMatrix(projMatrix);
+
+    shaderController.setArcadeMode(prefs->visualization.arcadeMode);
+
+    shaderController.setTailColoringMode(prefs->visualization.tailColoringMode);
+    shaderController.setTrajectoriesNumber(static_cast<size_t>(data.size()));
+    shaderController.setColors(prefs->visualization.colors);
+
+    shaderController.setInterpolationDistance(prefs->visualization.interpolationDistance);
+
+    shaderController.setPrimitive(prefs->visualization.primitive);
+
+    for (size_t i = 0; i < static_cast<size_t>(data.size()); i++) {
+        auto &locus = data[i];
+
         locus.startWork();
-        shaderProgram.setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
-        shaderProgram.setUniformValue(Preferences::COLOR_NAME, locus.colorData());
-        glDrawArrays(GL_LINE_STRIP,
-                     std::max<int>(0, static_cast<int>(std::min(locus.size(), amount)) - Preferences::AMOUNT_TAIL_POINTS),
-                     std::min(Preferences::AMOUNT_TAIL_POINTS, amount));
+        if (locus.size() == 0) {
+            continue;
+        }
+
+        int curAmount = std::min(locus.size(), time);
+        size_t start = std::max(0, curAmount - static_cast<int>(prefs->visualization.tailPointsNumber));
+        size_t actualLength = curAmount - start;
+
+        shaderController.setVertex();
+
+        shaderController.setStartTailSize(prefs->visualization.startPointSize);
+        shaderController.setFinalTailSize(prefs->visualization.finalPointSize);
+        shaderController.setTailLength(actualLength);
+        shaderController.setStartVertexIndex(start);
+        shaderController.setTrajectoryIndex(i);
+
+        glDrawArrays(GL_LINE_STRIP_ADJACENCY, start, actualLength);
 
         locus.endWork();
     }
+    shaderController.endWork();
 }
 
 } //namespace Locus

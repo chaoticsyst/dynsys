@@ -1,75 +1,82 @@
 #include <QtWidgets>
+#include <thread>
+#include <future>
 
-#include "Model.h"
-#include "AttractorsParams.h"
-#include "Window.h"
+#include "Model/Model.hpp"
+#include "Parser.hpp"
+#include "DynamicSystems/DynamicSystem.hpp"
+#include "Window.hpp"
 #include "ui_form.h"
-#include "PointsViewQGLWidget.h"
-#include "Preferences.h"
-#include "WindowPreferences.h"
+#include "PointsViewQGLWidget.hpp"
+#include "WindowPreferences.hpp"
 
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
-    Preferences::setDefaultValues();
-
     windowPreferences = nullptr;
+
+    /// Get systems vector
+    dynamicSystems = DynamicSystems::getDefaultSystems<LambdaNewPointAction>();
 
     setFocusPolicy(Qt::StrongFocus);
     ui->setupUi(this);
 
-    sliderTimer = new QTimer(this);
-    sliderTimer->setInterval(Preferences::SLIDER_TIMER_INTERVAL);
+    ui->pointsViewQGLWidget->setPreferences(&prefs);
 
+    sliderTimer = new QTimer(this);
+    sliderTimer->setInterval(prefs.controller.sliderTimeInterval);
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
 
-    insertConstants(AttractorsParams::goodParamsRossler);
+    ui->comboBox->addItem("Аттрактор Рёсслера");
+    ui->comboBox->addItem("Аттрактор Лоренца");
+    ui->comboBox->addItem("Свои уравнения");
 }
 
-void Window::insertConstants(QVector<std::pair<QString, QVector<double>>>& goodParams) {
+void Window::insertConstants(QVector<std::pair<QString, QVector<double>>> &goodParams) {
     ui->constantsBox->clear();
-    for (auto& [name, params] : goodParams) {
+    for (auto&[name, params] : goodParams) {
         ui->constantsBox->addItem(name);
     }
 }
 
-QVector3D getQPoint(const Model::Point &point) {
-    return QVector3D(point.x / Preferences::DIV_NORMALIZE,
-                     point.y / Preferences::DIV_NORMALIZE,
-                     point.z / Preferences::DIV_NORMALIZE); //TODO: implement normalization
+void Window::slot_restart_button() {
+    if (ui->comboBox->currentText() == "Свои уравнения") {
+        const std::string exprX = ui->firstExpr->text().toStdString();
+        const std::string exprY = ui->secondExpr->text().toStdString();
+        const std::string exprZ = ui->thirdExpr->text().toStdString();
+        auto derivatives_function = Parser::parseExpressions(exprX, exprY, exprZ);
+        count_points(derivatives_function);
+    } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
+        auto derivatives_function = Model::get_derivatives_function_lorenz(
+                ui->doubleSpinBox->value(),
+                ui->doubleSpinBox_2->value(),
+                ui->doubleSpinBox_3->value());
+        count_points(derivatives_function);
+    } else if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
+        auto derivatives_function = Model::get_derivatives_function_rossler(
+                ui->doubleSpinBox->value(),
+                ui->doubleSpinBox_2->value(),
+                ui->doubleSpinBox_3->value());
+        count_points(derivatives_function);
+    }
 }
 
-void Window::slot_restart_button() {
-    Model::ModelName modelName = Model::ModelName::ROSSLER;
-    if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
-        modelName = Model::ModelName::LORENZ;
-    } else if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
-        modelName = Model::ModelName::ROSSLER;
-    }
-
-    std::vector<long double> constants = {
-        ui->doubleSpinBox->value(),
-        ui->doubleSpinBox_2->value(),
-        ui->doubleSpinBox_3->value()
-    };
+template<typename Lambda>
+void Window::count_points(Lambda derivatives_function) {
     ui->pointsViewQGLWidget->clearAll();
-    for (size_t i = 0; i < Preferences::AMOUNT_LOCUS; i++) {
+    for (size_t i = 0; i < prefs.visualization.locusNumber; i++) {
         QVector<QVector3D> buffer;
-        auto pushBackVector = [&buffer](const Model::Point &point) {
-            buffer.push_back(
-                QVector3D(point.x / Preferences::DIV_NORMALIZE,
-                          point.y / Preferences::DIV_NORMALIZE,
-                          point.z / Preferences::DIV_NORMALIZE)
-            );
-        };
-        double offset = Preferences::START_POINT_DELTA * i;
-        Model::generate_points(pushBackVector,
-                               Model::Point{Preferences::START_POINT.x + offset,
-                                            Preferences::START_POINT.y + offset,
-                                            Preferences::START_POINT.z + offset},
-                               Preferences::COUNT_POINTS,
-                               Preferences::STEPS_PER_COUNT,
-                               Preferences::TAU,
-                               modelName,
-                               constants);
+
+        double offset = prefs.model.startPointDelta * i;
+
+        auto pushBackVector = Ui::Utils::getPushBackAndNormalizeLambda(buffer, prefs.model.divNormalization);
+
+        Model::generatePoints(pushBackVector,
+                              Model::Point{prefs.model.startPoint.x + offset,
+                                           prefs.model.startPoint.y + offset,
+                                           prefs.model.startPoint.z + offset},
+                              prefs.model.pointsNumber,
+                              prefs.model.deltaTime,
+                              derivatives_function);
+
         ui->pointsViewQGLWidget->addNewLocus(std::move(buffer));
     }
 
@@ -81,7 +88,9 @@ void Window::slot_restart_button() {
 }
 
 void Window::slot_model_selection(QString currentModel) {
-    if (currentModel == "Аттрактор Рёсслера") {
+    if (currentModel == "Свои уравнения") {
+        insertConstants(AttractorsParams::customParams);
+    } else if (currentModel == "Аттрактор Рёсслера") {
         insertConstants(AttractorsParams::goodParamsRossler);
     } else if (currentModel == "Аттрактор Лоренца") {
         insertConstants(AttractorsParams::goodParamsLorenz);
@@ -90,12 +99,14 @@ void Window::slot_model_selection(QString currentModel) {
 
 void Window::slot_constants_selection(QString currentConstants) {
     QVector<std::pair<QString, QVector<double>>> goodParams;
-    if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
+    if (ui->comboBox->currentText() == "Свои уравнения") {
+        goodParams = AttractorsParams::customParams;
+    } else if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
         goodParams = AttractorsParams::goodParamsRossler;
     } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
         goodParams = AttractorsParams::goodParamsLorenz;
     }
-    for (auto& [name, params] : goodParams) {
+    for (auto&[name, params] : goodParams) {
         if (name == currentConstants) {
             ui->doubleSpinBox->setValue(params[0]);
             ui->doubleSpinBox_2->setValue(params[1]);
@@ -107,7 +118,7 @@ void Window::slot_constants_selection(QString currentConstants) {
 
 void Window::slot_time_slider(int timeValue_) {
     timeValue = timeValue_;
-    ui->pointsViewQGLWidget->setCurrentTime((Preferences::COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
+    ui->pointsViewQGLWidget->setCurrentTime((prefs.model.pointsNumber / ui->horizontalSlider->maximum()) * timeValue);
 }
 
 void Window::slot_pause_button() {
@@ -120,14 +131,14 @@ void Window::slot_pause_button() {
 }
 
 void Window::slot_open_preferences() {
-    windowPreferences = new WindowPreferences();
+    windowPreferences = new WindowPreferences(this, &prefs);
     windowPreferences->show();
 }
 
 void Window::updateSlider() {
-    if (!pauseState && timeValue <= Preferences::COUNT_POINTS) {
-        ui->horizontalSlider->setValue(timeValue += Preferences::DELTA_TIME_TIMER);
-        ui->pointsViewQGLWidget->setCurrentTime((Preferences::COUNT_POINTS / ui->horizontalSlider->maximum()) * timeValue);
+    if (!pauseState && timeValue <= prefs.model.pointsNumber) {
+        ui->horizontalSlider->setValue(timeValue += prefs.controller.deltaTimePerStep);
+        ui->pointsViewQGLWidget->setCurrentTime((prefs.model.pointsNumber / ui->horizontalSlider->maximum()) * timeValue);
     }
     ui->pointsViewQGLWidget->repaint();
 }
@@ -150,4 +161,3 @@ void Window::keyPressEvent(QKeyEvent *event) {
 void Window::keyReleaseEvent(QKeyEvent *event) {
     ui->pointsViewQGLWidget->keyReleaseEvent(event);
 }
-

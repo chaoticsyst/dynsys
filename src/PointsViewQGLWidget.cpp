@@ -2,36 +2,51 @@
 #include <cmath>
 #include <algorithm>
 
-#include "PointsViewQGLWidget.h"
-#include "Preferences.h"
+#include "PointsViewQGLWidget.hpp"
 
 PointsViewQGLWidget::PointsViewQGLWidget(QWidget *parent) :
-    QGLWidget{QGLFormat(), parent} {}
+    QGLWidget{QGLFormat(), parent},
+    prefs{&Preferences::defaultPreferences} {}
+
+void PointsViewQGLWidget::setPreferences(const Preferences::Preferences *prefs_) {
+    prefs = prefs_;
+    locusController.setPreferences(prefs);
+    cameraController.setPreferences(prefs);
+}
 
 QSize PointsViewQGLWidget::minimumSizeHint() const {
-    return Preferences::MIN_WINDOW_SIZE;
+    return { 640, 480 };
 }
 
 QSize PointsViewQGLWidget::sizeHint() const {
-    return Preferences::INIT_WINDOW_SIZE;
-}
-
-QColor getNextColor(size_t index) {
-    long double func = Preferences::COLOR_FUNCTION_DELTA * (index + 1);
-    return QColor(std::abs(std::sin(func)) * 255,
-                     std::abs(std::cos(func) * std::sin(func)) * 255,
-                     std::abs(std::cos(func)) * 255);
+    return { 1080, 720 };
 }
 
 void PointsViewQGLWidget::addNewLocus(QVector<QVector3D> &&points) {
-    shaderProgram.bind();
-    QColor color = getNextColor(locusController.size());
-    locusController.addLocus(Locus::Locus(std::move(points), color));
-    shaderProgram.release();
+    locusController.addLocus(std::move(points));
 }
 
 void PointsViewQGLWidget::setCurrentTime(const int currentTime_) {
     currentTime = currentTime_;
+}
+
+bool PointsViewQGLWidget::startVideoRecording(const QString &filename) {
+    try {
+        videoEncoder.startEncoding(prefs->video.width, prefs->video.height, filename.toStdString().c_str());
+
+        return true;
+    } catch (const std::exception &e) {
+        videoEncoder.endEncoding();
+
+        return false;
+    }
+}
+
+void PointsViewQGLWidget::endVideoRecording(std::function<void (int)> callback) {
+    auto drawFunc = [&lc = locusController](const QMatrix4x4 &projMatrix, size_t time) {
+        lc.draw(projMatrix, time);
+    };
+    videoEncoder.endEncoding(drawFunc, callback);
 }
 
 void PointsViewQGLWidget::clearAll() {
@@ -41,12 +56,12 @@ void PointsViewQGLWidget::clearAll() {
 void PointsViewQGLWidget::initializeGL() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+    glEnable(GL_POINT_SMOOTH);
 
     qglClearColor(QColor(Qt::black));
 
-    shaderProgram.addShaderFromSourceCode(QGLShader::Vertex, Preferences::VERTEX_SHADER);
-    shaderProgram.addShaderFromSourceCode(QGLShader::Fragment, Preferences::FRAGMENT_SHADER);
-    shaderProgram.link();
+    locusController.initialize();
 }
 
 void PointsViewQGLWidget::resizeGL(int width, int height) {
@@ -54,13 +69,13 @@ void PointsViewQGLWidget::resizeGL(int width, int height) {
 }
 
 void PointsViewQGLWidget::paintGL() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    shaderProgram.bind();
-    shaderProgram.setUniformValue(Preferences::MATRIX_NAME, cameraController.getMatrix());
-    shaderProgram.enableAttributeArray(Preferences::VERTEX_NAME);
-    locusController.draw(shaderProgram, currentTime);
-    shaderProgram.disableAttributeArray(Preferences::VERTEX_NAME);
-    shaderProgram.release();
+    locusController.draw(cameraController.getMatrix(), currentTime);
+
+    if (videoEncoder.isWorking()) {
+        videoEncoder.writeState({cameraController.getPosition(),
+                                 cameraController.getTarget(),
+                                 currentTime});
+    }
 }
 
 void PointsViewQGLWidget::mouseMoveEvent(QMouseEvent *event) {
