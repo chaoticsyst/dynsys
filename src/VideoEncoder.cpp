@@ -68,7 +68,7 @@ void VideoEncoder::startEncoding(int videoWidth, int videoHeight, const char *fi
     }
     stream->time_base = (AVRational){1, 35};
 
-    codecContext = stream->codec;
+    codecContext = avcodec_alloc_context3(codec);
 
     if (codec->sample_fmts == nullptr) {
         codecContext->sample_fmt = AV_SAMPLE_FMT_S16;
@@ -87,6 +87,7 @@ void VideoEncoder::startEncoding(int videoWidth, int videoHeight, const char *fi
     av_opt_set(codecContext->priv_data, "profile", "main", 0);
     av_opt_set(codecContext->priv_data, "preset", "medium", 0);
     av_opt_set(codecContext->priv_data, "b-pyramid", "0", 0);
+
     if (avcodec_open2(codecContext, codec, nullptr) < 0) {
         throw std::logic_error("Could not initialize a codec context.");
     }
@@ -96,6 +97,7 @@ void VideoEncoder::startEncoding(int videoWidth, int videoHeight, const char *fi
         throw std::logic_error("Could not create or initalize an AVIO context.");
     }
 
+    avcodec_parameters_from_context(stream->codecpar, codecContext);
     if (avformat_write_header(formatContext, &formatOptions) < 0) {
         throw std::logic_error("Could not write the stream header in the output file.");
     }
