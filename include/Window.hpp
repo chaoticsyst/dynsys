@@ -19,6 +19,7 @@ public:
     ~Window();
 
 public slots:
+    void updateVideoRecordingState();
     void slot_restart_button();
     void slot_time_slider(int);
     void slot_model_selection(QString);

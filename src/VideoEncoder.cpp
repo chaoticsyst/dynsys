@@ -57,7 +57,7 @@ void VideoEncoder::startEncoding(int videoWidth, int videoHeight, const char *fi
         throw std::logic_error("Could not set the video options.");
     }
 
-    codec = avcodec_find_encoder_by_name("libx264");
+    codec = avcodec_find_encoder_by_name("mpeg4");
     if (codec == nullptr) {
         throw std::logic_error("Could not find the codec.");
     }
@@ -79,13 +79,15 @@ void VideoEncoder::startEncoding(int videoWidth, int videoHeight, const char *fi
     codecContext->height = height;
     codecContext->time_base = stream->time_base;
     codecContext->pix_fmt = OUTPUT_PIX_FORMAT;
-    codecContext->gop_size = 32;
+    codecContext->gop_size = 250;
     codecContext->level = 31;
 
+    codecContext->flags |= CODEC_FLAG_QSCALE;
+    codecContext->global_quality = 1;
+
     //set up extra options
-    av_opt_set(codecContext->priv_data, "crf", "1", 0);
     av_opt_set(codecContext->priv_data, "profile", "main", 0);
-    av_opt_set(codecContext->priv_data, "preset", "medium", 0);
+    av_opt_set(codecContext->priv_data, "preset", "slow", 0);
     av_opt_set(codecContext->priv_data, "b-pyramid", "0", 0);
 
     if (avcodec_open2(codecContext, codec, nullptr) < 0) {
