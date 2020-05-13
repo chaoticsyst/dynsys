@@ -89,6 +89,8 @@ void Window::count_points(Lambda derivatives_function) {
     sliderTimer->start();
 
     clearFocus();
+
+    ui->horizontalSlider->setMaximum(std::min(10000, prefs.model.pointsNumber));
 }
 
 void Window::slot_model_selection(QString currentModel) {
