@@ -76,6 +76,8 @@ void ShaderController::setInterpolationDistance(float distance) {
 }
 
 void ShaderController::setPrimitive(GLenum primitive) {
+    shaderProgram.release();
+
     bool isLines = shaderProgram.shaders().contains(gshLines);
     bool isPoints = shaderProgram.shaders().contains(gshPoints);
     if (primitive == GL_POINTS && !isPoints) {
@@ -89,6 +91,8 @@ void ShaderController::setPrimitive(GLenum primitive) {
         }
         shaderProgram.addShader(gshLines);
     }
+
+    shaderProgram.bind();
 }
 
 } //namespace ShaderController

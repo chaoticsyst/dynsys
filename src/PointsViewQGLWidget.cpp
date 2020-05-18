@@ -1,6 +1,7 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <QFileInfo>
 
 #include "PointsViewQGLWidget.hpp"
 
@@ -88,6 +89,19 @@ void PointsViewQGLWidget::mousePressEvent(QMouseEvent *event) {
 
 void PointsViewQGLWidget::keyPressEvent(QKeyEvent *event) {
     cameraController.applyKeyPressEvent(event);
+
+    if (event->key() == Qt::Key_R) {
+        static auto getFileName = [](size_t number) {
+            return QString::fromStdString("screenshot_" + std::to_string(number) + ".png");
+        };
+
+        static size_t screenshotNumber = 0;
+        while (QFileInfo(getFileName(screenshotNumber)).exists()) {
+            screenshotNumber++;
+        }
+
+        grabFrameBuffer().save(getFileName(screenshotNumber), "PNG");
+    }
 }
 
 void PointsViewQGLWidget::keyReleaseEvent(QKeyEvent *event) {

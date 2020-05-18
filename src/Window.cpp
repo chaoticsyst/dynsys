@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include <thread>
 #include <future>
+#include <QFileDialog>
 
 #include "Model.hpp"
 #include "Parser.hpp"
@@ -88,6 +89,8 @@ void Window::count_points(Lambda derivatives_function) {
     sliderTimer->start();
 
     clearFocus();
+
+    ui->horizontalSlider->setMaximum(std::min(10000, prefs.model.pointsNumber));
 }
 
 void Window::slot_model_selection(QString currentModel) {
@@ -144,6 +147,50 @@ void Window::updateSlider() {
         ui->pointsViewQGLWidget->setCurrentTime((prefs.model.pointsNumber / ui->horizontalSlider->maximum()) * timeValue);
     }
     ui->pointsViewQGLWidget->repaint();
+}
+
+void Window::updateVideoRecordingState() {
+    static bool enabled = false;
+
+    enabled ^= true;
+    if (enabled) {
+        bool prevPauseState = pauseState;
+        pauseState = true;
+
+        QString videoName = QFileDialog::getSaveFileName(this, tr("Save Video"), "",
+                                                        tr("Video (*.avi)"), nullptr,
+                                                        QFileDialog::Option::DontUseNativeDialog);
+        if (videoName.isEmpty()) {
+            pauseState = prevPauseState;
+            enabled = false;
+
+            return;
+        }
+
+        if (!videoName.endsWith(".avi")) {
+            videoName += ".avi";
+        }
+        ui->pointsViewQGLWidget->startVideoRecording(videoName.toStdString().c_str());
+
+        ui->videoRecordingButton->setText("Закончить запись");
+        ui->videoRecordingProgress->setEnabled(true);
+
+        pauseState = prevPauseState;
+    } else {
+        ui->videoRecordingButton->setEnabled(false);
+
+        auto changeProgress = [&bar = ui->videoRecordingProgress](int progress) {
+            bar->setValue(progress);
+        };
+
+        ui->pointsViewQGLWidget->endVideoRecording(changeProgress);
+
+        ui->videoRecordingProgress->setValue(0);
+        ui->videoRecordingProgress->setEnabled(false);
+
+        ui->videoRecordingButton->setText("Начать запись");
+        ui->videoRecordingButton->setEnabled(true);
+    }
 }
 
 Window::~Window() {
