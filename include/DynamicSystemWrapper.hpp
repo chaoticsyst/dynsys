@@ -4,7 +4,7 @@
 #include <QVector3D>
 #include <Model/Model.hpp>
 
-namespace Ui::Utils {
+namespace DynamicSystemWrapper_n {
 
 inline auto getPushBackAndNormalizeLambda(QVector<QVector3D> &vector, float normalizeConstant) {
     return [&vector, normalizeConstant](const Model::Point &point) {

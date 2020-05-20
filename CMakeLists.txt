@@ -58,7 +58,7 @@ add_executable(DynamicSystems
     include/DynamicSystems/DynamicSystemImpl.hpp
     include/DynamicSystems/DynamicSystemInternal.hpp
     include/Window.hpp
-    include/WindowUtils.hpp
+    include/DynamicSystemWrapper.hpp
     include/PointsViewQGLWidget.hpp
     include/Locus.hpp
     include/VideoEncoder.hpp

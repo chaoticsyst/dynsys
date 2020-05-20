@@ -8,7 +8,7 @@
 #include "DynamicSystems/DynamicSystem.hpp"
 #include "Preferences.hpp"
 #include "WindowPreferences.hpp"
-#include "WindowUtils.hpp"
+#include "DynamicSystemWrapper.hpp"
 
 namespace Ui {
 class Window;
@@ -39,7 +39,8 @@ private:
 
     void insertExpressions(std::array<std::string_view, 3> array, bool);
 
-    using LambdaPushBackAction = decltype(Ui::Utils::getPushBackAndNormalizeLambda(std::declval<QVector<QVector3D> &>(), std::declval<float>()));
+    using LambdaPushBackAction = decltype(DynamicSystemWrapper_n::getPushBackAndNormalizeLambda(std::declval<QVector<QVector3D> &>(),
+                                                                                                std::declval<float>()));
     using DynamicSystemWrapper = DynamicSystems::DynamicSystem<LambdaPushBackAction>;
 
     static DynamicSystemWrapper getCustomSystem(std::array<std::string, 3>);

@@ -81,7 +81,7 @@ void Window::slot_restart_button() {
                 ui->doubleSpinBox->value(),
                 ui->doubleSpinBox_2->value(),
                 ui->doubleSpinBox_3->value()};
-        auto pushBackVector = Ui::Utils::getPushBackAndNormalizeLambda(buffer, prefs.model.divNormalization);
+        auto pushBackVector = DynamicSystemWrapper_n::getPushBackAndNormalizeLambda(buffer, prefs.model.divNormalization);
 
         system.compute(pushBackVector,
                        Model::Point{prefs.model.startPoint.x + offset,
