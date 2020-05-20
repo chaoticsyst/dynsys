@@ -54,7 +54,7 @@ std::vector<std::string_view> DynamicSystem<LambdaNewPointAction>::getVariablesN
 }
 
 template<typename LambdaNewPointAction>
-std::size_t DynamicSystem<LambdaNewPointAction>::variablesCount() const {
+std::size_t DynamicSystem<LambdaNewPointAction>::constantsCount() const {
     return variablesNames_.size();
 }
 

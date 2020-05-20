@@ -50,14 +50,15 @@ add_executable(DynamicSystems
     include/Preferences.hpp
     include/Camera.hpp
     include/WindowPreferences.hpp
-        include/Model/Model.hpp
-        include/Model/ModelImpl.hpp
+    include/Model/Model.hpp
+    include/Model/ModelImpl.hpp
     include/DynamicSystems/SystemsBase.hpp
     include/DynamicSystems/SystemsBaseGetImpl.hpp
     include/DynamicSystems/DynamicSystem.hpp
     include/DynamicSystems/DynamicSystemImpl.hpp
     include/DynamicSystems/DynamicSystemInternal.hpp
     include/Window.hpp
+    include/WindowUtils.hpp
     include/PointsViewQGLWidget.hpp
     include/Locus.hpp
     include/VideoEncoder.hpp

@@ -2,7 +2,6 @@
 #include <thread>
 #include <future>
 
-#include "Model/Model.hpp"
 #include "Parser.hpp"
 #include "DynamicSystems/DynamicSystem.hpp"
 #include "Window.hpp"
@@ -11,10 +10,16 @@
 #include "WindowPreferences.hpp"
 
 Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
-    windowPreferences = nullptr;
+    auto dynamicSystemsVector = DynamicSystems::getDefaultSystems<LambdaPushBackAction>();
+    dynamicSystemsVector.push_back(getCustomSystem({"1", "1", "1"}));
+    for (auto &system : dynamicSystemsVector) {
+        if (system.constantsCount() <= 3) {
+            QString name = system.getAttractorName().data();
+            dynamicSystems.emplace(std::move(name), std::move(system));
+        }
+    }
 
-    /// Get systems vector
-    dynamicSystems = DynamicSystems::getDefaultSystems<LambdaNewPointAction>();
+    windowPreferences = nullptr;
 
     setFocusPolicy(Qt::StrongFocus);
     ui->setupUi(this);
@@ -25,57 +30,66 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     sliderTimer->setInterval(prefs.controller.sliderTimeInterval);
     connect(sliderTimer, SIGNAL(timeout()), this, SLOT(updateSlider()));
 
-    ui->comboBox->addItem("Аттрактор Рёсслера");
-    ui->comboBox->addItem("Аттрактор Лоренца");
-    ui->comboBox->addItem("Свои уравнения");
+    for (auto &[name, system] : dynamicSystems) {
+        ui->comboBox->addItem(name);
+    }
 }
 
-void Window::insertConstants(QVector<std::pair<QString, QVector<double>>> &goodParams) {
+Window::DynamicSystemWrapper Window::getCustomSystem(std::array<std::string, 3> expressions) {
+    auto derivativesFunction = Parser::parseExpressions(expressions[0], expressions[1], expressions[2]);
+    return DynamicSystemWrapper{"Custom system", std::move(expressions), {}, {},
+                                DynamicSystems::DynamicSystemInternal<LambdaPushBackAction, decltype(derivativesFunction)>{
+                                        [derivativesFunction = std::move(derivativesFunction)]
+                                                (std::vector<long double> &) { return derivativesFunction; }}};
+}
+
+void Window::insertConstants(const std::vector<std::pair<std::string, std::vector<long double>>> &goodParams) {
     ui->constantsBox->clear();
     for (auto&[name, params] : goodParams) {
-        ui->constantsBox->addItem(name);
+        ui->constantsBox->addItem(name.c_str());
     }
+}
+
+void Window::insertExpressions(std::array<std::string_view, 3> array, bool readOnly) {
+    ui->firstExpr->setText(array[0].data());
+    ui->firstExpr->setReadOnly(readOnly);
+    ui->secondExpr->setText(array[1].data());
+    ui->secondExpr->setReadOnly(readOnly);
+    ui->thirdExpr->setText(array[2].data());
+    ui->thirdExpr->setReadOnly(readOnly);
 }
 
 void Window::slot_restart_button() {
-    if (ui->comboBox->currentText() == "Свои уравнения") {
+    if (ui->comboBox->currentText() == "Custom system") {
+        dynamicSystems.erase("Custom system");
+
         const std::string exprX = ui->firstExpr->text().toStdString();
         const std::string exprY = ui->secondExpr->text().toStdString();
         const std::string exprZ = ui->thirdExpr->text().toStdString();
-        auto derivatives_function = Parser::parseExpressions(exprX, exprY, exprZ);
-        count_points(derivatives_function);
-    } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
-        auto derivatives_function = Model::get_derivatives_function_lorenz(
-                ui->doubleSpinBox->value(),
-                ui->doubleSpinBox_2->value(),
-                ui->doubleSpinBox_3->value());
-        count_points(derivatives_function);
-    } else if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
-        auto derivatives_function = Model::get_derivatives_function_rossler(
-                ui->doubleSpinBox->value(),
-                ui->doubleSpinBox_2->value(),
-                ui->doubleSpinBox_3->value());
-        count_points(derivatives_function);
-    }
-}
 
-template<typename Lambda>
-void Window::count_points(Lambda derivatives_function) {
+        dynamicSystems.emplace("Custom system", getCustomSystem({exprX, exprY, exprZ}));
+    }
+
+    DynamicSystemWrapper &system = dynamicSystems.at(ui->comboBox->currentText());
+
     ui->pointsViewQGLWidget->clearAll();
+
     for (size_t i = 0; i < prefs.visualization.locusNumber; i++) {
         QVector<QVector3D> buffer;
-
-        double offset = prefs.model.startPointDelta * i;
-
+        long double offset = prefs.model.startPointDelta * i;
+        std::vector<long double> constants = {
+                ui->doubleSpinBox->value(),
+                ui->doubleSpinBox_2->value(),
+                ui->doubleSpinBox_3->value()};
         auto pushBackVector = Ui::Utils::getPushBackAndNormalizeLambda(buffer, prefs.model.divNormalization);
 
-        Model::generatePoints(pushBackVector,
-                              Model::Point{prefs.model.startPoint.x + offset,
-                                           prefs.model.startPoint.y + offset,
-                                           prefs.model.startPoint.z + offset},
-                              prefs.model.pointsNumber,
-                              prefs.model.deltaTime,
-                              derivatives_function);
+        system.compute(pushBackVector,
+                       Model::Point{prefs.model.startPoint.x + offset,
+                                    prefs.model.startPoint.y + offset,
+                                    prefs.model.startPoint.z + offset},
+                       prefs.model.pointsNumber,
+                       prefs.model.deltaTime,
+                       constants);
 
         ui->pointsViewQGLWidget->addNewLocus(std::move(buffer));
     }
@@ -88,26 +102,17 @@ void Window::count_points(Lambda derivatives_function) {
 }
 
 void Window::slot_model_selection(QString currentModel) {
-    if (currentModel == "Свои уравнения") {
-        insertConstants(AttractorsParams::customParams);
-    } else if (currentModel == "Аттрактор Рёсслера") {
-        insertConstants(AttractorsParams::goodParamsRossler);
-    } else if (currentModel == "Аттрактор Лоренца") {
-        insertConstants(AttractorsParams::goodParamsLorenz);
-    }
+    DynamicSystemWrapper &system = dynamicSystems.at(ui->comboBox->currentText());
+    insertConstants(system.getInterestingConstants());
+    bool readOnly = ui->comboBox->currentText() != "Custom system";
+    insertExpressions(system.getFormulae(), readOnly);
 }
 
 void Window::slot_constants_selection(QString currentConstants) {
-    QVector<std::pair<QString, QVector<double>>> goodParams;
-    if (ui->comboBox->currentText() == "Свои уравнения") {
-        goodParams = AttractorsParams::customParams;
-    } else if (ui->comboBox->currentText() == "Аттрактор Рёсслера") {
-        goodParams = AttractorsParams::goodParamsRossler;
-    } else if (ui->comboBox->currentText() == "Аттрактор Лоренца") {
-        goodParams = AttractorsParams::goodParamsLorenz;
-    }
+    DynamicSystemWrapper &system = dynamicSystems.at(ui->comboBox->currentText());
+    auto goodParams = system.getInterestingConstants();
     for (auto&[name, params] : goodParams) {
-        if (name == currentConstants) {
+        if (name.data() == currentConstants) {
             ui->doubleSpinBox->setValue(params[0]);
             ui->doubleSpinBox_2->setValue(params[1]);
             ui->doubleSpinBox_3->setValue(params[2]);
@@ -124,9 +129,9 @@ void Window::slot_time_slider(int timeValue_) {
 void Window::slot_pause_button() {
     pauseState ^= true;
     if (!pauseState) {
-        ui->pauseButton->setText("Пауза");
+        ui->pauseButton->setText("Pause");
     } else {
-        ui->pauseButton->setText("Продолжить");
+        ui->pauseButton->setText("Continue");
     }
 }
 

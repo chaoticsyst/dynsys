@@ -37,7 +37,7 @@ public:
 
     std::vector<std::string_view> getVariablesNames() const;
 
-    std::size_t variablesCount() const;
+    std::size_t constantsCount() const;
 
     const std::vector<std::pair<std::string, std::vector<long double>>> &getInterestingConstants() const;
 

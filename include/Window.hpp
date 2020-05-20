@@ -3,24 +3,12 @@
 #include <QWidget>
 #include <QSlider>
 #include <QVector>
+#include <QVector3D>
 
 #include "DynamicSystems/DynamicSystem.hpp"
 #include "Preferences.hpp"
 #include "WindowPreferences.hpp"
-
-namespace Ui::Utils {
-/// Lambda-getter for typedef (you can find another way to define lambda type)
-auto getPushBackAndNormalizeLambda(QVector<QVector3D> &vector, float normalizeConstant) {
-    return [&vector, normalizeConstant](const Model::Point &point) {
-        vector.push_back(
-                QVector3D(static_cast<float>(point.x) / normalizeConstant,
-                          static_cast<float>(point.y) / normalizeConstant,
-                          static_cast<float>(point.z) / normalizeConstant)
-        );
-    };
-}
-
-}
+#include "WindowUtils.hpp"
 
 namespace Ui {
 class Window;
@@ -47,19 +35,20 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
-    template<typename Lambda>
-    void count_points(Lambda derivatives_function);
+    void insertConstants(const std::vector<std::pair<std::string, std::vector<long double>>> &);
 
-    void insertConstants(QVector<std::pair<QString, QVector<double>>>&);
+    void insertExpressions(std::array<std::string_view, 3> array, bool);
 
-    /// Define type of LambdaNewPointAction
-    typedef decltype(Ui::Utils::getPushBackAndNormalizeLambda(std::declval<QVector<QVector3D> &>(), std::declval<float>())) LambdaNewPointAction;
+    using LambdaPushBackAction = decltype(Ui::Utils::getPushBackAndNormalizeLambda(std::declval<QVector<QVector3D> &>(), std::declval<float>()));
+    using DynamicSystemWrapper = DynamicSystems::DynamicSystem<LambdaPushBackAction>;
 
-    std::vector<DynamicSystems::DynamicSystem<LambdaNewPointAction>> dynamicSystems;
+    static DynamicSystemWrapper getCustomSystem(std::array<std::string, 3>);
+
+    std::map<QString, DynamicSystemWrapper> dynamicSystems;
 
     int timeValue = 0;
 
-    bool pauseState = 0;
+    bool pauseState = false;
 
     Preferences::Preferences prefs;
 
