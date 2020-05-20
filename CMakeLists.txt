@@ -47,14 +47,18 @@ add_executable(DynamicSystems
     src/ShaderController.cpp
     src/Parser/Parser.cpp
     src/Parser/Lexer.cpp
-    include/AttractorsParams.hpp
     include/Preferences.hpp
     include/Camera.hpp
     include/WindowPreferences.hpp
-    include/Model.hpp
-    include/ModelImpl.hpp
-    include/DynamicSystemsDefault.hpp
+    include/Model/Model.hpp
+    include/Model/ModelImpl.hpp
+    include/DynamicSystems/SystemsBase.hpp
+    include/DynamicSystems/SystemsBaseGetImpl.hpp
+    include/DynamicSystems/DynamicSystem.hpp
+    include/DynamicSystems/DynamicSystemImpl.hpp
+    include/DynamicSystems/DynamicSystemInternal.hpp
     include/Window.hpp
+    include/DynamicSystemWrapper.hpp
     include/PointsViewQGLWidget.hpp
     include/Locus.hpp
     include/VideoEncoder.hpp
@@ -64,7 +68,6 @@ add_executable(DynamicSystems
     include/Parser/ParserException.hpp
     include/Parser/ParserNodes.hpp
     include/Parser/Lexer.hpp
-
     src/form.ui
     src/formPreferences.ui
     materials/Resources.qrc
@@ -74,4 +77,12 @@ qt5_use_modules(DynamicSystems Widgets OpenGL)
 
 add_subdirectory(test/)
 
-target_link_libraries(DynamicSystems ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${AVCODEC_LIBRARY} ${AVFORMAT_LIBRARY} ${AVUTIL_LIBRARY} ${AVSWS_LIBRARY} Threads::Threads)
+target_link_libraries(DynamicSystems
+        ${QT_LIBRARIES}
+        ${OPENGL_LIBRARIES}
+        ${AVCODEC_LIBRARY}
+        ${AVFORMAT_LIBRARY}
+        ${AVUTIL_LIBRARY}
+        ${AVSWS_LIBRARY}
+        Threads::Threads
+)

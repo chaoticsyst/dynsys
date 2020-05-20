@@ -3,9 +3,12 @@
 #include <QWidget>
 #include <QSlider>
 #include <QVector>
+#include <QVector3D>
 
+#include "DynamicSystems/DynamicSystem.hpp"
 #include "Preferences.hpp"
 #include "WindowPreferences.hpp"
+#include "DynamicSystemWrapper.hpp"
 
 namespace Ui {
 class Window;
@@ -33,14 +36,21 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
-    template<typename Lambda>
-    void count_points(Lambda derivatives_function);
+    void insertConstants(const std::vector<std::pair<std::string, std::vector<long double>>> &);
 
-    void insertConstants(QVector<std::pair<QString, QVector<double>>>&);
+    void insertExpressions(std::array<std::string_view, 3> array, bool);
+
+    using LambdaPushBackAction = decltype(DynamicSystemWrapper_n::getPushBackAndNormalizeLambda(std::declval<QVector<QVector3D> &>(),
+                                                                                                std::declval<float>()));
+    using DynamicSystemWrapper = DynamicSystems::DynamicSystem<LambdaPushBackAction>;
+
+    static DynamicSystemWrapper getCustomSystem(std::array<std::string, 3>);
+
+    std::map<QString, DynamicSystemWrapper> dynamicSystems;
 
     int timeValue = 0;
 
-    bool pauseState = 0;
+    bool pauseState = false;
 
     Preferences::Preferences prefs;
 
