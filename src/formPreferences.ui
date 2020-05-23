@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>556</width>
+    <width>758</width>
     <height>404</height>
    </rect>
   </property>
@@ -55,9 +55,9 @@
     </layout>
    </item>
    <item row="0" column="0">
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidget" name="prefsTabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabModel">
       <attribute name="title">
@@ -67,14 +67,14 @@
        <item row="3" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
-          <widget class="QLabel" name="label_7">
+          <widget class="QLabel" name="deltaTimeLabel">
            <property name="text">
             <string>Tau</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="tauBox">
+          <widget class="QDoubleSpinBox" name="deltaTimeValue">
            <property name="decimals">
             <number>10</number>
            </property>
@@ -91,14 +91,14 @@
        <item row="4" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="startPointsCoordsLabel">
            <property name="text">
             <string>Координаты стартовой точки</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="xCoord">
+          <widget class="QDoubleSpinBox" name="xCoordValue">
            <property name="decimals">
             <number>5</number>
            </property>
@@ -111,7 +111,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="yCoord">
+          <widget class="QDoubleSpinBox" name="yCoordValue">
            <property name="decimals">
             <number>5</number>
            </property>
@@ -124,7 +124,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="zCoord">
+          <widget class="QDoubleSpinBox" name="zCoordValue">
            <property name="decimals">
             <number>5</number>
            </property>
@@ -141,14 +141,14 @@
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="trajNumberLabel">
            <property name="text">
             <string>Количество стартовых точек</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="countPoints">
+          <widget class="QSpinBox" name="trajNumberValue">
            <property name="maximum">
             <number>100000</number>
            </property>
@@ -162,14 +162,14 @@
        <item row="1" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="pointsNumberLabel">
            <property name="text">
             <string>Размер траектории для одной точки</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="pointsOneStart">
+          <widget class="QSpinBox" name="pointsNumberValue">
            <property name="maximum">
             <number>200000</number>
            </property>
@@ -183,14 +183,14 @@
        <item row="2" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
-          <widget class="QLabel" name="label_9">
+          <widget class="QLabel" name="startPointsDeltaLabel">
            <property name="text">
             <string>Расстояние между стартовыми точками</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="deltaStart">
+          <widget class="QDoubleSpinBox" name="startPointsDeltaValue">
            <property name="decimals">
             <number>5</number>
            </property>
@@ -214,14 +214,14 @@
        <item row="1" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item>
-          <widget class="QLabel" name="label_6">
+          <widget class="QLabel" name="moveSpeedLabel">
            <property name="text">
             <string>Скорость перемещения</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="speedSlider">
+          <widget class="QSlider" name="speedMoveSlider">
            <property name="minimum">
             <number>1</number>
            </property>
@@ -238,14 +238,14 @@
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
-          <widget class="QLabel" name="label_5">
+          <widget class="QLabel" name="sensitivityLabel">
            <property name="text">
             <string>Чувствительность</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="sensSlider">
+          <widget class="QSlider" name="sensitivitySlider">
            <property name="minimum">
             <number>1</number>
            </property>
@@ -269,14 +269,14 @@
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="tailPointsNumberLabel">
            <property name="text">
             <string>Количество точек на хвосте</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="tailSize">
+          <widget class="QSpinBox" name="tailPointsNumberValue">
            <property name="minimum">
             <number>10</number>
            </property>
@@ -290,14 +290,14 @@
        <item row="2" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_9">
          <item>
-          <widget class="QLabel" name="label_8">
+          <widget class="QLabel" name="interpolationLabel">
            <property name="text">
             <string>Степень сглаживания (%)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="interDegree">
+          <widget class="QSpinBox" name="interpolationDegree">
            <property name="minimum">
             <number>0</number>
            </property>
@@ -311,14 +311,14 @@
        <item row="1" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_11">
          <item>
-          <widget class="QLabel" name="label_10">
+          <widget class="QLabel" name="timerSpeedLabel">
            <property name="text">
             <string>Скорость ползунка</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="timerSpeed">
+          <widget class="QSpinBox" name="timerSpeedValue">
            <property name="minimum">
             <number>1</number>
            </property>
@@ -336,15 +336,15 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>countPoints</tabstop>
-  <tabstop>pointsOneStart</tabstop>
-  <tabstop>xCoord</tabstop>
-  <tabstop>yCoord</tabstop>
-  <tabstop>zCoord</tabstop>
-  <tabstop>sensSlider</tabstop>
-  <tabstop>speedSlider</tabstop>
-  <tabstop>tailSize</tabstop>
+  <tabstop>prefsTabWidget</tabstop>
+  <tabstop>trajNumberValue</tabstop>
+  <tabstop>pointsNumberValue</tabstop>
+  <tabstop>xCoordValue</tabstop>
+  <tabstop>yCoordValue</tabstop>
+  <tabstop>zCoordValue</tabstop>
+  <tabstop>sensitivitySlider</tabstop>
+  <tabstop>speedMoveSlider</tabstop>
+  <tabstop>tailPointsNumberValue</tabstop>
   <tabstop>cancelButton</tabstop>
   <tabstop>setDefaultButton</tabstop>
   <tabstop>applyButton</tabstop>

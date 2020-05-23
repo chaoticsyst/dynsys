@@ -17,14 +17,14 @@
    <item row="9" column="0" colspan="5">
     <layout class="QHBoxLayout" name="thirdParamLayout">
      <item>
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="thirdParamLabel">
        <property name="text">
         <string>Третий параметр</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+      <widget class="QDoubleSpinBox" name="thirdParamValue">
        <property name="decimals">
         <number>5</number>
        </property>
@@ -67,7 +67,7 @@
     </widget>
    </item>
    <item row="10" column="0" colspan="7">
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="buildModelButton">
      <property name="text">
       <string>Построить модель</string>
      </property>
@@ -84,7 +84,7 @@
     </widget>
    </item>
    <item row="5" column="1">
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="preferencesButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -103,7 +103,7 @@
     </widget>
    </item>
    <item row="1" column="0" colspan="7">
-    <widget class="QSlider" name="horizontalSlider">
+    <widget class="QSlider" name="progressSlider">
      <property name="maximum">
       <number>10000</number>
      </property>
@@ -121,7 +121,7 @@
    <item row="9" column="6">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QLabel" name="label_6">
+      <widget class="QLabel" name="zCoordDerivLabel">
        <property name="text">
         <string>z'=</string>
        </property>
@@ -135,7 +135,7 @@
    <item row="7" column="6">
     <layout class="QHBoxLayout" name="firstParserLayout">
      <item>
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="xCoordDerivLabel">
        <property name="text">
         <string>x'=</string>
        </property>
@@ -149,14 +149,14 @@
    <item row="7" column="0" colspan="5">
     <layout class="QHBoxLayout" name="firstParamLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="firstParamLabel">
        <property name="text">
         <string>Первый параметр</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox">
+      <widget class="QDoubleSpinBox" name="firstParamValue">
        <property name="decimals">
         <number>5</number>
        </property>
@@ -176,7 +176,7 @@
    <item row="8" column="6">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QLabel" name="label_5">
+      <widget class="QLabel" name="yCoordDerivLabel">
        <property name="text">
         <string>y'=</string>
        </property>
@@ -197,14 +197,14 @@
    <item row="8" column="0" colspan="5">
     <layout class="QHBoxLayout" name="secondParamLayout">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="secondParamLabel">
        <property name="text">
         <string>Второй параметр</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+      <widget class="QDoubleSpinBox" name="secondParamValue">
        <property name="decimals">
         <number>5</number>
        </property>
@@ -222,7 +222,7 @@
     </layout>
    </item>
    <item row="0" column="0" colspan="7">
-    <widget class="PointsViewQGLWidget" name="pointsViewQGLWidget" native="true">
+    <widget class="PointsViewQGLWidget" name="pointsViewer" native="true">
      <property name="minimumSize">
       <size>
        <width>370</width>
@@ -232,10 +232,10 @@
     </widget>
    </item>
    <item row="5" column="6">
-    <widget class="QComboBox" name="comboBox"/>
+    <widget class="QComboBox" name="modelsComboBox"/>
    </item>
    <item row="6" column="0" colspan="7">
-    <widget class="QComboBox" name="constantsBox"/>
+    <widget class="QComboBox" name="constantsComboBox"/>
    </item>
   </layout>
  </widget>
@@ -250,7 +250,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>pushButton</sender>
+   <sender>buildModelButton</sender>
    <signal>clicked()</signal>
    <receiver>Window</receiver>
    <slot>slot_restart_button()</slot>
@@ -266,7 +266,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>horizontalSlider</sender>
+   <sender>progressSlider</sender>
    <signal>valueChanged(int)</signal>
    <receiver>Window</receiver>
    <slot>slot_time_slider(int)</slot>
@@ -282,7 +282,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>comboBox</sender>
+   <sender>modelsComboBox</sender>
    <signal>currentTextChanged(QString)</signal>
    <receiver>Window</receiver>
    <slot>slot_model_selection(QString)</slot>
@@ -298,7 +298,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>constantsBox</sender>
+   <sender>constantsComboBox</sender>
    <signal>currentTextChanged(QString)</signal>
    <receiver>Window</receiver>
    <slot>slot_constants_selection(QString)</slot>
@@ -330,7 +330,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_2</sender>
+   <sender>preferencesButton</sender>
    <signal>clicked()</signal>
    <receiver>Window</receiver>
    <slot>slot_open_preferences()</slot>

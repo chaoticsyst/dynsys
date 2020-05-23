@@ -10,43 +10,43 @@ WindowPreferences::WindowPreferences(QWidget *parent, Preferences::Preferences *
 
 void WindowPreferences::setCurrentStateInUI() {
 /* Model settings */
-    ui->countPoints->setValue(prefs->visualization.locusNumber);
-    ui->pointsOneStart->setValue(prefs->model.pointsNumber);
-    ui->deltaStart->setValue(prefs->model.startPointDelta);
-    ui->tauBox->setValue(prefs->model.deltaTime);
-    ui->xCoord->setValue(prefs->model.startPoint.x);
-    ui->yCoord->setValue(prefs->model.startPoint.y);
-    ui->zCoord->setValue(prefs->model.startPoint.z);
+    ui->trajNumberValue->setValue(prefs->visualization.locusNumber);
+    ui->pointsNumberValue->setValue(prefs->model.pointsNumber);
+    ui->startPointsDeltaValue->setValue(prefs->model.startPointDelta);
+    ui->deltaTimeValue->setValue(prefs->model.deltaTime);
+    ui->xCoordValue->setValue(prefs->model.startPoint.x);
+    ui->yCoordValue->setValue(prefs->model.startPoint.y);
+    ui->zCoordValue->setValue(prefs->model.startPoint.z);
 
 /* Camera settings */
-    ui->sensSlider->setValue((prefs->camera.sensitivity - 0.0005) / (0.03 - 0.0005) * 100);
-    ui->speedSlider->setValue((prefs->camera.speed - 0.05) / (0.3 - 0.05) * 100);
+    ui->sensitivitySlider->setValue((prefs->camera.sensitivity - 0.0005) / (0.03 - 0.0005) * 100);
+    ui->speedMoveSlider->setValue((prefs->camera.speed - 0.05) / (0.3 - 0.05) * 100);
 
 /* View settings */
-    ui->tailSize->setValue(prefs->visualization.tailPointsNumber);
-    ui->timerSpeed->setValue(prefs->controller.deltaTimePerStep);
-    ui->interDegree->setValue((0.21 - prefs->visualization.interpolationDistance) / 0.002);
+    ui->tailPointsNumberValue->setValue(prefs->visualization.tailPointsNumber);
+    ui->timerSpeedValue->setValue(prefs->controller.deltaTimePerStep);
+    ui->interpolationDegree->setValue((0.21 - prefs->visualization.interpolationDistance) / 0.002);
 
 }
 
 void WindowPreferences::setStateFromUI() {
 /* Model settings */
-    prefs->visualization.locusNumber = ui->countPoints->value();
-    prefs->model.pointsNumber        = ui->pointsOneStart->value();
-    prefs->model.startPointDelta     = ui->deltaStart->value();
-    prefs->model.deltaTime           = ui->tauBox->value();
-    prefs->model.startPoint.x        = ui->xCoord->value();
-    prefs->model.startPoint.y        = ui->yCoord->value();
-    prefs->model.startPoint.z        = ui->zCoord->value();
+    prefs->visualization.locusNumber = ui->trajNumberValue->value();
+    prefs->model.pointsNumber        = ui->pointsNumberValue->value();
+    prefs->model.startPointDelta     = ui->startPointsDeltaValue->value();
+    prefs->model.deltaTime           = ui->timerSpeedValue->value();
+    prefs->model.startPoint.x        = ui->xCoordValue->value();
+    prefs->model.startPoint.y        = ui->yCoordValue->value();
+    prefs->model.startPoint.z        = ui->zCoordValue->value();
 
 /* Camera settings */
-    prefs->camera.speed       = 0.05 + ui->speedSlider->value() / 100.0 * (0.3 - 0.05);
-    prefs->camera.sensitivity = 0.0005 + ui->sensSlider->value() / 100.0 * (0.03 - 0.0005);
+    prefs->camera.speed       = 0.05 + ui->speedMoveSlider->value() / 100.0 * (0.3 - 0.05);
+    prefs->camera.sensitivity = 0.0005 + ui->sensitivitySlider->value() / 100.0 * (0.03 - 0.0005);
 
 /* View settings */
-    prefs->visualization.tailPointsNumber      = ui->tailSize->value();
-    prefs->controller.deltaTimePerStep         = ui->timerSpeed->value();
-    prefs->visualization.interpolationDistance = 0.21 - ui->interDegree->value() * 0.002;
+    prefs->visualization.tailPointsNumber      = ui->tailPointsNumberValue->value();
+    prefs->controller.deltaTimePerStep         = ui->timerSpeedValue->value();
+    prefs->visualization.interpolationDistance = 0.21 - ui->interpolationDegree->value() * 0.002;
 
     prefs->controller.preferencesChanged = true;
 }
