@@ -38,7 +38,9 @@ void VideoEncoder::startEncoding(int videoWidth, int videoHeight, const char *fi
     AVCodec *codec               = nullptr;
     AVDictionary *formatOptions  = nullptr;
 
+#if LIBAVCODEC_VERSION_MAJOR < 58
     av_register_all();
+#endif
 
     av_log_set_level(AV_LOG_QUIET);
 
@@ -82,7 +84,12 @@ void VideoEncoder::startEncoding(int videoWidth, int videoHeight, const char *fi
     codecContext->gop_size = 250;
     codecContext->level = 31;
 
+#if LIBAVCODEC_VERSION_MAJOR < 58
     codecContext->flags |= CODEC_FLAG_QSCALE;
+#else
+    codecContext->flags |= AV_CODEC_FLAG_QSCALE;
+#endif
+
     codecContext->global_quality = 1;
 
     //set up extra options
