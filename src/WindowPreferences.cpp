@@ -34,7 +34,7 @@ void WindowPreferences::setStateFromUI() {
     prefs->visualization.locusNumber = ui->trajNumberValue->value();
     prefs->model.pointsNumber        = ui->pointsNumberValue->value();
     prefs->model.startPointDelta     = ui->startPointsDeltaValue->value();
-    prefs->model.deltaTime           = ui->timerSpeedValue->value();
+    prefs->model.deltaTime           = ui->deltaTimeValue->value();
     prefs->model.startPoint.x        = ui->xCoordValue->value();
     prefs->model.startPoint.y        = ui->yCoordValue->value();
     prefs->model.startPoint.z        = ui->zCoordValue->value();
