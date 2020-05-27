@@ -45,6 +45,7 @@ add_executable(DynamicSystems
     src/Preferences.cpp
     src/VideoEncoder.cpp
     src/ShaderController.cpp
+    src/DynamicSystemParser/DynamicSystemParser.cpp
     src/Parser/Parser.cpp
     src/Parser/Lexer.cpp
     include/Preferences.hpp
@@ -57,6 +58,8 @@ add_executable(DynamicSystems
     include/DynamicSystems/DynamicSystem.hpp
     include/DynamicSystems/DynamicSystemImpl.hpp
     include/DynamicSystems/DynamicSystemInternal.hpp
+    include/DynamicSystemParser/DynamicSystemParser.hpp
+    include/DynamicSystemParser/Impl/DynamicSystemParserImpl.hpp
     include/Window.hpp
     include/DynamicSystemWrapper.hpp
     include/PointsViewQGLWidget.hpp
@@ -64,7 +67,6 @@ add_executable(DynamicSystems
     include/VideoEncoder.hpp
     include/ShaderController.hpp
     include/Parser/Parser.hpp
-    include/Parser/ParserImpl.hpp
     include/Parser/ParserException.hpp
     include/Parser/ParserNodes.hpp
     include/Parser/Lexer.hpp

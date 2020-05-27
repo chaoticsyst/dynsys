@@ -23,7 +23,7 @@ public:
     Parser &operator=(const Parser &) = delete;
     Parser &operator=(Parser &&)      = delete;
 
-    std::shared_ptr<Node> parse() {
+    std::unique_ptr<Node> parse() {
         return parseAddSubtract();
     }
 
@@ -207,7 +207,7 @@ private:
     }
 };
 
-std::shared_ptr<Node> parseExpression(const std::string &expression,
+std::unique_ptr<Node> parseExpression(const std::string &expression,
                                       const std::array<long double *, 3> &variableAddresses,
                                       const std::map<std::string, long double> &customConstVariables) {
 

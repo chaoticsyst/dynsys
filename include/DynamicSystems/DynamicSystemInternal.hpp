@@ -14,15 +14,14 @@ class DynamicSystemInternal final {
 public:
     explicit DynamicSystemInternal(
             std::function<LambdaDerivatives(std::vector<long double> &)> derivativesFunctionGetter) :
-            getDerivativesFunction{derivativesFunctionGetter} {}
+            getDerivativesFunction{std::move(derivativesFunctionGetter)} {}
 
     void compute(LambdaNewPointAction newPointAction,
                  Model::Point point,
                  int pointsCount,
                  long double timeDelta,
                  std::vector<long double> &constantValues) const {
-        LambdaDerivatives derivativesFunction = getDerivativesFunction(constantValues);
-        Model::generatePoints(newPointAction, point, pointsCount, timeDelta, derivativesFunction);
+        Model::generatePoints(newPointAction, point, pointsCount, timeDelta, getDerivativesFunction(constantValues));
     }
 
 private:
