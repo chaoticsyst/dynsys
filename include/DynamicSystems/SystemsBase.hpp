@@ -364,8 +364,7 @@ DynamicSystem<LambdaNewPointAction> getSystemFinance() {
                                            "-x - c*z"};
     std::vector<std::string> constantsNames = {"a", "b", "c"};
     std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants = {
-            {"Classic values",   {10, 28,  8.0 / 3.0}},
-            {"Схождение в цикл", {10, 100, 8.0 / 3.0}}
+            {"Classic values",   {0.001, 0.2,  1.1}}
     };
     auto derivativesFunctionGetter = [](std::vector<long double> constValues) {
         return [a_ = (1 / constValues[1] - constValues[0]), b = constValues[1],
