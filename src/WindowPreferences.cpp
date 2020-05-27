@@ -32,6 +32,10 @@ void WindowPreferences::setCurrentStateInUI() {
     } else {
         ui->arcadeModeCheckBox->setCheckState(Qt::CheckState::Unchecked);
     }
+
+/* Camera settings */
+    ui->videoWidthValue->setValue(prefs->video.width);
+    ui->videoHeightValue->setValue(prefs->video.height);
 }
 
 void WindowPreferences::setStateFromUI() {
@@ -58,6 +62,10 @@ void WindowPreferences::setStateFromUI() {
     } else {
         prefs->disableArcadeMode();
     }
+
+/* Camera settings */
+    prefs->video.width = ui->videoWidthValue->value();
+    prefs->video.height = ui->videoHeightValue->value();
 
     prefs->controller.preferencesChanged = true;
 }
