@@ -266,22 +266,22 @@
        <string>Визуализация</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
-       <item row="0" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
          <item>
-          <widget class="QLabel" name="tailPointsNumberLabel">
+          <widget class="QLabel" name="timerSpeedLabel">
            <property name="text">
-            <string>Количество точек на хвосте</string>
+            <string>Скорость ползунка</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="tailPointsNumberValue">
+          <widget class="QSpinBox" name="timerSpeedValue">
            <property name="minimum">
-            <number>10</number>
+            <number>1</number>
            </property>
            <property name="maximum">
-            <number>1000</number>
+            <number>20</number>
            </property>
           </widget>
          </item>
@@ -308,22 +308,90 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_11">
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLabel" name="timerSpeedLabel">
+          <widget class="QLabel" name="tailPointsNumberLabel">
            <property name="text">
-            <string>Скорость ползунка</string>
+            <string>Количество точек на хвосте</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="timerSpeedValue">
+          <widget class="QSpinBox" name="tailPointsNumberValue">
            <property name="minimum">
-            <number>1</number>
+            <number>10</number>
            </property>
            <property name="maximum">
-            <number>20</number>
+            <number>1000</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="arcadeModeCheckBox">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Аркадный режим</string>
+         </property>
+         <property name="tristate">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabVideo">
+      <attribute name="title">
+       <string>Видео</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_14">
+         <item>
+          <widget class="QLabel" name="videoHeightLabel">
+           <property name="text">
+            <string>Высота</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="videoHeightValue">
+           <property name="minimum">
+            <number>100</number>
+           </property>
+           <property name="maximum">
+            <number>2160</number>
+           </property>
+           <property name="value">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
+         <item>
+          <widget class="QLabel" name="videoWidthLabel">
+           <property name="text">
+            <string>Ширина</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="videoWidthValue">
+           <property name="minimum">
+            <number>100</number>
+           </property>
+           <property name="maximum">
+            <number>4096</number>
+           </property>
+           <property name="value">
+            <number>100</number>
            </property>
           </widget>
          </item>
