@@ -1,7 +1,8 @@
 #include <cmath>
 
 #include "gtest/gtest.h"
-#include "Parser.hpp"
+#include "Parser/Parser.hpp"
+#include "DynamicSystemParser/DynamicSystemParser.hpp"
 
 TEST(parser, simple_integer_arithmetic) {
     auto func = Parser::parseExpression("2+1", {nullptr, nullptr, nullptr});
@@ -121,7 +122,8 @@ TEST(parser, parse_errors) {
 }
 
 TEST(parser, lambda_test) {
-    auto lambda = Parser::parseExpressions("x+y", "y - 1.1*z", "z - 1", {});
+    std::vector<long double> emptyVector;
+    auto lambda = DynamicSystemParser::Impl::parseExpressions("x+y", "y - 1.1*z", "z - 1", {}).operator()(emptyVector);
     EXPECT_NEAR(lambda({1, 1, 1}).x, (Model::Point{2, -0.1, 0}).x, 1e-10);
     EXPECT_NEAR(lambda({1, 1, 1}).y, (Model::Point{2, -0.1, 0}).y, 1e-10);
     EXPECT_NEAR(lambda({1, 1, 1}).z, (Model::Point{2, -0.1, 0}).z, 1e-10);
@@ -143,11 +145,14 @@ TEST(parser, strange_format) {
 
 TEST(parser, use_variables) {
     auto func = Parser::parseExpression("2 + a * bedy - c", {nullptr, nullptr, nullptr},
-                                        {{"a", 0.8}, {"bedy", 10.5}, {"c", -1}});
+                                        {{"a",    0.8},
+                                         {"bedy", 10.5},
+                                         {"c",    -1}});
     EXPECT_NEAR(func->calc(), 11.4, 1e-10);
     func = Parser::parseExpression("(2 * abcd - 3) + (2 * abcd * abcd * (abc - 2)) / 3 - 1",
-                                    {nullptr, nullptr, nullptr},
-                                    {{"abcd", 11.7}, {"abc", -3.15}});
+                                   {nullptr, nullptr, nullptr},
+                                   {{"abcd", 11.7},
+                                    {"abc",  -3.15}});
     EXPECT_NEAR(func->calc(), -450.589, 1e-10);
     func = Parser::parseExpression("3 * pi - e * 2 - (3 + e + pi) / (pi * pi - 2)", {nullptr, nullptr, nullptr});
     EXPECT_NEAR(func->calc(), 2.862, 1e-3);
@@ -158,8 +163,8 @@ TEST(parser, function_calls) {
                                         {nullptr, nullptr, nullptr});
     EXPECT_NEAR(func->calc(), -1.755, 1e-3);
     func = Parser::parseExpression("ln(100) * log(13) / 2 * (atan(3 + sin(hello)) - atanh(0.3)) * acos(0.5) - hello * sqrt(abs(hello))",
-                                    {nullptr, nullptr, nullptr},
-                                    {{"hello", -123}});
+                                   {nullptr, nullptr, nullptr},
+                                   {{"hello", -123}});
     EXPECT_NEAR(func->calc(), 1366.768, 1e-3);
     EXPECT_NEAR(Parser::parseExpression("exp(2)", {nullptr, nullptr, nullptr})->calc(),
                 Parser::parseExpression("e ^ 2 - sin(pi) * cos(112.2)", {nullptr, nullptr, nullptr})->calc(), 1e-10);
@@ -171,12 +176,16 @@ TEST(parser, strong_tests) {
                                         "/ 2 + priv / priv * priv * (e - pi / 2 + asinh(acosh(10) - prev * (3 / 2.5)))"
                                         "- 100 / sqrt(e^3)^3) + pi^e^e) - 10^(e + e / 2 - 3)) - 100)",
                                         {nullptr, nullptr, nullptr},
-                                        {{"priv", 10}, {"pre", 2}, {"prev", 2.5}});
+                                        {{"priv", 10},
+                                         {"pre",  2},
+                                         {"prev", 2.5}});
     EXPECT_NEAR(func->calc(), 0.8358, 1e-4);
     func = Parser::parseExpression("ln(sin(asin(a / 5 * 2) + asin(0.3232) * cos(abs(aaa * 20) / e)"
                                    " + e^(a * 20 - aa - aaa * 3) - e^5 * e^(aa + aa)"
                                    "/ pi^10) ^abs(aaa * 6) / ln(sin(cos(sin(cos(3) + 2) + aa * 2) - (1 / aa))"
                                    "+ ln(100) + atanh(0.3))^3 + 100)", {nullptr, nullptr, nullptr},
-                                   {{"a", 0.5}, {"aa", 1.5}, {"aaa", -0.5}});
+                                   {{"a",   0.5},
+                                    {"aa",  1.5},
+                                    {"aaa", -0.5}});
     EXPECT_NEAR(func->calc(), 4.6044, 1e-4);
 }

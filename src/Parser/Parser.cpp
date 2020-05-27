@@ -3,9 +3,9 @@
 #include <vector>
 #include <cmath>
 
-#include "Lexer.hpp"
-#include "Parser.hpp"
-#include "ParserNodes.hpp"
+#include "Parser/Lexer.hpp"
+#include "Parser/Parser.hpp"
+#include "Parser/ParserNodes.hpp"
 
 namespace Parser {
 

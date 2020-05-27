@@ -6,7 +6,7 @@
 #include <string>
 
 #include "DynamicSystemParser/DynamicSystemParser.hpp"
-#include "Parser.hpp"
+#include "Parser/Parser.hpp"
 
 namespace DynamicSystemParser {
 

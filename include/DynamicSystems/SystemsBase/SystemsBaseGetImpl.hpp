@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "DynamicSystems/DynamicSystem.hpp"
-#include "DynamicSystems/Impl/SystemsBase.hpp"
+#include "DynamicSystems/SystemsBase/SystemsBase.hpp"
 
 
 namespace DynamicSystems {

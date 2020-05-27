@@ -10,7 +10,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(
     ../include/
-    ../include/Parser/
     ${GTEST_INCLUDE_DIRS}        
 )
 
@@ -21,6 +20,7 @@ find_package(OpenGL REQUIRED)
 add_executable(TestDynSys
         testAll.cpp
         testParser.cpp
+        ../src/DynamicSystemParser/DynamicSystemParser.cpp
         ../src/Parser/Parser.cpp
         ../src/Parser/Lexer.cpp
         testSystems.cpp)

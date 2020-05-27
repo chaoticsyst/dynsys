@@ -1,7 +1,7 @@
 #include <sstream>
 
-#include "Lexer.hpp"
-#include "ParserException.hpp"
+#include "Parser/Lexer.hpp"
+#include "Parser/ParserException.hpp"
 
 namespace Lexer {
 
