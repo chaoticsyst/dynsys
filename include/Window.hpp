@@ -9,10 +9,13 @@
 #include "Preferences.hpp"
 #include "WindowPreferences.hpp"
 #include "DynamicSystemWrapper.hpp"
+#include "StoppableTask.hpp"
 
 namespace Ui {
 class Window;
 }
+
+class CountPointsTask;
 
 class Window : public QWidget {
     Q_OBJECT
@@ -22,6 +25,8 @@ public:
     ~Window();
 
 public slots:
+    void updateOpenGLWidget(QVector<QVector3D>);
+
     void updateVideoRecordingState();
     void slot_restart_button();
     void slot_time_slider(int);
@@ -36,6 +41,9 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
+    friend class CountPointsTask;
+    void afterCountPointsUIUpdate();
+
     void insertConstants(const std::vector<std::pair<std::string, std::vector<long double>>> &);
 
     void insertExpressions(std::array<std::string_view, 3> array, bool);
@@ -58,4 +66,24 @@ private:
 
     WindowPreferences *windowPreferences;
     Ui::Window *ui;
+    CountPointsTask *task;
+};
+
+
+class CountPointsTask : public StoppableTask {
+    Q_OBJECT
+
+signals:
+    void updater(QVector<QVector3D>);
+public:
+    CountPointsTask(Window& wind_);
+
+    void run() override;
+
+public slots:
+    void afterRun() override {
+        wind.afterCountPointsUIUpdate();
+    }
+private:
+    Window& wind;
 };

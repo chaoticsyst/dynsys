@@ -1,6 +1,4 @@
 #include <QtWidgets>
-#include <thread>
-#include <future>
 #include <QFileDialog>
 
 #include "DynamicSystemParser/DynamicSystemParser.hpp"
@@ -19,6 +17,8 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
             dynamicSystems.emplace(std::move(name), std::move(system));
         }
     }
+
+    task = new CountPointsTask(*this);
 
     windowPreferences = nullptr;
 
@@ -56,41 +56,7 @@ void Window::insertExpressions(std::array<std::string_view, 3> array, bool readO
     ui->thirdExpr->setReadOnly(readOnly);
 }
 
-void Window::slot_restart_button() {
-    if (ui->modelsComboBox->currentText() == "Custom system") {
-        dynamicSystems.erase("Custom system");
-
-        const std::string exprX = ui->firstExpr->text().toStdString();
-        const std::string exprY = ui->secondExpr->text().toStdString();
-        const std::string exprZ = ui->thirdExpr->text().toStdString();
-
-        dynamicSystems.emplace("Custom system", getCustomSystem({exprX, exprY, exprZ}));
-    }
-
-    DynamicSystemWrapper &system = dynamicSystems.at(ui->modelsComboBox->currentText());
-
-    ui->pointsViewer->clearAll();
-
-    for (size_t i = 0; i < prefs.visualization.locusNumber; i++) {
-        QVector<QVector3D> buffer;
-        long double offset = prefs.model.startPointDelta * i;
-        std::vector<long double> constants = {
-                ui->firstParamValue->value(),
-                ui->secondParamValue->value(),
-                ui->thirdParamValue->value()};
-        auto pushBackVector = DynamicSystemWrapper_n::getPushBackAndNormalizeLambda(buffer, prefs.model.divNormalization);
-
-        system.compute(pushBackVector,
-                       Model::Point{prefs.model.startPoint.x + offset,
-                                    prefs.model.startPoint.y + offset,
-                                    prefs.model.startPoint.z + offset},
-                       prefs.model.pointsNumber,
-                       prefs.model.deltaTime,
-                       constants);
-
-        ui->pointsViewer->addNewLocus(std::move(buffer));
-    }
-
+void Window::afterCountPointsUIUpdate() {
     timeValue = 0;
     ui->progressSlider->setValue(timeValue);
     sliderTimer->start();
@@ -98,6 +64,53 @@ void Window::slot_restart_button() {
     clearFocus();
 
     ui->progressSlider->setMaximum(std::min(10000, prefs.model.pointsNumber));
+}
+
+void Window::updateOpenGLWidget(QVector<QVector3D> buffer) {
+    ui->pointsViewer->addNewLocus(std::move(buffer));
+}
+
+CountPointsTask::CountPointsTask(Window& wind_) : wind(wind_) {
+    QObject::connect(this, &CountPointsTask::updater, &wind, &Window::updateOpenGLWidget, Qt::QueuedConnection);
+}
+
+void CountPointsTask::run() {
+    if (wind.ui->modelsComboBox->currentText() == "Custom system") {
+        wind.dynamicSystems.erase("Custom system");
+
+        const std::string exprX = wind.ui->firstExpr->text().toStdString();
+        const std::string exprY = wind.ui->secondExpr->text().toStdString();
+        const std::string exprZ = wind.ui->thirdExpr->text().toStdString();
+
+        wind.dynamicSystems.emplace("Custom system", wind.getCustomSystem({exprX, exprY, exprZ}));
+    }
+
+    Window::DynamicSystemWrapper &system = wind.dynamicSystems.at(wind.ui->modelsComboBox->currentText());
+
+    for (size_t i = 0; i < wind.prefs.visualization.locusNumber; i++) {
+        QVector<QVector3D> buffer;
+        long double offset = wind.prefs.model.startPointDelta * i;
+        std::vector<long double> constants = {
+                wind.ui->firstParamValue->value(),
+                wind.ui->secondParamValue->value(),
+                wind.ui->thirdParamValue->value()};
+        auto pushBackVector = DynamicSystemWrapper_n::getPushBackAndNormalizeLambda(buffer, wind.prefs.model.divNormalization);
+
+        system.compute(pushBackVector,
+                       Model::Point{wind.prefs.model.startPoint.x + offset,
+                                    wind.prefs.model.startPoint.y + offset,
+                                    wind.prefs.model.startPoint.z + offset},
+                       wind.prefs.model.pointsNumber,
+                       wind.prefs.model.deltaTime,
+                       constants);
+
+        emit updater(std::move(buffer));
+    }
+}
+
+void Window::slot_restart_button() {
+    ui->pointsViewer->clearAll();
+    (*task)();
 }
 
 void Window::slot_model_selection(QString currentModel) {
