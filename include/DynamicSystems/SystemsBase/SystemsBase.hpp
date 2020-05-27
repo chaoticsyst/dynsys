@@ -8,8 +8,8 @@
 #include "DynamicSystems/DynamicSystem.hpp"
 
 
-namespace DynamicSystems::AllSystems {
-
+namespace DynamicSystems {
+namespace AllSystems {
 
 template<typename LambdaNewPointAction>
 DynamicSystem<LambdaNewPointAction> getSystemLorenz() {
@@ -917,4 +917,4 @@ DynamicSystem<LambdaNewPointAction> getSystemYuWang() {
 }
 
 
-} // namespace DynamicSystem::AllSystems
+}} // namespace DynamicSystem::AllSystems

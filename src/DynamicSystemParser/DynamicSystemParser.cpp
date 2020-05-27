@@ -5,7 +5,8 @@
 
 #include "DynamicSystemParser/DynamicSystemParser.hpp"
 
-namespace DynamicSystemParser::Impl {
+namespace DynamicSystemParser {
+namespace Impl {
 
 ParserDerivativesWrapper::ParserDerivativesWrapper(std::unique_ptr<std::array<long double, 3>> variables_,
                                                    std::unique_ptr<const Parser::Node> xFunc_,
@@ -45,4 +46,4 @@ ParserDerivativesWrapper parseExpressions(const std::string &xExpr, const std::s
     return ParserDerivativesWrapper{std::move(variableArray), std::move(xFunc), std::move(yFunc), std::move(zFunc)};
 }
 
-} // namespace DynamicSystemParser::Impl
+}} // namespace DynamicSystemParser::Impl
