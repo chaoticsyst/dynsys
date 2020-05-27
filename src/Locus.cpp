@@ -73,9 +73,13 @@ void LocusController::draw(const QMatrix4x4 &projMatrix, size_t time) {
             continue;
         }
 
-        int curAmount = std::min(locus.size(), time);
-        size_t start = std::max(0, curAmount - static_cast<int>(prefs->visualization.tailPointsNumber));
-        size_t actualLength = curAmount - start;
+        size_t start = std::max(0, static_cast<int>(time) - static_cast<int>(prefs->visualization.tailPointsNumber));
+        if (start >= locus.size()) {
+            locus.endWork();
+
+            continue;
+        }
+        size_t actualLength = time - start;
 
         shaderController.setVertex();
 
