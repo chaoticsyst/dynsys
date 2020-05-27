@@ -27,6 +27,11 @@ void WindowPreferences::setCurrentStateInUI() {
     ui->timerSpeedValue->setValue(prefs->controller.deltaTimePerStep);
     ui->interpolationDegree->setValue((0.21 - prefs->visualization.interpolationDistance) / 0.002);
 
+    if (prefs->visualization.arcadeMode) {
+        ui->arcadeModeCheckBox->setCheckState(Qt::CheckState::Checked);
+    } else {
+        ui->arcadeModeCheckBox->setCheckState(Qt::CheckState::Unchecked);
+    }
 }
 
 void WindowPreferences::setStateFromUI() {
@@ -47,6 +52,12 @@ void WindowPreferences::setStateFromUI() {
     prefs->visualization.tailPointsNumber      = ui->tailPointsNumberValue->value();
     prefs->controller.deltaTimePerStep         = ui->timerSpeedValue->value();
     prefs->visualization.interpolationDistance = 0.21 - ui->interpolationDegree->value() * 0.002;
+
+    if (ui->arcadeModeCheckBox->checkState() == Qt::CheckState::Checked) {
+        prefs->enableArcadeMode();
+    } else {
+        prefs->disableArcadeMode();
+    }
 
     prefs->controller.preferencesChanged = true;
 }
