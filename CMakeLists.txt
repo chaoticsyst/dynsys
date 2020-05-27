@@ -53,11 +53,11 @@ add_executable(DynamicSystems
     include/WindowPreferences.hpp
     include/Model/Model.hpp
     include/Model/ModelImpl.hpp
-    include/DynamicSystems/SystemsBase.hpp
-    include/DynamicSystems/SystemsBaseGetImpl.hpp
     include/DynamicSystems/DynamicSystem.hpp
-    include/DynamicSystems/DynamicSystemImpl.hpp
-    include/DynamicSystems/DynamicSystemInternal.hpp
+    include/DynamicSystems/Impl/SystemsBase.hpp
+    include/DynamicSystems/Impl/SystemsBaseGetImpl.hpp
+    include/DynamicSystems/Impl/DynamicSystemImpl.hpp
+    include/DynamicSystems/Impl/DynamicSystemInternal.hpp
     include/DynamicSystemParser/DynamicSystemParser.hpp
     include/DynamicSystemParser/Impl/DynamicSystemParserImpl.hpp
     include/Window.hpp

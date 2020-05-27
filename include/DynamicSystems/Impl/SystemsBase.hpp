@@ -5,10 +5,10 @@
 #include <string>
 #include <cmath>
 
-#include "DynamicSystem.hpp"
+#include "DynamicSystems/DynamicSystem.hpp"
 
 
-namespace DynamicSystems {
+namespace DynamicSystems::AllSystems {
 
 
 template<typename LambdaNewPointAction>
@@ -917,4 +917,4 @@ DynamicSystem<LambdaNewPointAction> getSystemYuWang() {
 }
 
 
-} // namespace DynamicSystem
+} // namespace DynamicSystem::AllSystems
