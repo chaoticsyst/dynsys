@@ -1,16 +1,20 @@
 #pragma once
 
-#include "Model.hpp"
+#include <utility>
+
+#include "Model/Model.hpp"
 
 namespace Model {
+
+namespace Impl {
 
 constexpr long double COORDINATE_VALUE_LIMIT = 1e3;
 
 template<typename LambdaNextPointGenerator, typename LambdaNewPointAction>
-void generatePointsMainloop(LambdaNewPointAction newPointAction,
+void generatePointsMainloop(LambdaNewPointAction &&newPointAction,
                             Point point,
                             int pointsCount,
-                            LambdaNextPointGenerator nextPoint) {
+                            LambdaNextPointGenerator &&nextPoint) {
     Point previousPoint = point;
     for (int i = 0; i < pointsCount; ++i) {
         point = nextPoint(point);
@@ -25,12 +29,12 @@ void generatePointsMainloop(LambdaNewPointAction newPointAction,
 
 
 template<typename LambdaDerivatives, typename LambdaNewPointAction>
-void setNextPointGenerator(LambdaNewPointAction newPointAction,
+void setNextPointGenerator(LambdaNewPointAction &&newPointAction,
                            Point point,
                            int pointsCount,
                            long double tau,
-                           LambdaDerivatives countDerivatives) {
-    auto nextPoint = [tau, countDerivatives](const Point &point) {
+                           LambdaDerivatives &&countDerivatives) {
+    auto nextPoint = [tau, countDerivatives = std::forward<LambdaDerivatives>(countDerivatives)](const Point &point) {
         Point k1 = countDerivatives(point);
         Point send = {
                 point.x + k1.x * tau / 2,
@@ -52,21 +56,22 @@ void setNextPointGenerator(LambdaNewPointAction newPointAction,
                 point.z + (tau / 6) * (k1.z + k4.z + 2 * (k2.z + k3.z))
         };
     };
-    generatePointsMainloop(newPointAction, point, pointsCount, nextPoint);
+    generatePointsMainloop(std::forward<LambdaNewPointAction>(newPointAction), point, pointsCount, std::move(nextPoint));
 }
 
+} // namecpace Impl
 
 template<typename LambdaDerivatives, typename LambdaNewPointAction>
-void generatePoints(LambdaNewPointAction newPointAction,
+void generatePoints(LambdaNewPointAction &&newPointAction,
                     Point point,
                     int pointsCount,
                     long double tau,
-                    LambdaDerivatives countDerivatives) {
-    setNextPointGenerator(newPointAction,
-                          point,
-                          pointsCount,
-                          tau,
-                          countDerivatives);
+                    LambdaDerivatives &&countDerivatives) {
+    Impl::setNextPointGenerator(std::forward<LambdaNewPointAction>(newPointAction),
+                                point,
+                                pointsCount,
+                                tau,
+                                std::forward<LambdaDerivatives>(countDerivatives));
 }
 
 }//namespace Model
