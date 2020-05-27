@@ -60,6 +60,7 @@ add_executable(DynamicSystems
     include/Window.hpp
     include/DynamicSystemWrapper.hpp
     include/PointsViewQGLWidget.hpp
+    include/StoppableTask.hpp
     include/Locus.hpp
     include/VideoEncoder.hpp
     include/ShaderController.hpp
