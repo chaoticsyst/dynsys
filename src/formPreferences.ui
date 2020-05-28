@@ -57,7 +57,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="prefsTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabModel">
       <attribute name="title">
@@ -287,27 +287,6 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <widget class="QLabel" name="interpolationLabel">
-           <property name="text">
-            <string>Степень сглаживания (%)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="interpolationDegree">
-           <property name="minimum">
-            <number>0</number>
-           </property>
-           <property name="maximum">
-            <number>100</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
@@ -329,6 +308,27 @@
          </item>
         </layout>
        </item>
+       <item row="2" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QLabel" name="interpolationLabel">
+           <property name="text">
+            <string>Степень сглаживания (%)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="interpolationDegree">
+           <property name="minimum">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item row="3" column="0">
         <widget class="QCheckBox" name="arcadeModeCheckBox">
          <property name="layoutDirection">
@@ -341,6 +341,56 @@
           <bool>false</bool>
          </property>
         </widget>
+       </item>
+       <item row="4" column="0">
+        <layout class="QHBoxLayout" name="colorsLayout">
+         <item>
+          <widget class="QLabel" name="colorsLabel">
+           <property name="text">
+            <string>Цвета</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="firstColorButton">
+           <property name="autoFillBackground">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="secondColorButton">
+           <property name="autoFillBackground">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="thirdColorButton">
+           <property name="autoFillBackground">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -436,14 +486,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>setDefaultButton</sender>
+   <sender>thirdColorButton</sender>
    <signal>clicked()</signal>
    <receiver>WindowPreferences</receiver>
-   <slot>slot_set_default_button()</slot>
+   <slot>pickThirdColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>239</x>
-     <y>382</y>
+     <x>646</x>
+     <y>311</y>
     </hint>
     <hint type="destinationlabel">
      <x>192</x>
@@ -458,12 +508,44 @@
    <slot>slot_apply_button()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>410</x>
-     <y>384</y>
+     <x>745</x>
+     <y>391</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
      <y>397</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>firstColorButton</sender>
+   <signal>clicked()</signal>
+   <receiver>WindowPreferences</receiver>
+   <slot>pickFirstColor()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>557</x>
+     <y>311</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>378</x>
+     <y>201</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>secondColorButton</sender>
+   <signal>clicked()</signal>
+   <receiver>WindowPreferences</receiver>
+   <slot>pickSecondColor()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>468</x>
+     <y>311</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>378</x>
+     <y>201</y>
     </hint>
    </hints>
   </connection>
@@ -472,5 +554,8 @@
   <slot>slot_cancel_button()</slot>
   <slot>slot_set_default_button()</slot>
   <slot>slot_apply_button()</slot>
+  <slot>pickFirstColor()</slot>
+  <slot>pickSecondColor()</slot>
+  <slot>pickThirdColor()</slot>
  </slots>
 </ui>
