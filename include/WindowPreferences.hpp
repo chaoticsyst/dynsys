@@ -2,7 +2,6 @@
 
 #include <QObject>
 #include <QWidget>
-#include <QPushButton>
 
 #include "Preferences.hpp"
 
@@ -21,13 +20,16 @@ public slots:
     void slot_set_default_button();
     void slot_apply_button();
 
-    void pickFirstColor();
-    void pickSecondColor();
-    void pickThirdColor();
+    void addNewColor();
+    void removeLastColor();
+
+private slots:
+    void pickButtonColor();
 
 private:
     void setCurrentStateInUI();
     void setStateFromUI();
+    void addNewColorButton(QColor initColor);
 
     Ui::WindowPreferences *ui;
 

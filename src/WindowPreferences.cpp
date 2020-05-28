@@ -1,3 +1,5 @@
+#include <chrono>
+#include <random>
 #include <QColorDialog>
 
 #include "WindowPreferences.hpp"
@@ -16,6 +18,24 @@ QColor getColorFromQVector4D(const QVector4D &color) {
 
 QVector4D getQVector4DfromColor(const QColor &color) {
     return QVector4D(color.red(), color.green(), color.blue(), color.alpha()) / 255;
+}
+
+void WindowPreferences::addNewColorButton(QColor initColor) {
+    constexpr static size_t MAX_COLORS_NUMBER = 7;
+
+    if (static_cast<size_t>(ui->colorsHolderLayout->count()) >= MAX_COLORS_NUMBER) {
+        return;
+    }
+
+    QPushButton *button = new QPushButton(ui->colorsHolderLayout->widget());
+    button->setFlat(true);
+    button->setAutoFillBackground(true);
+    button->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum));
+    button->setPalette(initColor);
+
+    connect(button, SIGNAL(clicked()), this, SLOT(pickButtonColor()));
+
+    ui->colorsHolderLayout->addWidget(button);
 }
 
 void WindowPreferences::setCurrentStateInUI() {
@@ -37,9 +57,9 @@ void WindowPreferences::setCurrentStateInUI() {
     ui->timerSpeedValue->setValue(prefs->controller.deltaTimePerStep);
     ui->interpolationDegree->setValue((0.21 - prefs->visualization.interpolationDistance) / 0.002);
 
-    ui->firstColorButton->setPalette(getColorFromQVector4D(prefs->visualization.colors[0]));
-    ui->secondColorButton->setPalette(getColorFromQVector4D(prefs->visualization.colors[1]));
-    ui->thirdColorButton->setPalette(getColorFromQVector4D(prefs->visualization.colors[2]));
+    for (const auto &color : prefs->visualization.colors) {
+        addNewColorButton(getColorFromQVector4D(color));
+    }
 
     if (prefs->visualization.arcadeMode) {
         ui->arcadeModeCheckBox->setCheckState(Qt::CheckState::Checked);
@@ -71,9 +91,11 @@ void WindowPreferences::setStateFromUI() {
     prefs->controller.deltaTimePerStep         = ui->timerSpeedValue->value();
     prefs->visualization.interpolationDistance = 0.21 - ui->interpolationDegree->value() * 0.002;
 
-    prefs->visualization.colors = { getQVector4DfromColor(ui->firstColorButton->palette().button().color()),
-                                    getQVector4DfromColor(ui->secondColorButton->palette().button().color()),
-                                    getQVector4DfromColor(ui->thirdColorButton->palette().button().color()) };
+    prefs->visualization.colors.clear();
+    while (ui->colorsHolderLayout->count() > 1) {
+        QPushButton *button = static_cast<QPushButton *>(ui->colorsHolderLayout->takeAt(1)->widget());
+        prefs->visualization.colors.push_back(getQVector4DfromColor(button->palette().button().color()));
+    }
 
     if (ui->arcadeModeCheckBox->checkState() == Qt::CheckState::Checked) {
         prefs->enableArcadeMode();
@@ -104,23 +126,29 @@ void WindowPreferences::slot_set_default_button() {
     this->hide();
 }
 
-void pickButtonColor(QPushButton* button) {
+void WindowPreferences::addNewColor() {
+    static std::mt19937 rnd(std::chrono::steady_clock::now().time_since_epoch().count());
+
+    int color = rnd();
+    addNewColorButton(QColor::fromRgb(color > 0 ? color : -color));
+}
+
+void WindowPreferences::removeLastColor() {
+    if (ui->colorsHolderLayout->count() <= 2) {
+        return;
+    }
+
+    QLayoutItem *item = ui->colorsHolderLayout->takeAt(ui->colorsHolderLayout->count() - 1);
+    delete item->widget();
+    delete item;
+}
+
+void WindowPreferences::pickButtonColor() {
+    QPushButton *button = static_cast<QPushButton *>(sender());
     QColor color = QColorDialog::getColor(Qt::white, button, "Choose a color",  QColorDialog::DontUseNativeDialog);
     if (color != QColor::Invalid) {
         button->setPalette(color);
     }
-}
-
-void WindowPreferences::pickFirstColor() {
-    pickButtonColor(ui->firstColorButton);
-}
-
-void WindowPreferences::pickSecondColor() {
-    pickButtonColor(ui->secondColorButton);
-}
-
-void WindowPreferences::pickThirdColor() {
-    pickButtonColor(ui->thirdColorButton);
 }
 
 WindowPreferences::~WindowPreferences() {

@@ -266,27 +266,6 @@
        <string>Визуализация</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
-       <item row="1" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_11">
-         <item>
-          <widget class="QLabel" name="timerSpeedLabel">
-           <property name="text">
-            <string>Скорость ползунка</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="timerSpeedValue">
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>20</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
@@ -303,6 +282,27 @@
            </property>
            <property name="maximum">
             <number>1000</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QLabel" name="timerSpeedLabel">
+           <property name="text">
+            <string>Скорость ползунка</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="timerSpeedValue">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>20</number>
            </property>
           </widget>
          </item>
@@ -344,51 +344,59 @@
        </item>
        <item row="4" column="0">
         <layout class="QHBoxLayout" name="colorsLayout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
          <item>
-          <widget class="QLabel" name="colorsLabel">
-           <property name="text">
-            <string>Цвета</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="firstColorButton">
-           <property name="autoFillBackground">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="secondColorButton">
-           <property name="autoFillBackground">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="thirdColorButton">
-           <property name="autoFillBackground">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QLabel" name="colorsLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Цвета:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="colorsHolderLayout">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout">
+               <item>
+                <widget class="QPushButton" name="addColorButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>+</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="removeColorButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -486,22 +494,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>thirdColorButton</sender>
-   <signal>clicked()</signal>
-   <receiver>WindowPreferences</receiver>
-   <slot>pickThirdColor()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>646</x>
-     <y>311</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>192</x>
-     <y>396</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>applyButton</sender>
    <signal>clicked()</signal>
    <receiver>WindowPreferences</receiver>
@@ -518,14 +510,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>firstColorButton</sender>
+   <sender>addColorButton</sender>
    <signal>clicked()</signal>
    <receiver>WindowPreferences</receiver>
-   <slot>pickFirstColor()</slot>
+   <slot>addNewColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>557</x>
-     <y>311</y>
+     <x>67</x>
+     <y>282</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -534,14 +526,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>secondColorButton</sender>
+   <sender>removeColorButton</sender>
    <signal>clicked()</signal>
    <receiver>WindowPreferences</receiver>
-   <slot>pickSecondColor()</slot>
+   <slot>removeLastColor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>468</x>
-     <y>311</y>
+     <x>67</x>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -554,8 +546,7 @@
   <slot>slot_cancel_button()</slot>
   <slot>slot_set_default_button()</slot>
   <slot>slot_apply_button()</slot>
-  <slot>pickFirstColor()</slot>
-  <slot>pickSecondColor()</slot>
-  <slot>pickThirdColor()</slot>
+  <slot>addNewColor()</slot>
+  <slot>removeLastColor()</slot>
  </slots>
 </ui>
