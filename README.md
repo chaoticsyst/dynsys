@@ -70,7 +70,7 @@ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libavutil-dev
 * Обновление OpenGL:
 ```
 sudo add-apt-repository ppa:oibaf/graphics-drivers
-sudu apt-get update
+sudo apt-get update
 sudo apt-get install libgl1-mesa-dev libegl1-mesa xserver-xorg-video-intel libgl1-mesa-dri libglapi-mesa
 ```
 
