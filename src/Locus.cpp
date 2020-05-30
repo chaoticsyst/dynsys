@@ -69,6 +69,7 @@ void LocusController::draw(const QMatrix4x4 &projMatrix, size_t time) {
         auto &locus = data[i];
 
         locus.startWork();
+
         if (locus.size() == 0) {
             continue;
         }
@@ -79,7 +80,7 @@ void LocusController::draw(const QMatrix4x4 &projMatrix, size_t time) {
 
             continue;
         }
-        size_t actualLength = time - start;
+        size_t actualLength = std::min(time, locus.size()) - start;
 
         shaderController.setVertex();
 
