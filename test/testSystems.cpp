@@ -28,7 +28,7 @@ TEST(model, allConstantRK4_1) {
     int requiredCount = 100'000;
     long double tau = 0.01;
 
-    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 33);
+    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 32);
 }
 
 
@@ -37,7 +37,7 @@ TEST(model, allConstantRK4_2) {
     int requiredCount = 500'000;
     long double tau = 0.01;
 
-    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 28);
+    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 27);
 }
 
 TEST(model, allConstantRK4_3) {
@@ -45,7 +45,7 @@ TEST(model, allConstantRK4_3) {
     int requiredCount = 200'000;
     long double tau = 0.0001;
 
-    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 38);
+    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 37);
 }
 
 TEST(model, allConstantRK4_4) {
@@ -53,5 +53,5 @@ TEST(model, allConstantRK4_4) {
     int requiredCount = 100'000;
     long double tau = 0.1;
 
-    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 20);
+    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 19);
 }
