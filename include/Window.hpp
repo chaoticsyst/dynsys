@@ -48,6 +48,8 @@ private:
 
     void insertExpressions(std::array<std::string_view, 3> array, bool);
 
+    void addNewConstant(const std::string_view &name, long double initValue);
+
     using LambdaPushBackAction = decltype(DynamicSystemWrapper_n::getPushBackAndNormalizeLambda(std::declval<QVector<QVector3D> &>(),
                                                                                                 std::declval<float>()));
     using DynamicSystemWrapper = DynamicSystems::DynamicSystem<LambdaPushBackAction>;
