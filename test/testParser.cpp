@@ -123,7 +123,8 @@ TEST(parser, parse_errors) {
 
 TEST(parser, lambda_test) {
     std::vector<long double> emptyVector;
-    auto lambda = DynamicSystemParser::Impl::parseExpressions("x+y", "y - 1.1*z", "z - 1", {}).operator()(emptyVector);
+    auto lambdaGetter = DynamicSystemParser::Impl::parseExpressions("x+y", "y - 1.1*z", "z - 1", {});
+    auto lambda = lambdaGetter(emptyVector);
     EXPECT_NEAR(lambda({1, 1, 1}).x, (Model::Point{2, -0.1, 0}).x, 1e-10);
     EXPECT_NEAR(lambda({1, 1, 1}).y, (Model::Point{2, -0.1, 0}).y, 1e-10);
     EXPECT_NEAR(lambda({1, 1, 1}).z, (Model::Point{2, -0.1, 0}).z, 1e-10);
@@ -162,9 +163,10 @@ TEST(parser, function_calls) {
     auto func = Parser::parseExpression("sin(pi) + cos(2 * tan(pi)) - 3 * sin(2) / cos(sin(3))",
                                         {nullptr, nullptr, nullptr});
     EXPECT_NEAR(func->calc(), -1.755, 1e-3);
-    func = Parser::parseExpression("ln(100) * log(13) / 2 * (atan(3 + sin(hello)) - atanh(0.3)) * acos(0.5) - hello * sqrt(abs(hello))",
-                                   {nullptr, nullptr, nullptr},
-                                   {{"hello", -123}});
+    func = Parser::parseExpression(
+            "ln(100) * log(13) / 2 * (atan(3 + sin(hello)) - atanh(0.3)) * acos(0.5) - hello * sqrt(abs(hello))",
+            {nullptr, nullptr, nullptr},
+            {{"hello", -123}});
     EXPECT_NEAR(func->calc(), 1366.768, 1e-3);
     EXPECT_NEAR(Parser::parseExpression("exp(2)", {nullptr, nullptr, nullptr})->calc(),
                 Parser::parseExpression("e ^ 2 - sin(pi) * cos(112.2)", {nullptr, nullptr, nullptr})->calc(), 1e-10);
