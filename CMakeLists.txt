@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Ofast -pipe -Wall -Wextra")
 
-include_directories(include/ include/Parser/)
+include_directories(include/)
 
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
@@ -45,18 +45,21 @@ add_executable(DynamicSystems
     src/Preferences.cpp
     src/VideoEncoder.cpp
     src/ShaderController.cpp
+    src/DynamicSystemParser/DynamicSystemParser.cpp
     src/Parser/Parser.cpp
     src/Parser/Lexer.cpp
     include/Preferences.hpp
     include/Camera.hpp
     include/WindowPreferences.hpp
     include/Model/Model.hpp
-    include/Model/ModelImpl.hpp
-    include/DynamicSystems/SystemsBase.hpp
-    include/DynamicSystems/SystemsBaseGetImpl.hpp
+    include/Model/Impl/ModelImpl.hpp
     include/DynamicSystems/DynamicSystem.hpp
-    include/DynamicSystems/DynamicSystemImpl.hpp
-    include/DynamicSystems/DynamicSystemInternal.hpp
+    include/DynamicSystems/SystemsBase/SystemsBase.hpp
+    include/DynamicSystems/SystemsBase/SystemsBaseGetImpl.hpp
+    include/DynamicSystems/Impl/DynamicSystemImpl.hpp
+    include/DynamicSystems/Impl/DynamicSystemInternal.hpp
+    include/DynamicSystemParser/DynamicSystemParser.hpp
+    include/DynamicSystemParser/Impl/DynamicSystemParserImpl.hpp
     include/Window.hpp
     include/DynamicSystemWrapper.hpp
     include/PointsViewQGLWidget.hpp
@@ -65,7 +68,6 @@ add_executable(DynamicSystems
     include/VideoEncoder.hpp
     include/ShaderController.hpp
     include/Parser/Parser.hpp
-    include/Parser/ParserImpl.hpp
     include/Parser/ParserException.hpp
     include/Parser/ParserNodes.hpp
     include/Parser/Lexer.hpp

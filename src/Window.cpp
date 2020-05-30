@@ -1,7 +1,7 @@
 #include <QtWidgets>
 #include <QFileDialog>
 
-#include "Parser.hpp"
+#include "DynamicSystemParser/DynamicSystemParser.hpp"
 #include "DynamicSystems/DynamicSystem.hpp"
 #include "Window.hpp"
 #include "ui_form.h"
@@ -36,12 +36,8 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     }
 }
 
-Window::DynamicSystemWrapper Window::getCustomSystem(std::array<std::string, 3> expressions) {
-    auto derivativesFunction = Parser::parseExpressions(expressions[0], expressions[1], expressions[2]);
-    return DynamicSystemWrapper{"Custom system", std::move(expressions), {}, {},
-                                DynamicSystems::DynamicSystemInternal<LambdaPushBackAction, decltype(derivativesFunction)>{
-                                        [derivativesFunction = std::move(derivativesFunction)]
-                                                (std::vector<long double> &) { return derivativesFunction; }}};
+Window::DynamicSystemWrapper Window::getCustomSystem(const std::array<std::string, 3> &expressions) {
+    return DynamicSystemParser::getDynamicSystem<LambdaPushBackAction>("Custom system", expressions);
 }
 
 void Window::insertConstants(const std::vector<std::pair<std::string, std::vector<long double>>> &goodParams) {

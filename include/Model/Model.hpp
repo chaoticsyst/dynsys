@@ -7,12 +7,12 @@ struct Point {
 };
 
 template<typename LambdaDerivatives, typename LambdaNewPointAction>
-void generatePoints(LambdaNewPointAction newPointAction,
+void generatePoints(LambdaNewPointAction &&newPointAction,
                     Point point,
                     int pointsCount,
                     long double tau,
-                    LambdaDerivatives countDerivatives);
+                    LambdaDerivatives &&countDerivatives);
 
 } // namespace Model
 
-#include "ModelImpl.hpp"
+#include "Model/Impl/ModelImpl.hpp"

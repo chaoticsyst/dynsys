@@ -5,7 +5,7 @@
 #include <array>
 
 #include "Model/Model.hpp"
-#include "DynamicSystem.hpp"
+#include "DynamicSystems/DynamicSystem.hpp"
 
 
 namespace DynamicSystems {

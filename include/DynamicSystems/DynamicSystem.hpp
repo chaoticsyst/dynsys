@@ -6,7 +6,7 @@
 #include <functional>
 
 #include "Model/Model.hpp"
-#include "DynamicSystemInternal.hpp"
+#include "DynamicSystems/Impl/DynamicSystemInternal.hpp"
 
 
 namespace DynamicSystems {
@@ -57,5 +57,5 @@ private:
 
 } // namespace DynamicSystem
 
-#include "DynamicSystemImpl.hpp"
-#include "SystemsBaseGetImpl.hpp"
+#include "DynamicSystems/Impl/DynamicSystemImpl.hpp"
+#include "DynamicSystems/SystemsBase/SystemsBaseGetImpl.hpp"

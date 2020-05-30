@@ -52,7 +52,7 @@ private:
                                                                                                 std::declval<float>()));
     using DynamicSystemWrapper = DynamicSystems::DynamicSystem<LambdaPushBackAction>;
 
-    static DynamicSystemWrapper getCustomSystem(std::array<std::string, 3>);
+    static DynamicSystemWrapper getCustomSystem(const std::array<std::string, 3> &);
 
     std::map<QString, DynamicSystemWrapper> dynamicSystems;
 
