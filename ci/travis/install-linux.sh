@@ -1,8 +1,8 @@
 sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 sudo apt-get update -qq
 
-sudo apt-get install -qq g++-8 # g++ with C++17 install
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 90
+sudo apt-get install -qq g++-9 # g++ with C++17 install
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 90
 
 # CMake update
 CMAKE_VERSION=3.15.0
@@ -19,12 +19,9 @@ tar --strip-components=1 -xzf $CMAKE_TAR -C $CMAKE_DIR
 export PATH=$CMAKE_DIR/bin:$PATH
 
 # Qt libraries install
-sudo add-apt-repository --yes ppa:beineri/opt-qt571-xenial
+sudo add-apt-repository --yes ppa:beineri/opt-qt-5.12.0-bionic
 sudo apt-get -qq update
-sudo apt-get install --yes qt5-default
-sudo apt-get install --yes qt57base 
-sudo apt-get install --yes qt57imageformats 
-sudo apt-get install --yes qt57svg
+sudo apt-get install --yes qt5-default qt512base  qt512imageformats qt512svg
 
 # Ninja install
 sudo apt-get --yes install ninja-build
@@ -32,10 +29,7 @@ sudo apt-get --yes install ninja-build
 # video librarries install
 sudo add-apt-repository --yes ppa:mc3man/xerus-media
 sudo apt-get -qq update
-sudo apt-get install --yes libavcodec-dev 
-sudo apt-get install --yes libavformat-dev 
-sudo apt-get install --yes libswscale-dev 
-sudo apt-get install --yes libavutil-dev
+sudo apt-get install --yes libavcodec-dev libavformat-dev libswscale-dev libavutil-dev
 
 # Google tests install
 sudo apt-get install --yes libgtest-dev
