@@ -34,21 +34,21 @@
      <item>
       <widget class="QPushButton" name="cancelButton">
        <property name="text">
-        <string>Отмена</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="setDefaultButton">
        <property name="text">
-        <string>Сбросить настройки</string>
+        <string>Set default values</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="applyButton">
        <property name="text">
-        <string>Применить</string>
+        <string>Accept</string>
        </property>
       </widget>
      </item>
@@ -57,11 +57,11 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="prefsTabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabModel">
       <attribute name="title">
-       <string>Модель</string>
+       <string>Modeling</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="3" column="0">
@@ -69,7 +69,7 @@
          <item>
           <widget class="QLabel" name="deltaTimeLabel">
            <property name="text">
-            <string>Tau</string>
+            <string>Delta time</string>
            </property>
           </widget>
          </item>
@@ -93,7 +93,7 @@
          <item>
           <widget class="QLabel" name="startPointsCoordsLabel">
            <property name="text">
-            <string>Координаты стартовой точки</string>
+            <string>Start point position</string>
            </property>
           </widget>
          </item>
@@ -143,7 +143,7 @@
          <item>
           <widget class="QLabel" name="trajNumberLabel">
            <property name="text">
-            <string>Количество стартовых точек</string>
+            <string>Start points number</string>
            </property>
           </widget>
          </item>
@@ -164,7 +164,7 @@
          <item>
           <widget class="QLabel" name="pointsNumberLabel">
            <property name="text">
-            <string>Размер траектории для одной точки</string>
+            <string>Trajectory size (in points)</string>
            </property>
           </widget>
          </item>
@@ -185,7 +185,7 @@
          <item>
           <widget class="QLabel" name="startPointsDeltaLabel">
            <property name="text">
-            <string>Расстояние между стартовыми точками</string>
+            <string>Distance between start points</string>
            </property>
           </widget>
          </item>
@@ -208,15 +208,21 @@
      </widget>
      <widget class="QWidget" name="tabCamera">
       <attribute name="title">
-       <string>Камера</string>
+       <string>Camera</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="1" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item>
           <widget class="QLabel" name="moveSpeedLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
-            <string>Скорость перемещения</string>
+            <string>Movement speed</string>
            </property>
           </widget>
          </item>
@@ -239,8 +245,14 @@
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
           <widget class="QLabel" name="sensitivityLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
-            <string>Чувствительность</string>
+            <string>Sensitivity</string>
            </property>
           </widget>
          </item>
@@ -263,7 +275,7 @@
      </widget>
      <widget class="QWidget" name="tabView">
       <attribute name="title">
-       <string>Визуализация</string>
+       <string>Visualization</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
@@ -271,7 +283,7 @@
          <item>
           <widget class="QLabel" name="tailPointsNumberLabel">
            <property name="text">
-            <string>Количество точек на хвосте</string>
+            <string>Visible tail size (in points)</string>
            </property>
           </widget>
          </item>
@@ -292,7 +304,7 @@
          <item>
           <widget class="QLabel" name="timerSpeedLabel">
            <property name="text">
-            <string>Скорость ползунка</string>
+            <string>Time speed</string>
            </property>
           </widget>
          </item>
@@ -313,7 +325,7 @@
          <item>
           <widget class="QLabel" name="interpolationLabel">
            <property name="text">
-            <string>Степень сглаживания (%)</string>
+            <string>Interpolation level (in %)</string>
            </property>
           </widget>
          </item>
@@ -335,7 +347,7 @@
           <enum>Qt::LeftToRight</enum>
          </property>
          <property name="text">
-          <string>Аркадный режим</string>
+          <string>Arcade mode</string>
          </property>
          <property name="tristate">
           <bool>false</bool>
@@ -358,7 +370,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Цвета:</string>
+              <string>Colors:</string>
              </property>
             </widget>
            </item>
@@ -404,7 +416,7 @@
      </widget>
      <widget class="QWidget" name="tabVideo">
       <attribute name="title">
-       <string>Видео</string>
+       <string>Recording</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7">
        <item row="1" column="0">
@@ -412,7 +424,7 @@
          <item>
           <widget class="QLabel" name="videoHeightLabel">
            <property name="text">
-            <string>Высота</string>
+            <string>Height</string>
            </property>
           </widget>
          </item>
@@ -436,7 +448,7 @@
          <item>
           <widget class="QLabel" name="videoWidthLabel">
            <property name="text">
-            <string>Ширина</string>
+            <string>Width</string>
            </property>
           </widget>
          </item>

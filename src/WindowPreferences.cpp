@@ -28,7 +28,6 @@ void WindowPreferences::addNewColorButton(QColor initColor) {
     }
 
     QPushButton *button = new QPushButton(ui->colorsHolderLayout->widget());
-    button->setFlat(true);
     button->setAutoFillBackground(true);
     button->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum));
     button->setPalette(initColor);

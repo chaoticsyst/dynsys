@@ -183,7 +183,7 @@ void Window::updateVideoRecordingState() {
         }
         ui->pointsViewer->startVideoRecording(videoName.toStdString().c_str());
 
-        ui->videoRecordingButton->setText("Закончить запись");
+        ui->videoRecordingButton->setText("End recording");
         ui->videoRecordingProgress->setEnabled(true);
 
         pauseState = prevPauseState;
@@ -199,7 +199,7 @@ void Window::updateVideoRecordingState() {
         ui->videoRecordingProgress->setValue(0);
         ui->videoRecordingProgress->setEnabled(false);
 
-        ui->videoRecordingButton->setText("Начать запись");
+        ui->videoRecordingButton->setText("Start recording");
         ui->videoRecordingButton->setEnabled(true);
     }
 }
