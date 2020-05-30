@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Динамические системы</string>
+   <string>Dynamic systems</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="9" column="0" colspan="5">
@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="thirdParamLabel">
        <property name="text">
-        <string>Третий параметр</string>
+        <string>Third parameter</string>
        </property>
       </widget>
      </item>
@@ -62,14 +62,14 @@
       </size>
      </property>
      <property name="text">
-      <string>Пауза</string>
+      <string>Pause</string>
      </property>
     </widget>
    </item>
    <item row="10" column="0" colspan="7">
     <widget class="QPushButton" name="buildModelButton">
      <property name="text">
-      <string>Построить модель</string>
+      <string>Start modeling</string>
      </property>
     </widget>
    </item>
@@ -98,7 +98,7 @@
       </size>
      </property>
      <property name="text">
-      <string>Настройки</string>
+      <string>Preferences</string>
      </property>
     </widget>
    </item>
@@ -151,7 +151,7 @@
      <item>
       <widget class="QLabel" name="firstParamLabel">
        <property name="text">
-        <string>Первый параметр</string>
+        <string>First parameter</string>
        </property>
       </widget>
      </item>
@@ -190,7 +190,7 @@
    <item row="5" column="2">
     <widget class="QPushButton" name="videoRecordingButton">
      <property name="text">
-      <string>Начать запись</string>
+      <string>Start recording</string>
      </property>
     </widget>
    </item>
@@ -199,7 +199,7 @@
      <item>
       <widget class="QLabel" name="secondParamLabel">
        <property name="text">
-        <string>Второй параметр</string>
+        <string>Second parameter</string>
        </property>
       </widget>
      </item>
