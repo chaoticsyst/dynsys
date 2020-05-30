@@ -60,7 +60,9 @@ sudo apt-get install qt5-default qt512base qt512imageformats qt512svg5
 
 * Установка libav (ffmpeg):
 ```
-sudo add-apt-repository ppa:mc3man/xerus-media
+sudo add-apt-repository ppa:savoury1/graphics
+sudo add-apt-repository ppa:savoury1/multimedia
+sudo add-apt-repository ppa:savoury1/ffmpeg4
 sudo apt-get update
 sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libavutil-dev
 ```

@@ -27,7 +27,9 @@ sudo apt-get install --yes qt5-default qt512base  qt512imageformats qt512svg
 sudo apt-get --yes install ninja-build
 
 # video librarries install
-sudo add-apt-repository --yes ppa:mc3man/xerus-media
+sudo add-apt-repository --yes ppa:savoury1/graphics
+sudo add-apt-repository --yes ppa:savoury1/multimedia
+sudo add-apt-repository --yes ppa:savoury1/ffmpeg4
 sudo apt-get -qq update
 sudo apt-get install --yes libavcodec-dev libavformat-dev libswscale-dev libavutil-dev
 
