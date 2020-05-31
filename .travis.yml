@@ -16,3 +16,4 @@ script:
     - cd build
     - cmake -GNinja ..
     - ninja
+    - ./test/TestDynSys
