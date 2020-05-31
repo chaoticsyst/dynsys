@@ -12,10 +12,8 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
     auto dynamicSystemsVector = DynamicSystems::getDefaultSystems<LambdaPushBackAction>();
     dynamicSystemsVector.push_back(getCustomSystem({"1", "1", "1"}));
     for (auto &system : dynamicSystemsVector) {
-        if (system.constantsCount() <= 3) {
-            QString name = system.getAttractorName().data();
-            dynamicSystems.emplace(std::move(name), std::move(system));
-        }
+        QString name = system.getAttractorName().data();
+        dynamicSystems.emplace(std::move(name), std::move(system));
     }
 
     task = new CountPointsTask(*this);
@@ -33,6 +31,22 @@ Window::Window(QWidget *parent) : QWidget(parent), ui(new Ui::Window) {
 
     for (auto &[name, system] : dynamicSystems) {
         ui->modelsComboBox->addItem(name);
+    }
+}
+
+void collectAllConstants(QLayout *currentLayout, std::vector<long double> &constants) {
+    for (size_t i = 0; i < static_cast<size_t>(currentLayout->count()); i++) {
+        QLayoutItem *item = currentLayout->itemAt(i);
+
+        if (item->layout() != nullptr) {
+            collectAllConstants(item->layout(), constants);
+        } else {
+            QWidget *widget = item->widget();
+            if (item == nullptr || typeid(*widget) != typeid(QDoubleSpinBox)) {
+                continue;
+            }
+            constants.push_back(static_cast<QDoubleSpinBox *>(widget)->value());
+        }
     }
 }
 
@@ -90,10 +104,10 @@ void CountPointsTask::run() {
     for (size_t i = 0; i < wind.prefs.visualization.locusNumber; i++) {
         QVector<QVector3D> buffer;
         long double offset = wind.prefs.model.startPointDelta * i;
-        std::vector<long double> constants = {
-                wind.ui->firstParamValue->value(),
-                wind.ui->secondParamValue->value(),
-                wind.ui->thirdParamValue->value()};
+
+        std::vector<long double> constants;
+        collectAllConstants(wind.ui->constantsHolderLayout, constants);
+
         auto pushBackVector = DynamicSystemWrapper_n::getPushBackAndNormalizeLambda(buffer, wind.prefs.model.divNormalization);
 
         system.compute(pushBackVector,
@@ -106,6 +120,60 @@ void CountPointsTask::run() {
 
         emit updater(std::move(buffer));
     }
+}
+
+void removeAllFromLayout(QLayout *layout) {
+    while (layout->count()) {
+        QLayoutItem *item = layout->takeAt(0);
+        if (item->layout() != nullptr) {
+            removeAllFromLayout(item->layout());
+            delete item->layout();
+        } else {
+            delete item->widget();
+            delete item;
+        }
+    }
+}
+
+void Window::addNewConstant(const std::string_view &name, long double initValue) {
+    constexpr static size_t maxColumnSize = 3;
+
+    QGridLayout *lastLayout = nullptr;
+    size_t rows = 0;
+
+    if (ui->constantsHolderLayout->count() != 0) {
+        auto item = ui->constantsHolderLayout->takeAt(ui->constantsHolderLayout->count() - 1)->layout();
+        lastLayout = static_cast<QGridLayout *>(item);
+
+        if (lastLayout->rowCount() == maxColumnSize) {
+            ui->constantsHolderLayout->addLayout(lastLayout);
+            lastLayout = nullptr;
+        } else {
+            rows = lastLayout->rowCount();
+        }
+    }
+    if (lastLayout == nullptr) {
+        lastLayout = new QGridLayout();
+    }
+    ui->constantsHolderLayout->addLayout(lastLayout);
+
+    lastLayout->setAlignment(Qt::AlignTop);
+
+    QLabel *valueLabel = new QLabel(QString::fromStdString(std::string(name)));
+    valueLabel->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored));
+    lastLayout->addWidget(valueLabel, rows, 0);
+
+    QLabel *equalityLabel = new QLabel(" = ");
+    equalityLabel->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored));
+    lastLayout->addWidget(equalityLabel, rows, 1);
+
+    QDoubleSpinBox *valueBox = new QDoubleSpinBox();
+    valueBox->setRange(-10000, 10000);
+    valueBox->setDecimals(6);
+    valueBox->setSingleStep(0.01);
+    valueBox->setValue(initValue);
+
+    lastLayout->addWidget(valueBox, rows, 2);
 }
 
 void Window::slot_restart_button() {
@@ -121,13 +189,17 @@ void Window::slot_model_selection(QString currentModel) {
 }
 
 void Window::slot_constants_selection(QString currentConstants) {
+    removeAllFromLayout(ui->constantsHolderLayout);
+
     DynamicSystemWrapper &system = dynamicSystems.at(ui->modelsComboBox->currentText());
     auto goodParams = system.getInterestingConstants();
+
     for (auto&[name, params] : goodParams) {
         if (name.data() == currentConstants) {
-            ui->firstParamValue->setValue(params[0]);
-            ui->secondParamValue->setValue(params[1]);
-            ui->thirdParamValue->setValue(params[2]);
+            for (size_t i = 0; i < params.size(); i++) {
+                addNewConstant(system.getVariablesNames()[i], params[i]);
+            }
+
             break;
         }
     }
@@ -205,6 +277,8 @@ void Window::updateVideoRecordingState() {
 }
 
 Window::~Window() {
+    removeAllFromLayout(ui->constantsHolderLayout);
+
     delete windowPreferences;
     delete ui;
 }

@@ -14,65 +14,6 @@
    <string>Dynamic systems</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="9" column="0" colspan="5">
-    <layout class="QHBoxLayout" name="thirdParamLayout">
-     <item>
-      <widget class="QLabel" name="thirdParamLabel">
-       <property name="text">
-        <string>Third parameter</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="thirdParamValue">
-       <property name="decimals">
-        <number>5</number>
-       </property>
-       <property name="minimum">
-        <double>-1000.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1000.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="5" column="0">
-    <widget class="QPushButton" name="pauseButton">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>88</width>
-       <height>24</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>120</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Pause</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0" colspan="7">
-    <widget class="QPushButton" name="buildModelButton">
-     <property name="text">
-      <string>Start modeling</string>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="3">
     <widget class="QProgressBar" name="videoRecordingProgress">
      <property name="enabled">
@@ -102,7 +43,73 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="7">
+   <item row="5" column="2">
+    <widget class="QPushButton" name="videoRecordingButton">
+     <property name="text">
+      <string>Start recording</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="5">
+    <layout class="QHBoxLayout" name="firstParserLayout">
+     <item>
+      <widget class="QLabel" name="xCoordDerivLabel">
+       <property name="text">
+        <string>x'=</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="firstExpr"/>
+     </item>
+    </layout>
+   </item>
+   <item row="5" column="5">
+    <widget class="QComboBox" name="modelsComboBox"/>
+   </item>
+   <item row="5" column="0">
+    <widget class="QPushButton" name="pauseButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>88</width>
+       <height>24</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>120</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Pause</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="6">
+    <widget class="PointsViewQGLWidget" name="pointsViewer" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>370</width>
+       <height>370</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="6">
+    <widget class="QPushButton" name="buildModelButton">
+     <property name="text">
+      <string>Start modeling</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="6">
     <widget class="QSlider" name="progressSlider">
      <property name="maximum">
       <number>10000</number>
@@ -118,62 +125,10 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="6">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="zCoordDerivLabel">
-       <property name="text">
-        <string>z'=</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="thirdExpr"/>
-     </item>
-    </layout>
+   <item row="6" column="0" colspan="6">
+    <widget class="QComboBox" name="constantsComboBox"/>
    </item>
-   <item row="7" column="6">
-    <layout class="QHBoxLayout" name="firstParserLayout">
-     <item>
-      <widget class="QLabel" name="xCoordDerivLabel">
-       <property name="text">
-        <string>x'=</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="firstExpr"/>
-     </item>
-    </layout>
-   </item>
-   <item row="7" column="0" colspan="5">
-    <layout class="QHBoxLayout" name="firstParamLayout">
-     <item>
-      <widget class="QLabel" name="firstParamLabel">
-       <property name="text">
-        <string>First parameter</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="firstParamValue">
-       <property name="decimals">
-        <number>5</number>
-       </property>
-       <property name="minimum">
-        <double>-1000.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1000.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="8" column="6">
+   <item row="8" column="5">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="yCoordDerivLabel">
@@ -187,55 +142,26 @@
      </item>
     </layout>
    </item>
-   <item row="5" column="2">
-    <widget class="QPushButton" name="videoRecordingButton">
-     <property name="text">
-      <string>Start recording</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0" colspan="5">
-    <layout class="QHBoxLayout" name="secondParamLayout">
+   <item row="9" column="5">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QLabel" name="secondParamLabel">
+      <widget class="QLabel" name="zCoordDerivLabel">
        <property name="text">
-        <string>Second parameter</string>
+        <string>z'=</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="secondParamValue">
-       <property name="decimals">
-        <number>5</number>
-       </property>
-       <property name="minimum">
-        <double>-1000.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1000.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-      </widget>
+      <widget class="QLineEdit" name="thirdExpr"/>
      </item>
     </layout>
    </item>
-   <item row="0" column="0" colspan="7">
-    <widget class="PointsViewQGLWidget" name="pointsViewer" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>370</width>
-       <height>370</height>
-      </size>
+   <item row="7" column="0" rowspan="3" colspan="4">
+    <layout class="QHBoxLayout" name="constantsHolderLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
      </property>
-    </widget>
-   </item>
-   <item row="5" column="6">
-    <widget class="QComboBox" name="modelsComboBox"/>
-   </item>
-   <item row="6" column="0" colspan="7">
-    <widget class="QComboBox" name="constantsComboBox"/>
+    </layout>
    </item>
   </layout>
  </widget>

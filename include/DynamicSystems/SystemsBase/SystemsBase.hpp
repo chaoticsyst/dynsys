@@ -102,7 +102,7 @@ DynamicSystem<LambdaNewPointAction> getSystemHR3() {
     std::array<std::string, 3> formulae = {"y - a*x^3 + b*x^2 - z + I",
                                            "c - d*x^2 - y",
                                            "r*(s*(x - alpha) - z)"};
-    std::vector<std::string> constantsNames = {"a", "b", "c", "d"};
+    std::vector<std::string> constantsNames = {"a", "b", "I", "c", "d", "r", "s", "alpha"};
     std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants = {
             {"Classic values", {1, 3, 2.7, 1, 5, 0.003, 4, -1.6}}
     };
