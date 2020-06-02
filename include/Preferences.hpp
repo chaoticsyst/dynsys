@@ -18,7 +18,7 @@ private:
         size_t tailPointsNumber = 100;
         size_t locusNumber = 200;
 
-        float interpolationDistance = 0.001;
+        float interpolationDistance = 0.15;
         float startPointSize = 0;
         float finalPointSize = 10;
 
