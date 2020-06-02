@@ -61,6 +61,6 @@ public:
     void disableArcadeMode();
 };
 
-inline const Preferences defaultPreferences;
+inline const Preferences defaultPreferences{};
 
 } //namespace Preferences

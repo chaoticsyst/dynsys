@@ -59,7 +59,7 @@ void setNextPointGenerator(LambdaNewPointAction &&newPointAction,
     generatePointsMainloop(std::forward<LambdaNewPointAction>(newPointAction), point, pointsCount, std::move(nextPoint));
 }
 
-} // namecpace Impl
+} // namespace Impl
 
 template<typename LambdaDerivatives, typename LambdaNewPointAction>
 void generatePoints(LambdaNewPointAction &&newPointAction,

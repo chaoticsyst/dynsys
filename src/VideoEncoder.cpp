@@ -103,7 +103,7 @@ void VideoEncoder::startEncoding(int videoWidth, int videoHeight, const char *fi
 
     av_dump_format(formatContext, 0, filename, 1);
     if (avio_open(&formatContext->pb, filename, AVIO_FLAG_WRITE) < 0) {
-        throw std::logic_error("Could not create or initalize an AVIO context.");
+        throw std::logic_error("Could not create or initialize an AVIO context.");
     }
 
     avcodec_parameters_from_context(stream->codecpar, codecContext);
@@ -142,12 +142,12 @@ void VideoEncoder::startEncoding(int videoWidth, int videoHeight, const char *fi
 }
 
 void VideoEncoder::endEncoding() {
-    if (working == false) {
+    if (!working) {
         return;
     }
     allStates.clear();
 
-    while (built && writeFrame(nullptr) == true);
+    while (built && writeFrame(nullptr));
     if (formatContext != nullptr) {
         if (built) {
             av_write_trailer(formatContext);
@@ -196,7 +196,7 @@ bool VideoEncoder::writeFrame(AVFrame *frame) {
 }
 
 void VideoEncoder::writeFrame(const QImage &image) {
-    if (working == false) {
+    if (!working) {
         return;
     }
     const uint8_t *data[8] = {
@@ -216,7 +216,7 @@ void VideoEncoder::writeFrame(const QImage &image) {
 }
 
 void VideoEncoder::writeState(const FrameState &state) {
-    if (working == false) {
+    if (!working) {
         return;
     }
     allStates << state;
@@ -224,7 +224,7 @@ void VideoEncoder::writeState(const FrameState &state) {
 
 void VideoEncoder::endEncoding(std::function<void (const QMatrix4x4 &, size_t)> drawFunc,
                                std::function<void (int)> callback) {
-    if (working == false) {
+    if (!working) {
         endEncoding();
     }
     GLint prevViewport[4];

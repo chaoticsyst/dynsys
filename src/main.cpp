@@ -1,5 +1,4 @@
 #include <QApplication>
-#include <QGLWidget>
 
 #include "Window.hpp"
 
