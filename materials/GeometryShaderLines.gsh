@@ -14,7 +14,7 @@ void main(void) {
     vertexID_FSH = vertexID_GSH[1];
 
     highp float distance = distance(gl_in[1].gl_Position.xyz, gl_in[2].gl_Position.xyz);
-    highp int cuts = int(min(255.0, max(3.0, interpolationDist / distance)));
+    highp int cuts = int(min(255.0, max(3.0, distance / interpolationDist)));
     if (cuts % 2 != 1) {
         cuts--;
     }
