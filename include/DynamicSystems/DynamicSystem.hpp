@@ -28,7 +28,7 @@ public:
                   std::array<std::string, 3> formulae,
                   std::vector<std::string> variablesNames,
                   std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants,
-                  DynamicSystemInternal<LambdaNewPointAction, LambdaDerivatives> systemInteranal);
+                  DynamicSystemInternal<LambdaNewPointAction, LambdaDerivatives> systemInternal);
 
 
     std::string_view getAttractorName() const;

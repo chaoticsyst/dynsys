@@ -42,10 +42,10 @@ void collectAllConstants(QLayout *currentLayout, std::vector<long double> &const
             collectAllConstants(item->layout(), constants);
         } else {
             QWidget *widget = item->widget();
-            if (item == nullptr || typeid(*widget) != typeid(QDoubleSpinBox)) {
+            if (widget == nullptr || typeid(*widget) != typeid(QDoubleSpinBox)) {
                 continue;
             }
-            constants.push_back(static_cast<QDoubleSpinBox *>(widget)->value());
+            constants.push_back(dynamic_cast<QDoubleSpinBox *>(widget)->value());
         }
     }
 }
@@ -84,7 +84,7 @@ void Window::updateOpenGLWidget(QVector<QVector3D> buffer) {
     ui->pointsViewer->addNewLocus(std::move(buffer));
 }
 
-CountPointsTask::CountPointsTask(Window& wind_) : wind(wind_) {
+CountPointsTask::CountPointsTask(Window &wind_) : wind(wind_) {
     QObject::connect(this, &CountPointsTask::updater, &wind, &Window::updateOpenGLWidget, Qt::QueuedConnection);
 }
 
@@ -103,12 +103,14 @@ void CountPointsTask::run() {
 
     for (size_t i = 0; i < wind.prefs.visualization.locusNumber; i++) {
         QVector<QVector3D> buffer;
+        buffer.reserve(wind.prefs.model.pointsNumber);
         long double offset = wind.prefs.model.startPointDelta * i;
 
         std::vector<long double> constants;
         collectAllConstants(wind.ui->constantsHolderLayout, constants);
 
-        auto pushBackVector = DynamicSystemWrapper_n::getPushBackAndNormalizeLambda(buffer, wind.prefs.model.divNormalization);
+        auto pushBackVector = DynamicSystemWrapper_n::getPushBackAndNormalizeLambda(buffer,
+                                                                                    wind.prefs.model.divNormalization);
 
         system.compute(pushBackVector,
                        Model::Point{wind.prefs.model.startPoint.x + offset,
@@ -143,7 +145,7 @@ void Window::addNewConstant(const std::string_view &name, long double initValue)
 
     if (ui->constantsHolderLayout->count() != 0) {
         auto item = ui->constantsHolderLayout->takeAt(ui->constantsHolderLayout->count() - 1)->layout();
-        lastLayout = static_cast<QGridLayout *>(item);
+        lastLayout = dynamic_cast<QGridLayout *>(item);
 
         if (lastLayout->rowCount() == maxColumnSize) {
             ui->constantsHolderLayout->addLayout(lastLayout);
@@ -182,7 +184,7 @@ void Window::slot_restart_button() {
 }
 
 void Window::slot_model_selection(QString currentModel) {
-    DynamicSystemWrapper &system = dynamicSystems.at(ui->modelsComboBox->currentText());
+    DynamicSystemWrapper &system = dynamicSystems.at(currentModel);
     insertConstants(system.getInterestingConstants());
     bool readOnly = ui->modelsComboBox->currentText() != "Custom system";
     insertExpressions(system.getFormulae(), readOnly);
@@ -241,8 +243,8 @@ void Window::updateVideoRecordingState() {
         pauseState = true;
 
         QString videoName = QFileDialog::getSaveFileName(this, tr("Save Video"), "",
-                                                        tr("Video (*.avi)"), nullptr,
-                                                        QFileDialog::Option::DontUseNativeDialog);
+                                                         tr("Video (*.avi)"), nullptr,
+                                                         QFileDialog::Option::DontUseNativeDialog);
         if (videoName.isEmpty()) {
             pauseState = prevPauseState;
             enabled = false;
