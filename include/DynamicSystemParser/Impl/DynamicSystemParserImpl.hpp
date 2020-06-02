@@ -20,12 +20,12 @@ public:
                              std::unique_ptr<const Parser::Node> zFunc);
 
     auto operator()(std::vector<long double> &) {
-        return [xFuncGet = xFunc.get(), yFuncGet = yFunc.get(), zFuncGet = zFunc.get(), variablesGet = variables.get()]
+        return [&xFuncGet = *xFunc, &yFuncGet = *yFunc, &zFuncGet = *zFunc, &variablesGet = *variables] //TODO
                 (const Model::Point &point) {
-            (*variablesGet)[0] = point.x;
-            (*variablesGet)[1] = point.y;
-            (*variablesGet)[2] = point.z;
-            return Model::Point{xFuncGet->calc(), yFuncGet->calc(), zFuncGet->calc()};
+            variablesGet[0] = point.x;
+            variablesGet[1] = point.y;
+            variablesGet[2] = point.z;
+            return Model::Point{xFuncGet.calc(), yFuncGet.calc(), zFuncGet.calc()};
         };
     }
 
