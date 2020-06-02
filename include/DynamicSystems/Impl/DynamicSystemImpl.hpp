@@ -18,20 +18,20 @@ DynamicSystem<LambdaNewPointAction>::DynamicSystem(
         std::array<std::string, 3> formulae,
         std::vector<std::string> variablesNames,
         std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants,
-        DynamicSystemInternal<LambdaNewPointAction, LambdaDerivatives> systemInteranal) :
+        DynamicSystemInternal<LambdaNewPointAction, LambdaDerivatives> systemInternal) :
+        compute{
+                [system = std::move(systemInternal)](LambdaNewPointAction newPointAction,
+                                                     Model::Point point,
+                                                     int pointsCount,
+                                                     long double timeDelta,
+                                                     std::vector<long double> &variableValue) {
+                    system.compute(newPointAction, point, pointsCount, timeDelta, variableValue);
+                }
+        },
         attractorName_{std::move(attractorName)},
         formulae_{std::move(formulae)},
         variablesNames_{std::move(variablesNames)},
-        interestingConstants_{std::move(interestingConstants)},
-        compute{
-                [system = std::move(systemInteranal)](LambdaNewPointAction newPointAction,
-                                                      Model::Point point,
-                                                      int pointsCount,
-                                                      long double timeDelta,
-                                                      std::vector<long double> &variableValue) {
-                    system.compute(newPointAction, point, pointsCount, timeDelta, variableValue);
-                }
-        } {}
+        interestingConstants_{std::move(interestingConstants)} {}
 
 
 template<typename LambdaNewPointAction>

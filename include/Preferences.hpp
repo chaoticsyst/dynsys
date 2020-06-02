@@ -3,7 +3,7 @@
 #include <QVector4D>
 #include <qgl.h>
 
-#include "include/Model/Model.hpp"
+#include "Model/Model.hpp"
 
 namespace Preferences {
 
@@ -61,6 +61,6 @@ public:
     void disableArcadeMode();
 };
 
-inline const Preferences defaultPreferences;
+inline const Preferences defaultPreferences{};
 
 } //namespace Preferences

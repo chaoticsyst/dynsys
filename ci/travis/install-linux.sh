@@ -14,8 +14,8 @@ CMAKE_URL=http://www.cmake.org/files/$CMAKE_VERSION_DIR/$CMAKE_TAR
 CMAKE_DIR=$(pwd)/cmake-$CMAKE_VERSION
 
 wget --quiet $CMAKE_URL
-mkdir -p $CMAKE_DIR
-tar --strip-components=1 -xzf $CMAKE_TAR -C $CMAKE_DIR
+mkdir -p "$CMAKE_DIR"
+tar --strip-components=1 -xzf $CMAKE_TAR -C "$CMAKE_DIR"
 export PATH=$CMAKE_DIR/bin:$PATH
 
 # Qt libraries install

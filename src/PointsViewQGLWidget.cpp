@@ -1,5 +1,5 @@
+#include <utility>
 #include <vector>
-#include <cmath>
 #include <algorithm>
 #include <QFileInfo>
 
@@ -47,7 +47,7 @@ void PointsViewQGLWidget::endVideoRecording(std::function<void (int)> callback) 
     auto drawFunc = [&lc = locusController](const QMatrix4x4 &projMatrix, size_t time) {
         lc.draw(projMatrix, time);
     };
-    videoEncoder.endEncoding(drawFunc, callback);
+    videoEncoder.endEncoding(std::move(drawFunc), std::move(callback));
 }
 
 void PointsViewQGLWidget::clearAll() {

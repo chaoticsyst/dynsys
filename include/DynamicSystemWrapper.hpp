@@ -2,7 +2,7 @@
 
 #include <QVector>
 #include <QVector3D>
-#include <Model/Model.hpp>
+#include "Model/Model.hpp"
 
 namespace DynamicSystemWrapper_n {
 
