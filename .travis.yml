@@ -6,11 +6,6 @@ compiler: g++
 install:
     - source ci/travis/install-linux.sh
 
-before_script:
-    - QTDIR="/opt/qt512"
-    - PATH="$QTDIR/bin:$PATH"
-    - source /opt/qt512/bin/qt512-env.sh
-
 script:
     - mkdir build
     - cd build
