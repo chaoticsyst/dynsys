@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(DynamicSystems)
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOUIC ON)
@@ -12,6 +10,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Ofast -pipe -Wall -Wextra")
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -D__STDC_CONSTANT_MACROS")
+
+project(DynamicSystems)
 
 include_directories(include/)
 
@@ -20,8 +21,6 @@ find_package(Qt5OpenGL REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(Threads REQUIRED)
 
-
-set(CMAKE_CXX_FLAGS "-D__STDC_CONSTANT_MACROS")
 
 find_path(AVCODEC_INCLUDE_DIR libavcodec/avcodec.h)
 find_library(AVCODEC_LIBRARY avcodec)
@@ -77,8 +76,6 @@ add_executable(DynamicSystems
 )
 
 qt5_use_modules(DynamicSystems Widgets OpenGL)
-
-add_subdirectory(test/)
 
 target_link_libraries(DynamicSystems
         ${QT_LIBRARIES}
