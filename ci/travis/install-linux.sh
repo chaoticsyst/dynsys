@@ -19,19 +19,13 @@ tar --strip-components=1 -xzf $CMAKE_TAR -C "$CMAKE_DIR"
 export PATH=$CMAKE_DIR/bin:$PATH
 
 # Qt libraries install
-sudo add-apt-repository --yes ppa:beineri/opt-qt-5.12.0-bionic
-sudo apt-get -qq update
-sudo apt-get install --yes qt5-default qt512base  qt512imageformats qt512svg
+sudo apt-get install --yes qt5-default
 
 # Ninja install
 sudo apt-get --yes install ninja-build
 
 # video librarries install
-sudo add-apt-repository --yes ppa:savoury1/graphics
-sudo add-apt-repository --yes ppa:savoury1/multimedia
-sudo add-apt-repository --yes ppa:savoury1/ffmpeg4
-sudo apt-get -qq update
-sudo apt-get install --yes libavcodec-dev libavformat-dev libswscale-dev libavutil-dev
+sudo apt-get install --yes libavcodec-dev libavformat-dev libswscale-dev
 
 # Google tests install
 sudo apt-get install --yes libgtest-dev
