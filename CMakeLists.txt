@@ -77,6 +77,13 @@ add_executable(DynamicSystems
 
 qt5_use_modules(DynamicSystems Widgets OpenGL)
 
+target_include_directories(DynamicSystems PRIVATE
+    ${AVCODEC_INCLUDE_DIR}
+    ${AVFORMAT_INCLUDE_DIR}
+    ${AVUTIL_INCLUDE_DIR}
+    ${AVSWS_INCLUDE_DIR}
+)
+
 target_link_libraries(DynamicSystems
         ${QT_LIBRARIES}
         ${OPENGL_LIBRARIES}
