@@ -85,11 +85,11 @@ target_include_directories(DynamicSystems PRIVATE
 )
 
 target_link_libraries(DynamicSystems
-        ${QT_LIBRARIES}
-        ${OPENGL_LIBRARIES}
-        ${AVCODEC_LIBRARY}
-        ${AVFORMAT_LIBRARY}
-        ${AVUTIL_LIBRARY}
-        ${AVSWS_LIBRARY}
-        Threads::Threads
+    ${QT_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    ${AVCODEC_LIBRARY}
+    ${AVFORMAT_LIBRARY}
+    ${AVUTIL_LIBRARY}
+    ${AVSWS_LIBRARY}
+    Threads::Threads
 )
