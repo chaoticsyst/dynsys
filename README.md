@@ -19,7 +19,7 @@
 * Возможность записи видео
 * Возможность паузы и перематывания времени
 
-![Снимок интерфейса](https://github.com/kkarnauk/dynsys/blob/main/media/Interface.png) 
+![Снимок интерфейса](https://github.com/kkarnauk/dynsys/blob/main/media/Interface.png)
 
 ## Моделирование
 
@@ -31,13 +31,13 @@
 
 ## Визуализация
 
-Визуализация производится при помощи OpenGL (версия 3.3) и обертки Qt над ним.
+Визуализация производится при помощи OpenGL и обертки Qt над ним.
 
 Приложение берёт несколько точек около изначальной позиции, считает их траектории и затем отображает точки с некоторым хвостом их траектории. Точки, посчитанные моделью, интерполируются кривой Катмулл-Рома.
 
 Реализована воможность свободного перемещения.
 
-Для удобства есть возможность записи видео в формате avi. Для этого используется библиотека libav (ffmpeg 4.2.2). Также можно делать снимки экрана.
+Для удобства есть возможность записи видео в формате avi. Для этого используется библиотека libav. Также можно делать снимки экрана.
 
 ## Поддержка OS
 
@@ -47,9 +47,16 @@
 * MacOS
 
 ## Инструкция по установке
+Требуемые версии библиотек:
+* Qt5 — 5.10 и выше.
+* libav (libavcodec, libavformat, libavutil, libswscale) — 57 и выше (но желательно иметь хотя бы 58).
+* OpenGL — 3.3 и выше.
+
+Далее инструкции для конкретных ОС.
+
 <details>
 <summary>
-    Linux
+    Linux (U)buntu
 </summary>
 
 * Установка Qt:
@@ -57,29 +64,38 @@
 sudo apt-get install qt5-default
 ```
 
-* Установка libav (ffmpeg):
+* Установка libav:
 ```
 sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev
 ```
 
+* Обновление OpenGL:
+    * Чтобы проверить версию:
+    ```
+    glxinfo | grep "OpenGL version"
+    ```
+    * Если версия ниже 3.3, необходимо обновить:
+    ```
+    sudo add-apt-repository ppa:oibaf/graphics-drivers
+    sudo apt-get update
+    sudo apt-get upgrade
+    ```
+
+</details>
+
 <details>
 <summary>
-   Обновление OpenGL
+Windows
 </summary>
 
-Проверить версию OpenGL:
-```
-glxinfo | grep "OpenGL version"
-```
-Требуется версия 3.3 или выше 
+*  Чтобы получить необходимую версию C++ (g++7 и выше), скачайте и установите [MinGW](https://sourceforge.net/projects/mingw-w64/files/Multilib%20Toolchains%28Targetting%20Win32%20and%20Win64%29/ray_linn/gcc-9.x-with-ada/), а также добавьте `/path/to/MinGW/bin/` в `PATH`.
 
-Обновить OpenGL для Ubuntu 18.04:
-```
-sudo add-apt-repository ppa:oibaf/graphics-drivers
-sudo apt-get update
-sudo apt-get upgrade
-```
-</details>
+* Установите [Cmake](https://cmake.org/download/). Он должен добавиться в `PATH` автоматически.
+
+* Установите Qt5, следуя инструкциям [отсюда](https://doc.qt.io/archives/qt-4.8/install-win.html).
+
+* Скачайте [libav](http://builds.libav.org/windows/nightly-gpl/libav-x86_64-w64-mingw32-20180108.7z) и распакуйте в удобное для Вас место. Затем добавьте `/path/to/libav/bin` и `/path/to/libav/include` в `PATH`.
+
 </details>
 
 ## Как использовать?
@@ -107,9 +123,9 @@ sudo apt-get upgrade
 
 ![Аттрактор Декуан Ли](https://github.com/kkarnauk/dynsys/blob/main/media/Dequan%20Li.gif)
 
-![Пример 1](https://github.com/kkarnauk/dynsys/blob/main/media/Example1.png) 
+![Пример 1](https://github.com/kkarnauk/dynsys/blob/main/media/Example1.png)
 
-![Пример 2](https://github.com/kkarnauk/dynsys/blob/main/media/Example2.png) 
+![Пример 2](https://github.com/kkarnauk/dynsys/blob/main/media/Example2.png)
 
 ## Ссылки
 
