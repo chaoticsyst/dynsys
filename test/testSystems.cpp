@@ -25,34 +25,34 @@ int countConvergesSystems(const Model::Point &startPoint, int requiredCount, lon
 }
 
 TEST(model, allConstantRK4_1) {
-    Model::Point startPoint = {0.1, 0.1, 0.1};
+    Model::Point startPoint = {0.2, 0.3, 0.1};
     int requiredCount = 100'000;
     long double tau = 0.01;
 
-    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 32);
+    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 34);
 }
 
 
 TEST(model, allConstantRK4_2) {
-    Model::Point startPoint = {0.01, 0.01, 0.01};
+    Model::Point startPoint = {0.02, 0.03, 0.01};
     int requiredCount = 500'000;
     long double tau = 0.01;
 
-    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 27);
+    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 33);
 }
 
 TEST(model, allConstantRK4_3) {
-    Model::Point startPoint = {0.01, 0.01, 0.01};
+    Model::Point startPoint = {0.02, 0.03, 0.01};
     int requiredCount = 200'000;
     long double tau = 0.0001;
 
-    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 36);
+    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 37);
 }
 
 TEST(model, allConstantRK4_4) {
-    Model::Point startPoint = {0.01, 0.01, 0.01};
+    Model::Point startPoint = {0.02, 0.03, 0.01};
     int requiredCount = 100'000;
     long double tau = 0.1;
 
-    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 19);
+    EXPECT_GE(countConvergesSystems(startPoint, requiredCount, tau), 21);
 }
