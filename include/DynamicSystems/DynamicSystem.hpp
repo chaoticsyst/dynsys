@@ -41,7 +41,7 @@ public:
 
     const std::vector<std::pair<std::string, std::vector<long double>>> &getInterestingConstants() const;
 
-    const std::function<void(LambdaNewPointAction newPointAction,
+    const std::function<void(LambdaNewPointAction &&newPointAction,
                              Model::Point point,
                              int pointsCount,
                              long double timeDelta,
