@@ -47,32 +47,40 @@
 * MacOS
 
 ## Инструкция по установке
-
-Замечание: данная инструкция действительна для Linux Ubuntu 18.04.
+<details>
+<summary>
+    Linux
+</summary>
 
 * Установка Qt:
 ```
-sudo add-apt-repository ppa:beineri/opt-qt-5.12.0-bionic
-sudo apt-get update
-sudo apt-get install build-essential
-sudo apt-get install qt5-default qt512base qt512imageformats qt512svg5
+sudo apt-get install qt5-default
 ```
 
 * Установка libav (ffmpeg):
 ```
-sudo add-apt-repository ppa:savoury1/graphics
-sudo add-apt-repository ppa:savoury1/multimedia
-sudo add-apt-repository ppa:savoury1/ffmpeg4
-sudo apt-get update
-sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libavutil-dev
+sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev
 ```
 
-* Обновление OpenGL:
+<details>
+<summary>
+   Обновление OpenGL
+</summary>
+
+Проверить версию OpenGL:
+```
+glxinfo | grep "OpenGL version"
+```
+Требуется версия 3.3 или выше 
+
+Обновить OpenGL для Ubuntu 18.04:
 ```
 sudo add-apt-repository ppa:oibaf/graphics-drivers
 sudo apt-get update
-sudo apt-get install libgl1-mesa-dev libegl1-mesa xserver-xorg-video-intel libgl1-mesa-dri libglapi-mesa
+sudo apt-get upgrade
 ```
+</details>
+</details>
 
 ## Как использовать?
 
