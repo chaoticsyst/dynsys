@@ -43,7 +43,7 @@ private:
     };
 
     struct ModelPreferences final {
-        Model::Point startPoint = { 1, 1, 1 };
+        Model::Point startPoint = { 0.1, 0.2, 0.3 };
         int pointsNumber = 20000;
         double deltaTime = 0.01;
         float divNormalization = 8;

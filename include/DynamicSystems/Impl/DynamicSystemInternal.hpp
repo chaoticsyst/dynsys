@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <vector>
+#include <utility>
 
 #include "Model/Model.hpp"
 
@@ -16,12 +17,14 @@ public:
             std::function<LambdaDerivatives(std::vector<long double> &)> derivativesFunctionGetter) :
             getDerivativesFunction{std::move(derivativesFunctionGetter)} {}
 
-    void compute(LambdaNewPointAction newPointAction,
+    void compute(LambdaNewPointAction &&newPointAction,
                  Model::Point point,
                  int pointsCount,
                  long double timeDelta,
                  std::vector<long double> &constantValues) const {
-        Model::generatePoints(newPointAction, point, pointsCount, timeDelta, getDerivativesFunction(constantValues));
+        Model::generatePoints(std::forward<LambdaNewPointAction>(newPointAction),
+                              point, pointsCount, timeDelta,
+                              getDerivativesFunction(constantValues));
     }
 
 private:

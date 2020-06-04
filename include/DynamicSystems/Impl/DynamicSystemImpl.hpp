@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <array>
+#include <utility>
 
 #include "Model/Model.hpp"
 #include "DynamicSystems/DynamicSystem.hpp"
@@ -20,12 +21,13 @@ DynamicSystem<LambdaNewPointAction>::DynamicSystem(
         std::vector<std::pair<std::string, std::vector<long double>>> interestingConstants,
         DynamicSystemInternal<LambdaNewPointAction, LambdaDerivatives> systemInternal) :
         compute{
-                [system = std::move(systemInternal)](LambdaNewPointAction newPointAction,
+                [system = std::move(systemInternal)](LambdaNewPointAction &&newPointAction,
                                                      Model::Point point,
                                                      int pointsCount,
                                                      long double timeDelta,
                                                      std::vector<long double> &variableValue) {
-                    system.compute(newPointAction, point, pointsCount, timeDelta, variableValue);
+                    system.compute(std::forward<LambdaNewPointAction>(newPointAction),
+                                   point, pointsCount, timeDelta, variableValue);
                 }
         },
         attractorName_{std::move(attractorName)},

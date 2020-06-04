@@ -112,7 +112,7 @@ void CountPointsTask::run() {
         auto pushBackVector = DynamicSystemWrapper_n::getPushBackAndNormalizeLambda(buffer,
                                                                                     wind.prefs.model.divNormalization);
 
-        system.compute(pushBackVector,
+        system.compute(std::move(pushBackVector),
                        Model::Point{wind.prefs.model.startPoint.x + offset,
                                     wind.prefs.model.startPoint.y + offset,
                                     wind.prefs.model.startPoint.z + offset},
