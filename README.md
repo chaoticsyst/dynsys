@@ -1,6 +1,6 @@
 # Моделирование и визуализация динамических систем
 
-![Аттрактор Хедли](https://github.com/kkarnauk/dynsys/blob/main/media/Hadley.gif)
+![Аттрактор Хедли](https://github.com/chaoticsyst/dynsys/blob/master/media/Hadley.gif)
 
 ## Введение
 
@@ -19,7 +19,7 @@
 * Возможность записи видео
 * Возможность паузы и перематывания времени
 
-![Снимок интерфейса](https://github.com/kkarnauk/dynsys/blob/main/media/Interface.png)
+![Снимок интерфейса](https://github.com/chaoticsyst/dynsys/blob/master/media/Interface.png)
 
 ## Моделирование
 
@@ -121,11 +121,11 @@ Windows
 
 ## Примеры
 
-![Аттрактор Декуан Ли](https://github.com/kkarnauk/dynsys/blob/main/media/Dequan%20Li.gif)
+![Аттрактор Декуан Ли](https://github.com/chaoticsyst/dynsys/blob/master/media/Dequan%20Li.gif)
 
-![Пример 1](https://github.com/kkarnauk/dynsys/blob/main/media/Example1.png)
+![Пример 1](https://github.com/chaoticsyst/dynsys/blob/master/media/Example1.png)
 
-![Пример 2](https://github.com/kkarnauk/dynsys/blob/main/media/Example2.png)
+![Пример 2](https://github.com/chaoticsyst/dynsys/blob/master/media/Example2.png)
 
 ## Ссылки
 
